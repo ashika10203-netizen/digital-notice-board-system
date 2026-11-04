@@ -286,6 +286,63 @@
             #viewAdmin > div:first-child { border-radius: 16px !important; }
         }
 
+    
+
+        /* Student Event Calendar — charcoal panel with champagne details */
+        #eventCalendarWidget {
+            background: linear-gradient(145deg, #302e29 0%, #25241f 100%) !important;
+            border: 1px solid #4a463d !important;
+            box-shadow: 0 16px 34px rgba(35, 31, 24, .16) !important;
+            color: #f5efe4 !important;
+        }
+        #eventCalendarWidget h3,
+        #eventCalendarWidget h4,
+        #eventCalendarWidget #calendarMonthYear {
+            color: #f5efe4 !important;
+        }
+        #eventCalendarWidget .border-b,
+        #eventCalendarWidget .border-t { border-color: #514b40 !important; }
+        #eventCalendarWidget .text-slate-400,
+        #eventCalendarWidget .text-slate-500 { color: #c3b9a8 !important; }
+        #eventCalendarWidget #calendarDaysGrid > div {
+            color: #e9e1d4 !important;
+            background: #3b3932 !important;
+            border: 1px solid #575247 !important;
+            border-radius: 9px !important;
+            padding: 8px 4px !important;
+        }
+        #eventCalendarWidget #calendarDaysGrid > div:empty {
+            background: transparent !important;
+            border-color: transparent !important;
+        }
+        #eventCalendarWidget #calendarDaysGrid > div[onclick] {
+            cursor: pointer;
+            transition: background .16s ease, border-color .16s ease;
+        }
+        #eventCalendarWidget #calendarDaysGrid > div[onclick]:hover {
+            background: #514b40 !important;
+            border-color: #b69a6b !important;
+        }
+        #eventCalendarWidget #calendarDaysGrid > div[class*="bg-indigo"] {
+            background: #b69a6b !important;
+            color: #28251f !important;
+            border-color: #d5c09a !important;
+        }
+        #eventCalendarWidget #calendarEventsList > div {
+            background: #3a3831 !important;
+            border: 1px solid #575145 !important;
+            border-radius: 10px !important;
+            color: #f5efe4 !important;
+        }
+        #eventCalendarWidget #calendarEventsList .text-slate-200 { color: #f5efe4 !important; }
+        #eventCalendarWidget #calendarEventsList .text-slate-400 { color: #c3b9a8 !important; }
+        #eventCalendarWidget #calendarEventsList [class*="bg-violet"] {
+            background: #514735 !important;
+            color: #e6d2a9 !important;
+        }
+        #eventCalendarWidget button { color: #d8c7a8 !important; }
+        #eventCalendarWidget button:hover { color: #fff7e8 !important; }
+
     </style>
 </head>
 
@@ -1028,6 +1085,13 @@
         }
 
         // Calendar
+                // Student calendar hides internal faculty-only meetings.
+        function getStudentCalendarEvents() {
+            return calendarEvents.filter(event =>
+                event.type !== 'meeting' && !/faculty/i.test(event.title)
+            );
+        }
+
         function renderCalendar() {
             const year = currentCalDate.getFullYear();
             const month = currentCalDate.getMonth();
@@ -1047,7 +1111,7 @@
 
             for (let d = 1; d <= daysInMonth; d++) {
                 const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-                const hasEvent = calendarEvents.some(e => e.date === dateStr);
+                const hasEvent = getStudentCalendarEvents().some(e => e.date === dateStr);
 
                 let dayClasses = "p-1.5 rounded-lg border border-slate-800/50 transition-all cursor-pointer hover:bg-slate-800 ";
                 if (hasEvent) {
@@ -1069,7 +1133,7 @@
 
         function renderCalendarEventsList(filterDate = null) {
             const container = document.getElementById('calendarEventsList');
-            let eventsToDisplay = calendarEvents;
+            let eventsToDisplay = getStudentCalendarEvents();
 
             if (filterDate) {
                 eventsToDisplay = calendarEvents.filter(e => e.date === filterDate);
