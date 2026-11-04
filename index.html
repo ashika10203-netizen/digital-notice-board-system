@@ -92,6 +92,200 @@
         .ticker-wrap:hover #tickerContent {
             animation-play-state: paused;
         }
+    
+
+        /* =====================================================
+           CHARCOAL + CHAMPAGNE — PREMIUM MINIMAL THEME
+           Visual-only overrides; existing app logic is unchanged.
+           ===================================================== */
+        :root {
+            color-scheme: light;
+            --campus-charcoal: #292824;
+            --campus-charcoal-soft: #39372f;
+            --campus-ink: #302e29;
+            --campus-muted: #777268;
+            --campus-ivory: #f7f5f0;
+            --campus-cream: #f1ede4;
+            --campus-champagne: #e8dfcf;
+            --campus-gold: #a88b58;
+            --campus-gold-dark: #8c7042;
+            --campus-line: #e5dfd4;
+            --campus-card: #fffefa;
+        }
+
+        html, body {
+            background: var(--campus-ivory) !important;
+            color: var(--campus-ink) !important;
+        }
+
+        body { font-family: 'Inter', sans-serif; }
+
+        ::-webkit-scrollbar-track { background: #eeeae2 !important; }
+        ::-webkit-scrollbar-thumb { background: #c8bda9 !important; }
+        ::-webkit-scrollbar-thumb:hover { background: #a88b58 !important; }
+
+        /* Main application surfaces */
+        [class~="bg-slate-950"],
+        [class~="bg-slate-950/40"],
+        [class~="bg-slate-950/80"] {
+            background-color: var(--campus-ivory) !important;
+        }
+        [class~="bg-slate-900"],
+        [class~="bg-slate-900/90"],
+        [class~="bg-slate-900/80"],
+        [class~="bg-slate-900/60"] {
+            background-color: var(--campus-card) !important;
+        }
+        [class~="bg-slate-800"],
+        [class~="bg-slate-800/80"],
+        [class~="bg-slate-800/40"] {
+            background-color: var(--campus-cream) !important;
+        }
+        [class~="bg-slate-700"] { background-color: #e6dfd3 !important; }
+
+        /* Login screen */
+        #fullLoginPage { background: var(--campus-ivory) !important; }
+        #fullLoginPage > .absolute {
+            background: radial-gradient(circle at 50% 0%, #eee5d5 0%, #f7f5f0 62%) !important;
+            opacity: 1 !important;
+        }
+        .glass-panel {
+            background: rgba(255, 254, 250, .96) !important;
+            border: 1px solid var(--campus-line) !important;
+            backdrop-filter: blur(14px);
+            box-shadow: 0 18px 50px rgba(48, 43, 33, .07) !important;
+        }
+        .glass-card {
+            background: var(--campus-card) !important;
+            border: 1px solid var(--campus-line) !important;
+            backdrop-filter: none;
+            box-shadow: 0 5px 18px rgba(48, 43, 33, .035);
+        }
+
+        /* Header, sidebar and footer */
+        header[class~="bg-slate-900/90"],
+        nav[class~="bg-slate-900"],
+        aside[class~="bg-slate-900"] {
+            background: var(--campus-charcoal) !important;
+            border-color: #454239 !important;
+        }
+        header [class~="text-white"],
+        aside [class~="text-white"],
+        nav [class~="text-white"] { color: #fffdf8 !important; }
+        header [class~="text-slate-400"],
+        aside [class~="text-slate-400"] { color: #c2bcae !important; }
+
+        /* Typography */
+        [class~="text-slate-100"],
+        [class~="text-slate-200"],
+        [class~="text-slate-300"] { color: var(--campus-ink) !important; }
+        [class~="text-slate-400"],
+        [class~="text-slate-500"] { color: var(--campus-muted) !important; }
+        [class~="text-slate-700"] { color: #4c4941 !important; }
+
+        /* Champagne replaces the former indigo / violet brand accents */
+        [class~="bg-indigo-600"],
+        [class~="bg-indigo-500"],
+        [class~="bg-teal-600"],
+        [class~="bg-amber-600"] {
+            background-color: var(--campus-charcoal-soft) !important;
+        }
+        [class~="hover:bg-indigo-600"]:hover,
+        [class~="hover:bg-teal-500"]:hover,
+        [class~="hover:bg-amber-500"]:hover {
+            background-color: var(--campus-gold-dark) !important;
+        }
+        [class~="text-indigo-400"],
+        [class~="text-indigo-300"],
+        [class~="text-indigo-200"],
+        [class~="text-violet-400"],
+        [class~="text-teal-400"],
+        [class~="text-teal-300"],
+        [class~="text-amber-400"],
+        [class~="text-amber-300"] { color: var(--campus-gold-dark) !important; }
+
+        [class~="bg-indigo-500/20"],
+        [class~="bg-indigo-600/20"],
+        [class~="bg-violet-500/20"],
+        [class~="bg-teal-500/20"],
+        [class~="bg-teal-500/10"],
+        [class~="bg-amber-500/20"] {
+            background-color: #f0e9dc !important;
+        }
+        [class~="border-indigo-500/30"],
+        [class~="border-indigo-500/20"],
+        [class~="border-teal-500/30"],
+        [class~="border-teal-500/20"],
+        [class~="border-amber-500/30"],
+        [class~="border-amber-500/20"] {
+            border-color: #d9cbb3 !important;
+        }
+
+        /* Dashboard hero panels */
+        #viewStudent > div:first-child,
+        #viewFaculty > div:first-child,
+        #viewAdmin > div:first-child {
+            background: linear-gradient(115deg, #e9e0d1 0%, #f4f0e8 58%, #eee9df 100%) !important;
+            border: 1px solid #dfd5c4 !important;
+            box-shadow: 0 12px 28px rgba(48, 43, 33, .045) !important;
+        }
+        #viewStudent > div:first-child h2,
+        #viewFaculty > div:first-child h2,
+        #viewAdmin > div:first-child h2 { color: var(--campus-charcoal) !important; }
+        #viewStudent > div:first-child p,
+        #viewFaculty > div:first-child p,
+        #viewAdmin > div:first-child p { color: #625d52 !important; }
+
+        /* Borders, tables, inputs and interactive states */
+        [class~="border-slate-800"],
+        [class~="border-slate-800/80"],
+        [class~="border-slate-700"],
+        [class~="border-slate-700/80"],
+        [class~="border-slate-700/70"],
+        [class~="border-slate-700/50"],
+        [class~="divide-slate-800/60"] {
+            border-color: var(--campus-line) !important;
+        }
+        input, select, textarea {
+            background: #fffefa !important;
+            color: var(--campus-ink) !important;
+            border-color: #d9d2c6 !important;
+        }
+        input::placeholder, textarea::placeholder { color: #a39c8f !important; }
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--campus-gold) !important;
+            box-shadow: 0 0 0 3px rgba(168, 139, 88, .13) !important;
+            outline: none !important;
+        }
+        table thead { background: #f0ece4 !important; }
+        table tbody tr:hover { background: #f8f5ef !important; }
+        button { transition: background-color .18s ease, border-color .18s ease, box-shadow .18s ease; }
+
+        /* Keep alerts/status colors meaningful while softening their surfaces */
+        [class~="bg-rose-950/40"],
+        [class~="bg-rose-950/70"],
+        [class~="bg-rose-900/40"] { background-color: #f8e9e5 !important; }
+        [class~="text-rose-300"],
+        [class~="text-rose-200"],
+        [class~="text-rose-400"] { color: #a4473e !important; }
+        [class~="border-rose-800/50"],
+        [class~="border-rose-900/50"],
+        [class~="border-rose-700/50"] { border-color: #e9c9c2 !important; }
+
+        /* Reduce overly heavy dark shadows from the previous theme */
+        [class~="shadow-indigo-500/30"],
+        [class~="shadow-indigo-600/30"],
+        [class~="shadow-teal-600/30"],
+        [class~="shadow-amber-600/30"] {
+            --tw-shadow-color: rgba(48, 43, 33, .08) !important;
+        }
+
+        @media (max-width: 640px) {
+            #viewStudent > div:first-child,
+            #viewFaculty > div:first-child,
+            #viewAdmin > div:first-child { border-radius: 16px !important; }
+        }
+
     </style>
 </head>
 
