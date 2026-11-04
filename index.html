@@ -499,6 +499,33 @@
                         </button>
                     </div>
 
+                    <!-- ADMIN EVENT CALENDAR -->
+                    <section id="adminEventCalendar" class="glass-panel p-5 rounded-2xl space-y-4">
+                        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
+                            <div>
+                                <h3 class="font-bold text-sm text-slate-100 flex items-center gap-2">
+                                    <i class="fa-solid fa-calendar-days text-violet-400"></i> Event Calendar
+                                </h3>
+                                <p class="text-xs text-slate-400 mt-1">View campus events and important deadlines</p>
+                            </div>
+                            <div class="flex items-center gap-3 text-xs">
+                                <button type="button" onclick="changeAdminCalendarMonth(-1)" aria-label="Previous month"
+                                    class="p-2 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700"><i class="fa-solid fa-chevron-left"></i></button>
+                                <span id="adminCalendarMonthYear" class="font-bold text-slate-200 font-mono min-w-20 text-center">Nov 2026</span>
+                                <button type="button" onclick="changeAdminCalendarMonth(1)" aria-label="Next month"
+                                    class="p-2 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700"><i class="fa-solid fa-chevron-right"></i></button>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-semibold text-slate-400">
+                            <div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div>
+                        </div>
+                        <div id="adminCalendarDaysGrid" class="grid grid-cols-7 gap-1 text-center text-xs font-mono"></div>
+                        <div class="pt-3 border-t border-slate-800/80">
+                            <h4 class="text-[11px] font-semibold text-slate-400 mb-2">Scheduled Events</h4>
+                            <div id="adminCalendarEventsList" class="space-y-2 max-h-48 overflow-y-auto pr-1"></div>
+                        </div>
+                    </section>
+
                     <div class="flex border-b border-slate-800 gap-4">
                         <button onclick="switchAdminTab('notices')" id="adminTabNotices"
                             class="admin-tab-btn border-b-2 border-amber-500 text-amber-400 pb-3 text-sm font-semibold flex items-center gap-2">
@@ -662,6 +689,7 @@
         let currentAdminTab = 'notices';
         let studentActiveCategory = 'all';
         let currentCalDate = new Date(2026, 10, 1);
+        let adminCalDate = new Date(2026, 10, 1);
 
         let notices = [
             {
@@ -871,6 +899,58 @@
 
         function selectCalendarDay(dateStr) {
             renderCalendarEventsList(dateStr);
+        }
+
+        // Admin Event Calendar (separate display, shared event data)
+        function renderAdminCalendar() {
+            const year = adminCalDate.getFullYear();
+            const month = adminCalDate.getMonth();
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            const monthLabel = document.getElementById('adminCalendarMonthYear');
+            const grid = document.getElementById('adminCalendarDaysGrid');
+            if (!monthLabel || !grid) return;
+
+            monthLabel.innerText = `${monthNames[month]} ${year}`;
+            grid.innerHTML = '';
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            for (let i = 0; i < firstDay; i++) grid.innerHTML += '<div class="p-2"></div>';
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const hasEvent = calendarEvents.some(event => event.date === dateStr);
+                const classes = hasEvent
+                    ? 'p-2 rounded-lg bg-violet-600/30 text-violet-200 border border-violet-500/40 font-bold cursor-pointer hover:bg-violet-600/50'
+                    : 'p-2 rounded-lg text-slate-300 border border-slate-800/50 cursor-pointer hover:bg-slate-800';
+                grid.innerHTML += `<button type="button" onclick="selectAdminCalendarDay('${dateStr}')" class="${classes}">${day}${hasEvent ? '<span class="block mx-auto mt-1 w-1 h-1 rounded-full bg-violet-300"></span>' : ''}</button>`;
+            }
+            renderAdminCalendarEvents();
+        }
+
+        function changeAdminCalendarMonth(delta) {
+            adminCalDate.setMonth(adminCalDate.getMonth() + delta);
+            renderAdminCalendar();
+        }
+
+        function selectAdminCalendarDay(dateStr) {
+            renderAdminCalendarEvents(dateStr);
+        }
+
+        function renderAdminCalendarEvents(filterDate = null) {
+            const container = document.getElementById('adminCalendarEventsList');
+            if (!container) return;
+            const events = filterDate
+                ? calendarEvents.filter(event => event.date === filterDate)
+                : calendarEvents;
+            container.innerHTML = events.length
+                ? events.map(event => `
+                    <div class="p-3 rounded-lg bg-slate-900/80 border border-slate-800 flex justify-between items-center gap-3">
+                        <div><div class="font-semibold text-slate-200 text-xs">${event.title}</div>
+                        <div class="text-[10px] text-slate-400 font-mono mt-1">${event.date}</div></div>
+                        <span class="text-[10px] px-2 py-1 rounded bg-violet-500/20 text-violet-300 capitalize">${event.type}</span>
+                    </div>
+                `).join('')
+                : '<p class="text-xs text-slate-500 text-center py-3">No events scheduled for this date.</p>';
         }
 
         // Dashboard Role Switcher
