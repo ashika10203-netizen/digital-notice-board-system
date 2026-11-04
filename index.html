@@ -67,7 +67,29 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .ticker-wrap:hover .animate-ticker {
+        /* Reliable live ticker animation independent of Tailwind's CDN compiler */
+        @keyframes ticker-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        #tickerContent {
+            display: flex;
+            width: max-content;
+            min-width: max-content;
+            animation: ticker-scroll 30s linear infinite;
+            will-change: transform;
+        }
+
+        #tickerContent .ticker-item {
+            display: inline-flex;
+            align-items: center;
+            flex-shrink: 0;
+            white-space: nowrap;
+            padding-right: 3rem;
+        }
+
+        .ticker-wrap:hover #tickerContent {
             animation-play-state: paused;
         }
     </style>
@@ -213,7 +235,7 @@
                 <i class="fa-solid fa-bolt animate-pulse"></i> Live Flash
             </div>
             <div class="ticker-wrap flex-1 overflow-hidden relative whitespace-nowrap ml-4">
-                <div id="tickerContent" class="inline-block animate-ticker text-xs text-rose-200 font-medium"></div>
+                <div id="tickerContent" class="text-xs text-rose-200 font-medium"></div>
             </div>
         </div>
 
@@ -749,18 +771,24 @@
 
         // Live Ticker
         function renderLiveTicker() {
-            const urgentAlerts = notices.filter(n => n.priority === 'Urgent' || n.priority === 'High');
             const tickerEl = document.getElementById('tickerContent');
-            if (urgentAlerts.length === 0) {
-                tickerEl.innerText = "No urgent notifications broadcasted at this moment.";
-                return;
-            }
-            tickerEl.innerHTML = urgentAlerts.map(a => `
-                <span class="inline-flex items-center gap-2 mr-12">
-                    <span class="px-1.5 py-0.5 rounded bg-rose-500/40 font-bold uppercase text-[10px] text-white">${a.priority}</span>
-                    <span><strong>${a.title}</strong> — ${a.content}</span>
-                </span>
-            `).join('');
+            if (!tickerEl) return;
+
+            const urgentAlerts = notices.filter(n =>
+                n.priority === 'Urgent' || n.priority === 'High'
+            );
+
+            const tickerMessage = urgentAlerts.length
+                ? urgentAlerts.map(a => `
+                    <span class="ticker-item">
+                        <span class="px-1.5 py-0.5 rounded bg-rose-500/40 font-bold uppercase text-[10px] text-white mr-2">${a.priority}</span>
+                        <span><strong>${a.title}</strong> — ${a.content}</span>
+                    </span>
+                `).join('')
+                : '<span class="ticker-item">No urgent notifications broadcasted at this moment.</span>';
+
+            // Duplicate the content for continuous scrolling without a blank gap.
+            tickerEl.innerHTML = tickerMessage + tickerMessage;
         }
 
         // Unique AI Assistant Widget Q&A
