@@ -1347,6 +1347,86 @@ input:focus, select:focus, textarea:focus {
 }
 </style>
 
+
+<style id="campussync-final-red-white-fix">
+/* Final university theme correction: overrides older Tailwind blue/indigo styles. */
+#fullLoginPage { background:#ffffff !important; color:#382d30 !important; }
+#fullLoginPage > .absolute { background:linear-gradient(135deg,#fff7f8 0%,#ffffff 55%,#fbe9ed 100%) !important; opacity:1 !important; }
+#fullLoginPage .glass-panel {
+  background:#ffffff !important; border:1px solid #efd6dc !important;
+  box-shadow:0 22px 60px rgba(140,16,39,.13) !important;
+}
+#fullLoginPage h1 { color:#9f1027 !important; }
+#fullLoginPage p, #fullLoginPage label { color:#786b6e !important; }
+#fullLoginPage .glass-panel > div:first-child > div:first-child {
+  background:linear-gradient(135deg,#9f1027,#d04457) !important;
+  box-shadow:0 8px 22px rgba(181,18,43,.2) !important;
+}
+#fullLoginPage .campus-visual-icon-blue { background:#fbe8ec !important; color:#b5122b !important; }
+#fullLoginPage form > div:first-child > div {
+  background:#fff5f6 !important; border-color:#efd6dc !important;
+}
+#fullLoginPage button[id^="loginRole"] {
+  color:#786b6e !important; background:#fff !important; border:1px solid #efd6dc !important;
+}
+#fullLoginPage button[id^="loginRole"].bg-indigo-600,
+#fullLoginPage button[id^="loginRole"].bg-teal-600,
+#fullLoginPage button[id^="loginRole"].bg-amber-600 {
+  color:#fff !important; background:#b5122b !important; border-color:#b5122b !important;
+}
+#fullLoginPage input {
+  color:#382d30 !important; background:#fff !important; border:1px solid #e7cbd1 !important;
+}
+#fullLoginPage input:focus { border-color:#b5122b !important; }
+#fullLoginPage form button[type="submit"] {
+  background:linear-gradient(100deg,#9f1027,#c52b45) !important;
+  color:#fff !important; box-shadow:0 8px 20px rgba(181,18,43,.2) !important;
+}
+#fullLoginPage .glass-panel > div:last-child { border-color:#f0dce0 !important; color:#8a777b !important; }
+
+#mainDashboard, #mainDashboard main { background:#fff !important; color:#382d30 !important; }
+#mainDashboard > header {
+  background:linear-gradient(110deg,#9f1027,#bd1834 58%,#d04457) !important;
+  border-color:#8f1025 !important;
+}
+#mainDashboard aside { background:#fff !important; border-color:#f0dce0 !important; }
+#mainDashboard aside > div > div:first-child { background:#fff5f6 !important; border-color:#efd6dc !important; }
+#mainDashboard aside nav a { color:#786b6e !important; border-color:transparent !important; }
+#mainDashboard aside nav a:hover,
+#mainDashboard aside nav a.bg-indigo-600\/20 {
+  color:#9f1027 !important; background:#fbe8ec !important; border-color:#efd0d7 !important;
+}
+#mainDashboard .bg-indigo-600, #mainDashboard .bg-indigo-700,
+#mainDashboard .bg-blue-600, #mainDashboard .bg-blue-700,
+#mainDashboard .bg-violet-600 {
+  background:#b5122b !important; color:#fff !important; border-color:#b5122b !important;
+}
+#mainDashboard [class*="bg-indigo-"], #mainDashboard [class*="bg-blue-"],
+#mainDashboard [class*="bg-violet-"] {
+  background-color:#fbe9ed !important;
+}
+#mainDashboard [class*="text-indigo-"], #mainDashboard [class*="text-blue-"],
+#mainDashboard [class*="text-violet-"] { color:#a91029 !important; }
+#mainDashboard [class*="border-indigo-"], #mainDashboard [class*="border-blue-"],
+#mainDashboard [class*="border-violet-"] { border-color:#e7b9c3 !important; }
+#mainDashboard .bg-gradient-to-r.from-indigo-900\/80,
+#mainDashboard .bg-gradient-to-r.from-indigo-900\/80 * { color:#382d30 !important; }
+#mainDashboard .ticker-wrap { background:#fff5f6 !important; border-color:#efd6dc !important; }
+#mainDashboard .ticker-wrap #tickerContent { color:#71313e !important; }
+#mainDashboard input, #mainDashboard select, #mainDashboard textarea {
+  background:#fff !important; color:#382d30 !important; border-color:#e7cbd1 !important;
+}
+#mainDashboard button:focus-visible, #mainDashboard a:focus-visible {
+  outline:2px solid #b5122b !important; outline-offset:2px;
+}
+#campusCategoryDock .campus-category-tile.active,
+#studentCategoryTabs .tab-btn.active {
+  background:#b5122b !important; color:#fff !important; border-color:#b5122b !important;
+}
+#campusCategoryDock .campus-category-tile.active i,
+#studentCategoryTabs .tab-btn.active i { color:#fff !important; }
+</style>
+
 </head>
 
 <body class="h-full flex flex-col font-sans overflow-hidden bg-slate-950 text-slate-100">
