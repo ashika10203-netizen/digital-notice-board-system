@@ -675,6 +675,13 @@
         }
 
     </style>
+<style id="campus-filter-alignment">
+#studentCategoryTabs { display:grid !important; grid-template-columns:repeat(5,minmax(0,1fr)) !important; gap:10px !important; align-items:stretch !important; width:100% !important; overflow:visible !important; }
+#studentCategoryTabs .tab-btn { width:100% !important; min-width:0 !important; min-height:44px !important; display:flex !important; align-items:center !important; justify-content:center !important; text-align:center !important; white-space:normal !important; line-height:1.25 !important; padding:10px 12px !important; border:1px solid rgba(148,163,184,.22) !important; border-radius:12px !important; }
+#studentCategoryTabs .tab-btn:not(.active) { background:rgba(15,23,42,.55) !important; }
+#studentCategoryTabs .tab-btn.active { background:#4f46e5 !important; border-color:#6366f1 !important; box-shadow:0 5px 14px rgba(79,70,229,.2) !important; }
+@media (max-width:760px) { #studentCategoryTabs { grid-template-columns:repeat(2,minmax(0,1fr)) !important; } #studentCategoryTabs .tab-btn:last-child { grid-column:span 2; } }
+</style>
 </head>
 
 <body class="h-full flex flex-col font-sans overflow-hidden bg-slate-950 text-slate-100">
@@ -2232,10 +2239,30 @@ function facultyQuickLink(targetId) {
       b.onclick=showCampusNotifications; header.insertBefore(b, header.firstChild);
     }
     const tabs=document.getElementById('studentCategoryTabs');
-    if(tabs && !document.getElementById('campusExtraFilters')) {
-      const wrap=document.createElement('div'); wrap.id='campusExtraFilters'; wrap.className='flex flex-wrap gap-2 mt-2';
-      wrap.innerHTML='<button class="px-3 py-1.5 rounded-lg text-xs border border-blue-200 bg-blue-50" onclick="campusSetCategory(\'all\')">All</button><button class="px-3 py-1.5 rounded-lg text-xs border" onclick="campusSetCategory(\'academic\')">Academic</button><button class="px-3 py-1.5 rounded-lg text-xs border" onclick="campusSetCategory(\'events\')">Events</button><button class="px-3 py-1.5 rounded-lg text-xs border" onclick="campusSetCategory(\'exams\')">Exams</button><button class="px-3 py-1.5 rounded-lg text-xs border" onclick="campusSetCategory(\'placement\')">Placements</button><label class="ml-auto flex items-center gap-2 text-xs text-slate-500">Posted on <input id="campusDateFilter" type="date" class="rounded-lg border px-2 py-1" onchange="campusSetDate(this.value)"></label>';
-      tabs.parentNode.insertBefore(wrap,tabs.nextSibling);
+    // Keep a single category navigation row; the original duplicate filter strip caused misalignment.
+    const extraFilters=document.getElementById('campusExtraFilters');
+    if(extraFilters) extraFilters.remove();
+    if(tabs) {
+      tabs.style.display='grid';
+      tabs.style.gridTemplateColumns='repeat(5, minmax(0, 1fr))';
+      tabs.style.gap='10px';
+      tabs.style.width='100%';
+      tabs.style.overflow='visible';
+      tabs.style.paddingBottom='0';
+      tabs.querySelectorAll('button').forEach((button,index)=>{
+        button.style.width='100%';
+        button.style.minWidth='0';
+        button.style.minHeight='42px';
+        button.style.display='flex';
+        button.style.alignItems='center';
+        button.style.justifyContent='center';
+        button.style.textAlign='center';
+        button.style.whiteSpace='normal';
+        button.style.lineHeight='1.25';
+        button.style.padding='10px 12px';
+        if(index===1) button.innerHTML='<i class="fa-solid fa-book-open mr-2"></i>Assignments & Exams';
+        if(index===2) button.innerHTML='<i class="fa-solid fa-briefcase mr-2"></i>Placements & Events';
+      });
     }
     if(!document.getElementById('campusNotificationModal')) {
       const modal=document.createElement('div'); modal.id='campusNotificationModal'; modal.className='hidden fixed inset-0 z-[100] bg-slate-950/60 p-4 items-center justify-center';
