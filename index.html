@@ -682,6 +682,175 @@
 #studentCategoryTabs .tab-btn.active { background:#4f46e5 !important; border-color:#6366f1 !important; box-shadow:0 5px 14px rgba(79,70,229,.2) !important; }
 @media (max-width:760px) { #studentCategoryTabs { grid-template-columns:repeat(2,minmax(0,1fr)) !important; } #studentCategoryTabs .tab-btn:last-child { grid-column:span 2; } }
 </style>
+
+<style id="campussync-creative-login">
+/* Creative split-screen login refresh — keeps the existing login fields and actions */
+#fullLoginPage {
+    padding: 28px !important;
+    background:
+      radial-gradient(circle at 12% 15%, rgba(51, 117, 214, .22), transparent 30%),
+      radial-gradient(circle at 85% 85%, rgba(34, 180, 173, .18), transparent 28%),
+      #eef3fa !important;
+}
+#fullLoginPage > .absolute { display: none !important; }
+#fullLoginPage .glass-panel {
+    width: min(100%, 1050px) !important;
+    max-width: 1050px !important;
+    min-height: 590px;
+    padding: 0 !important;
+    display: grid !important;
+    grid-template-columns: 1.05fr .95fr;
+    align-items: stretch;
+    gap: 0 !important;
+    overflow: hidden;
+    border: 1px solid rgba(210, 222, 239, .9) !important;
+    border-radius: 30px !important;
+    background: #fff !important;
+    box-shadow: 0 32px 90px rgba(32, 55, 91, .17) !important;
+}
+#fullLoginPage .glass-panel > div:first-child {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    margin: 0 !important;
+    padding: 64px 54px !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: left !important;
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 80% 18%, rgba(255,255,255,.18), transparent 26%),
+      linear-gradient(145deg, #102d59 0%, #145b83 55%, #168c91 100%);
+}
+#fullLoginPage .glass-panel > div:first-child:after {
+    content: "";
+    position: absolute;
+    width: 310px;
+    height: 310px;
+    right: -115px;
+    bottom: -135px;
+    border: 1px solid rgba(255,255,255,.22);
+    border-radius: 50%;
+    box-shadow: 0 0 0 34px rgba(255,255,255,.045), 0 0 0 72px rgba(255,255,255,.035);
+}
+#fullLoginPage .glass-panel > div:first-child > div:first-child {
+    width: 66px !important;
+    height: 66px !important;
+    margin: 0 0 28px !important;
+    border-radius: 20px !important;
+    background: rgba(255,255,255,.16) !important;
+    border: 1px solid rgba(255,255,255,.28);
+    box-shadow: 0 12px 28px rgba(0,0,0,.12) !important;
+}
+#fullLoginPage .glass-panel > div:first-child i { font-size: 27px !important; }
+#fullLoginPage .glass-panel h1 {
+    color: #fff !important;
+    font-size: clamp(36px, 4vw, 50px) !important;
+    letter-spacing: -1.8px !important;
+    line-height: 1.05;
+}
+#fullLoginPage .glass-panel > div:first-child p {
+    color: rgba(255,255,255,.78) !important;
+    font-size: 14px !important;
+    line-height: 1.7;
+    max-width: 310px;
+}
+#fullLoginPage .glass-panel > div:first-child:before {
+    content: "ONE CAMPUS.\A ONE CONNECTED COMMUNITY.";
+    white-space: pre-line;
+    order: 5;
+    margin-top: 42px;
+    color: rgba(255,255,255,.92);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2.2px;
+    line-height: 2;
+}
+#fullLoginPage .glass-panel form {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: end;
+    padding: 52px 54px 22px !important;
+    margin: 0 !important;
+}
+#fullLoginPage .glass-panel form label {
+    color: #34445c !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+}
+#fullLoginPage .glass-panel form > div:first-child > div {
+    background: #f1f5fa !important;
+    border: 1px solid #e1e8f1 !important;
+    border-radius: 14px !important;
+    padding: 5px !important;
+}
+#fullLoginPage .glass-panel form button[id^="loginRole"] {
+    min-height: 62px;
+    border-radius: 11px !important;
+}
+#fullLoginPage .glass-panel form input {
+    min-height: 46px;
+    color: #1e2d43 !important;
+    background: #f7f9fc !important;
+    border: 1px solid #dce5f0 !important;
+    border-radius: 12px !important;
+    font-size: 13px !important;
+}
+#fullLoginPage .glass-panel form input:focus {
+    background: #fff !important;
+    border-color: #258caa !important;
+    box-shadow: 0 0 0 3px rgba(37,140,170,.12);
+}
+#fullLoginPage .glass-panel form button[type="submit"] {
+    min-height: 49px;
+    border-radius: 13px !important;
+    background: linear-gradient(100deg, #174f83, #168d91) !important;
+    box-shadow: 0 12px 24px rgba(22,105,139,.2) !important;
+    font-size: 13px !important;
+}
+#fullLoginPage .glass-panel > div:last-child {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: start;
+    margin: 0 54px 42px !important;
+    padding: 18px 0 0 !important;
+    color: #8996a8 !important;
+    border-color: #e8edf4 !important;
+    font-size: 10px !important;
+}
+@media (max-width: 720px) {
+    #fullLoginPage { padding: 14px !important; overflow-y: auto; align-items: flex-start !important; }
+    #fullLoginPage .glass-panel {
+        min-height: 0;
+        margin: auto 0;
+        grid-template-columns: 1fr;
+        border-radius: 23px !important;
+    }
+    #fullLoginPage .glass-panel > div:first-child {
+        grid-column: 1; grid-row: 1;
+        padding: 28px 28px 24px !important;
+        align-items: center; text-align: center !important;
+    }
+    #fullLoginPage .glass-panel > div:first-child > div:first-child {
+        width: 52px !important; height: 52px !important; margin: 0 0 14px !important;
+    }
+    #fullLoginPage .glass-panel h1 { font-size: 34px !important; }
+    #fullLoginPage .glass-panel > div:first-child p { font-size: 12px !important; }
+    #fullLoginPage .glass-panel > div:first-child:before { display: none; }
+    #fullLoginPage .glass-panel form {
+        grid-column: 1; grid-row: 2;
+        padding: 26px 26px 10px !important;
+        align-self: auto;
+    }
+    #fullLoginPage .glass-panel > div:last-child {
+        grid-column: 1; grid-row: 3;
+        margin: 0 26px 25px !important;
+    }
+}
+</style>
+
 </head>
 
 <body class="h-full flex flex-col font-sans overflow-hidden bg-slate-950 text-slate-100">
