@@ -1920,7 +1920,7 @@ input:focus, select:focus, textarea:focus {
                         </div>
                     </section>
 
-                    <div class="flex border-b border-slate-800 gap-4">
+                    <div class="flex flex-wrap border-b border-slate-800 gap-4">
                         <button onclick="switchAdminTab('notices')" id="adminTabNotices"
                             class="admin-tab-btn border-b-2 border-amber-500 text-amber-400 pb-3 text-sm font-semibold flex items-center gap-2">
                             <i class="fa-solid fa-list-check"></i> Notice Moderation
@@ -1930,6 +1930,8 @@ input:focus, select:focus, textarea:focus {
                             <i class="fa-solid fa-users-gear"></i> User Control
                         </button>
                         <button onclick="switchAdminTab('questions')" id="adminTabQuestions" class="admin-tab-btn border-b-2 border-transparent text-slate-400 pb-3 text-sm font-semibold flex items-center gap-2"><i class="fa-solid fa-comments"></i> Student Questions <span id="adminQuestionCount" class="rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-bold text-blue-700">0</span></button>
+                        <button onclick="switchAdminTab('approval')" id="adminTabApproval" class="admin-tab-btn border-b-2 border-transparent text-slate-500 pb-3 text-sm font-semibold flex items-center gap-2"><i class="fa-solid fa-clipboard-check"></i> Faculty Notice Approval</button>
+                        <button onclick="switchAdminTab('reports')" id="adminTabReports" class="admin-tab-btn border-b-2 border-transparent text-slate-500 pb-3 text-sm font-semibold flex items-center gap-2"><i class="fa-solid fa-chart-column"></i> Activity & Reports</button>
                     </div>
 
                     <div id="adminNoticeSection" class="space-y-4">
@@ -2635,12 +2637,12 @@ function facultyQuickLink(targetId) {
                 admin.insertBefore(panel,admin.children[1]||null);
             }
             if (admin && !document.getElementById('adminApprovalSection')) {
-                const panel=document.createElement('section'); panel.id='adminApprovalSection'; panel.className='rounded-2xl border border-rose-100 bg-white p-5 space-y-3';
+                const panel=document.createElement('section'); panel.id='adminApprovalSection'; panel.className='hidden rounded-2xl border border-rose-100 bg-white p-5 space-y-3';
                 panel.innerHTML='<div><h3 class="font-bold text-slate-800">Faculty Notice Approval</h3><p class="text-xs text-slate-500">Review faculty notices before they appear in the student feed.</p></div><div id="adminApprovalList" class="space-y-2"></div>';
                 const tabs=document.getElementById('adminNoticeSection'); if(tabs) tabs.insertAdjacentElement('beforebegin',panel);
             }
             if (admin && !document.getElementById('adminActivityReports')) {
-                const panel=document.createElement('section'); panel.id='adminActivityReports'; panel.className='rounded-2xl border border-rose-100 bg-white p-5 space-y-3';
+                const panel=document.createElement('section'); panel.id='adminActivityReports'; panel.className='hidden rounded-2xl border border-rose-100 bg-white p-5 space-y-3';
                 panel.innerHTML='<div><h3 class="font-bold text-slate-800">Activity & Reports</h3><p class="text-xs text-slate-500">Recent notice activity and monthly publishing summary</p></div><div id="adminMonthlyStats" class="text-sm font-semibold text-rose-700"></div><div id="adminActivityList" class="space-y-2 text-xs text-slate-600"></div>';
                 const tabs=document.getElementById('adminNoticeSection'); if(tabs) tabs.insertAdjacentElement('beforebegin',panel);
             }
@@ -2743,13 +2745,19 @@ function facultyQuickLink(targetId) {
         // Admin Board
         function switchAdminTab(tab) {
             currentAdminTab = tab;
-            document.querySelectorAll('.admin-tab-btn').forEach(btn => btn.className = "admin-tab-btn border-b-2 border-transparent text-slate-400 hover:text-slate-200 pb-3 text-sm font-semibold flex items-center gap-2");
-            ['adminNoticeSection','adminUserSection','adminQuestionsSection'].forEach(id => document.getElementById(id).classList.add('hidden'));
-            const active = document.getElementById(tab === 'notices' ? 'adminTabNotices' : tab === 'users' ? 'adminTabUsers' : 'adminTabQuestions');
-            active.className = "admin-tab-btn border-b-2 border-blue-600 text-blue-700 pb-3 text-sm font-semibold flex items-center gap-2";
-            if (tab === 'notices') document.getElementById('adminNoticeSection').classList.remove('hidden');
-            else if (tab === 'users') { document.getElementById('adminUserSection').classList.remove('hidden'); renderAdminUsers(); }
-            else { document.getElementById('adminQuestionsSection').classList.remove('hidden'); renderAdminQuestions(); }
+            const sectionIds = ['adminNoticeSection','adminUserSection','adminQuestionsSection','adminApprovalSection','adminActivityReports'];
+            sectionIds.forEach(id => { const el=document.getElementById(id); if(el) el.classList.add('hidden'); });
+            document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+                btn.className = "admin-tab-btn border-b-2 border-transparent text-slate-500 hover:text-rose-700 pb-3 text-sm font-semibold flex items-center gap-2";
+            });
+            const tabIds = {notices:'adminTabNotices',users:'adminTabUsers',questions:'adminTabQuestions',approval:'adminTabApproval',reports:'adminTabReports'};
+            const active=document.getElementById(tabIds[tab]||'adminTabNotices');
+            if(active) active.className="admin-tab-btn border-b-2 border-rose-700 text-rose-700 pb-3 text-sm font-semibold flex items-center gap-2";
+            if(tab==='users'){document.getElementById('adminUserSection')?.classList.remove('hidden');renderAdminUsers();}
+            else if(tab==='questions'){document.getElementById('adminQuestionsSection')?.classList.remove('hidden');renderAdminQuestions();}
+            else if(tab==='approval'){document.getElementById('adminApprovalSection')?.classList.remove('hidden');campusRefreshDashboards();}
+            else if(tab==='reports'){document.getElementById('adminActivityReports')?.classList.remove('hidden');campusRefreshDashboards();}
+            else {document.getElementById('adminNoticeSection')?.classList.remove('hidden');}
         }
 
         function renderAdminBoard() {
