@@ -288,6 +288,9 @@
 
     
 
+        /* Event calendars open in a popup instead of taking dashboard space */
+        #eventCalendarWidget { display: none; }
+        #adminEventCalendar { display: none !important; }
         /* Student Event Calendar — charcoal panel with champagne details */
         #eventCalendarWidget {
             background: linear-gradient(145deg, #302e29 0%, #25241f 100%) !important;
@@ -825,7 +828,7 @@
                             class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-indigo-600/20 text-indigo-300 font-semibold text-xs border border-indigo-500/30">
                             <i class="fa-solid fa-table-columns text-sm"></i> Main Notice Feed
                         </a>
-                        <a href="#eventCalendarWidget"
+                        <a href="#" onclick="openEventCalendar(); return false;"
                             class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 text-xs transition-all">
                             <i class="fa-solid fa-calendar-days text-sm"></i> Event Calendar
                         </a>
@@ -1038,6 +1041,7 @@
                         <section class="glass-panel rounded-2xl p-5 space-y-4">
                             <h3 id="facultyQuickLinksHeading" class="border-b border-slate-800 pb-3 text-slate-100"><i class="fa-solid fa-bolt text-amber-500 mr-2"></i>Quick Links</h3>
                             <div class="grid grid-cols-2 gap-3">
+                                <button type="button" onclick="openEventCalendar()" class="faculty-quick-link"><i class="fa-solid fa-calendar-days"></i><span>Event Calendar</span></button>
                                 <button type="button" onclick="openNoticeModal('faculty')" class="faculty-quick-link"><i class="fa-solid fa-plus"></i><span>Post a notice</span></button>
                                 <button type="button" onclick="openFacultyQuickView('notices')" class="faculty-quick-link"><i class="fa-solid fa-bullhorn"></i><span>My notices</span></button>
                                 <button type="button" onclick="openFacultyQuickView('directives')" class="faculty-quick-link"><i class="fa-solid fa-inbox"></i><span>Staff directives</span></button>
@@ -1095,10 +1099,7 @@
                             <p class="text-sm text-slate-300 mt-1">Global oversight, access governance, and
                                 institution-wide broadcasts.</p>
                         </div>
-                        <button onclick="openNoticeModal('admin')"
-                            class="px-4 py-2.5 bg-amber-600 hover:bg-amber-500 text-white rounded-xl text-xs font-bold shadow-lg shadow-amber-600/30 flex items-center gap-2 transition-all">
-                            <i class="fa-solid fa-tower-broadcast"></i> Global Broadcast
-                        </button>
+                        <div class="flex flex-wrap gap-2"><button type="button" onclick="openEventCalendar()" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center gap-2"><i class="fa-solid fa-calendar-days"></i> Event Calendar</button><button onclick="openNoticeModal('admin')" class="px-4 py-2.5 bg-amber-600 hover:bg-amber-500 text-white rounded-xl text-xs font-bold shadow-lg shadow-amber-600/30 flex items-center gap-2 transition-all"><i class="fa-solid fa-tower-broadcast"></i> Global Broadcast</button></div>
                     </div>
 
                     <!-- ADMIN EVENT CALENDAR -->
@@ -1477,6 +1478,36 @@
             }
 
             renderCalendarEventsList();
+        }
+
+        let eventCalendarOriginalParent = null;
+        let eventCalendarOriginalNext = null;
+        function openEventCalendar() {
+            const widget = document.getElementById('eventCalendarWidget');
+            const content = document.getElementById('eventCalendarModalContent');
+            const modal = document.getElementById('eventCalendarModal');
+            if (!widget || !content || !modal) return;
+            if (!eventCalendarOriginalParent) {
+                eventCalendarOriginalParent = widget.parentNode;
+                eventCalendarOriginalNext = widget.nextSibling;
+            }
+            content.appendChild(widget);
+            widget.style.display = 'block';
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            renderCalendar();
+            renderCalendarEventsList();
+        }
+        function closeEventCalendar() {
+            const widget = document.getElementById('eventCalendarWidget');
+            const modal = document.getElementById('eventCalendarModal');
+            if (widget && eventCalendarOriginalParent) {
+                if (eventCalendarOriginalNext && eventCalendarOriginalNext.parentNode === eventCalendarOriginalParent) eventCalendarOriginalParent.insertBefore(widget, eventCalendarOriginalNext);
+                else eventCalendarOriginalParent.appendChild(widget);
+                widget.style.display = 'none';
+            }
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
         }
 
         function changeCalendarMonth(delta) {
@@ -1951,6 +1982,16 @@ function facultyQuickLink(targetId) {
             document.getElementById('sidebarCountUrgent').innerText = notices.filter(n => n.priority === 'Urgent').length;
         }
     </script>
+
+    <div id="eventCalendarModal" class="hidden fixed inset-0 z-[90] bg-slate-950/70 backdrop-blur-sm p-3 sm:p-6 items-center justify-center">
+        <div class="w-full max-w-4xl max-h-[92vh] overflow-y-auto rounded-2xl bg-white p-4 sm:p-6 shadow-2xl">
+            <div class="flex items-center justify-between gap-3 mb-4 border-b border-slate-200 pb-3">
+                <div><h2 class="text-lg font-extrabold text-slate-900">Campus Event Calendar</h2><p class="text-xs text-slate-500 mt-1">Upcoming events and important deadlines</p></div>
+                <button type="button" onclick="closeEventCalendar()" class="rounded-lg px-3 py-2 text-sm text-slate-600 hover:bg-slate-100"><i class="fa-solid fa-xmark mr-1"></i> Close</button>
+            </div>
+            <div id="eventCalendarModalContent"></div>
+        </div>
+    </div>
 
     <div id="facultyQuickViewModal" class="hidden fixed inset-0 z-[80] bg-slate-950/80 backdrop-blur-sm p-4 flex items-center justify-center">
         <div class="w-full max-w-3xl max-h-[85vh] overflow-y-auto rounded-2xl border border-[#b99a58]/40 bg-[#292824] shadow-2xl p-5 sm:p-7">
