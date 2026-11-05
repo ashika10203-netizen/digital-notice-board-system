@@ -943,6 +943,36 @@
 }
 </style>
 
+
+<style id="campussync-notice-tab-refresh">
+/* Remove the top floating announcement card from the login visual */
+.campus-login-visual .campus-float-card-main { display: none !important; }
+.campus-login-visual .campus-float-card-small {
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+}
+/* Clear blue palette for All Notices and the other category tabs */
+#studentCategoryTabs .tab-btn {
+    background: #eaf2ff !important;
+    color: #24436f !important;
+    border: 1px solid #c9daf3 !important;
+    box-shadow: none !important;
+}
+#studentCategoryTabs .tab-btn i { color: #3569ad !important; }
+#studentCategoryTabs .tab-btn:hover {
+    background: #dceaff !important;
+    border-color: #9dbce8 !important;
+}
+#studentCategoryTabs .tab-btn.active {
+    background: #2563eb !important;
+    color: #ffffff !important;
+    border-color: #2563eb !important;
+    box-shadow: 0 5px 14px rgba(37, 99, 235, .18) !important;
+}
+#studentCategoryTabs .tab-btn.active i { color: #ffffff !important; }
+</style>
+
 </head>
 
 <body class="h-full flex flex-col font-sans overflow-hidden bg-slate-950 text-slate-100">
