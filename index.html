@@ -385,6 +385,200 @@
             box-shadow: 0 0 0 5px rgba(185,154,88,0.12);
             transition: outline .2s ease, box-shadow .2s ease;
         }
+
+        /* =====================================================
+           CAMPUSSYNC — CLEAN BLUE / WHITE PROFESSIONAL THEME
+           High contrast, crisp cards, clear typography.
+           ===================================================== */
+        :root {
+            --campus-navy: #14213d;
+            --campus-blue: #2563eb;
+            --campus-blue-dark: #1d4ed8;
+            --campus-blue-pale: #eff6ff;
+            --campus-page: #f4f7fb;
+            --campus-surface: #ffffff;
+            --campus-text: #172033;
+            --campus-muted: #596579;
+            --campus-border: #dce4ef;
+        }
+        html, body, #mainDashboard, main {
+            background: var(--campus-page) !important;
+            color: var(--campus-text) !important;
+        }
+        body { font-family: 'Inter', sans-serif !important; }
+        header[class~="bg-slate-900/90"],
+        aside[class~="bg-slate-900/60"] {
+            background: var(--campus-navy) !important;
+            border-color: #263653 !important;
+        }
+        header h1, header .text-white, aside .text-white { color: #ffffff !important; }
+        header .text-slate-400, aside .text-slate-400 { color: #c5d0e0 !important; }
+        main { background: var(--campus-page) !important; }
+        .glass-panel, .glass-card {
+            background: var(--campus-surface) !important;
+            border: 1px solid var(--campus-border) !important;
+            border-radius: 16px !important;
+            box-shadow: 0 5px 18px rgba(20, 33, 61, .055) !important;
+            backdrop-filter: none !important;
+        }
+        [class~="bg-slate-950"], [class~="bg-slate-950/40"],
+        [class~="bg-slate-900"], [class~="bg-slate-900/90"],
+        [class~="bg-slate-900/80"], [class~="bg-slate-900/60"] {
+            background-color: #ffffff !important;
+        }
+        [class~="bg-slate-800"], [class~="bg-slate-800/80"],
+        [class~="bg-slate-800/40"], [class~="bg-slate-700"] {
+            background-color: #eef3f9 !important;
+        }
+        [class~="text-slate-100"], [class~="text-slate-200"],
+        [class~="text-slate-300"], [class~="text-slate-400"],
+        [class~="text-slate-500"] {
+            color: var(--campus-text) !important;
+        }
+        [class~="text-slate-400"], [class~="text-slate-500"] {
+            color: var(--campus-muted) !important;
+        }
+        [class~="border-slate-800"], [class~="border-slate-800/80"],
+        [class~="border-slate-700"], [class~="border-slate-700/80"],
+        [class~="border-slate-700/70"], [class~="border-slate-700/50"] {
+            border-color: var(--campus-border) !important;
+        }
+        [class~="bg-indigo-600"], [class~="bg-indigo-500"],
+        [class~="bg-teal-600"], [class~="bg-amber-600"] {
+            background-color: var(--campus-blue) !important;
+            color: #ffffff !important;
+        }
+        [class~="hover:bg-indigo-600"]:hover,
+        [class~="hover:bg-teal-500"]:hover,
+        [class~="hover:bg-amber-500"]:hover {
+            background-color: var(--campus-blue-dark) !important;
+        }
+        [class~="text-indigo-400"], [class~="text-indigo-300"],
+        [class~="text-indigo-200"], [class~="text-violet-400"],
+        [class~="text-teal-400"], [class~="text-teal-300"],
+        [class~="text-amber-400"], [class~="text-amber-300"] {
+            color: var(--campus-blue-dark) !important;
+        }
+        [class~="bg-indigo-500/20"], [class~="bg-indigo-600/20"],
+        [class~="bg-violet-500/20"], [class~="bg-teal-500/20"],
+        [class~="bg-teal-500/10"], [class~="bg-amber-500/20"] {
+            background-color: #eaf2ff !important;
+        }
+        [class~="border-indigo-500/30"], [class~="border-indigo-500/20"],
+        [class~="border-teal-500/30"], [class~="border-teal-500/20"],
+        [class~="border-amber-500/30"], [class~="border-amber-500/20"] {
+            border-color: #bfd3f5 !important;
+        }
+        #fullLoginPage {
+            background: linear-gradient(135deg, #eaf2ff 0%, #f7f9fc 55%, #e9f0fb 100%) !important;
+        }
+        #fullLoginPage > .absolute {
+            background: radial-gradient(circle at 50% 0%, #dce9ff 0%, #f4f7fb 68%) !important;
+        }
+        #fullLoginPage .glass-panel {
+            background: #ffffff !important;
+            border: 1px solid #dbe5f2 !important;
+            box-shadow: 0 24px 70px rgba(20, 33, 61, .13) !important;
+        }
+        #fullLoginPage h1, #fullLoginPage label { color: #172033 !important; }
+        #fullLoginPage p { color: #596579 !important; }
+        #viewStudent > div:first-child,
+        #viewFaculty > div:first-child,
+        #viewAdmin > div:first-child {
+            background: linear-gradient(115deg, #e8f1ff 0%, #f7faff 58%, #edf4ff 100%) !important;
+            border: 1px solid #d4e2f7 !important;
+            border-radius: 18px !important;
+            box-shadow: 0 10px 28px rgba(37, 99, 235, .07) !important;
+        }
+        #viewStudent > div:first-child h2,
+        #viewFaculty > div:first-child h2,
+        #viewAdmin > div:first-child h2 {
+            color: #14213d !important;
+            font-weight: 800 !important;
+        }
+        #viewStudent > div:first-child p,
+        #viewFaculty > div:first-child p,
+        #viewAdmin > div:first-child p { color: #52627a !important; }
+        #viewStudent h2, #viewStudent h3, #viewStudent h4,
+        #viewFaculty h2, #viewFaculty h3, #viewFaculty h4,
+        #viewAdmin h2, #viewAdmin h3, #viewAdmin h4 {
+            color: #172033 !important;
+            font-weight: 800 !important;
+        }
+        #viewStudent .text-white, #viewFaculty .text-white, #viewAdmin .text-white {
+            color: #172033 !important;
+        }
+        #viewStudent button, #viewFaculty button, #viewAdmin button {
+            font-weight: 600;
+        }
+        #eventCalendarWidget {
+            background: #ffffff !important;
+            border: 1px solid var(--campus-border) !important;
+            color: var(--campus-text) !important;
+            box-shadow: 0 5px 18px rgba(20, 33, 61, .055) !important;
+        }
+        #eventCalendarWidget h3, #eventCalendarWidget h4,
+        #eventCalendarWidget #calendarMonthYear { color: #172033 !important; }
+        #eventCalendarWidget .text-slate-400,
+        #eventCalendarWidget .text-slate-500 { color: #596579 !important; }
+        #eventCalendarWidget .border-b, #eventCalendarWidget .border-t {
+            border-color: var(--campus-border) !important;
+        }
+        #eventCalendarWidget #calendarDaysGrid > div {
+            color: #27364d !important;
+            background: #f5f8fc !important;
+            border: 1px solid #e1e8f1 !important;
+            border-radius: 9px !important;
+        }
+        #eventCalendarWidget #calendarDaysGrid > div:empty {
+            background: transparent !important;
+            border-color: transparent !important;
+        }
+        #eventCalendarWidget #calendarDaysGrid > div[class*="bg-indigo"] {
+            background: #2563eb !important;
+            color: #ffffff !important;
+            border-color: #2563eb !important;
+        }
+        #eventCalendarWidget #calendarEventsList > div {
+            background: #f7f9fc !important;
+            border: 1px solid #e1e8f1 !important;
+            color: #172033 !important;
+        }
+        #eventCalendarWidget #calendarEventsList .text-slate-200 { color: #172033 !important; }
+        #eventCalendarWidget #calendarEventsList .text-slate-400 { color: #596579 !important; }
+        #eventCalendarWidget button { color: #2563eb !important; }
+        .faculty-quick-link {
+            background: #f6f9ff !important;
+            color: #172033 !important;
+            border: 1px solid #dce6f5 !important;
+            border-radius: 12px !important;
+        }
+        .faculty-quick-link:hover {
+            background: #eaf2ff !important;
+            border-color: #8fb4f0 !important;
+        }
+        #facultyQuickLinksHeading { color: #172033 !important; font-weight: 800 !important; }
+        input, select, textarea {
+            background: #ffffff !important;
+            color: #172033 !important;
+            border: 1px solid #cfd9e7 !important;
+            border-radius: 9px !important;
+        }
+        input::placeholder, textarea::placeholder { color: #78869a !important; }
+        input:focus, select:focus, textarea:focus {
+            border-color: #4f83df !important;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, .12) !important;
+        }
+        table thead { background: #edf3fb !important; color: #334155 !important; }
+        table tbody tr:hover { background: #f5f8fd !important; }
+        .ticker-wrap { background: transparent !important; }
+        @media (max-width: 640px) {
+            main { padding: 14px !important; }
+            #viewStudent > div:first-child,
+            #viewFaculty > div:first-child,
+            #viewAdmin > div:first-child { border-radius: 14px !important; }
+        }
+
 </style>
 </head>
 
