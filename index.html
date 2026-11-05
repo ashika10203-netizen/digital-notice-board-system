@@ -2659,7 +2659,7 @@ function facultyQuickLink(targetId) {
     ];
     const categories = studentNoticeMode === 'department' ? departmentCategories : commonCategories;
     tabs.innerHTML = categories.map(([key, icon, label]) =>
-      '<button type="button" onclick="filterStudentNotices(\\''+key+'\\')" data-cat="'+key+'" class="tab-btn'+(studentActiveCategory===key?' active':'')+'"><i class="fa-solid '+icon+'"></i><span>'+label+'</span></button>'
+      '<button type="button" onclick="filterStudentNotices(&quot;'+key+'&quot;)" data-cat="'+key+'" class="tab-btn'+(studentActiveCategory===key?' active':'')+'"><i class="fa-solid '+icon+'"></i><span>'+label+'</span></button>'
     ).join('');
   }
 
