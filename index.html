@@ -1232,6 +1232,19 @@
             </div>
         </header>
 
+        <!-- LIVE ALERT TICKER -->
+        <div class="ticker-wrap flex items-center gap-3 px-4 lg:px-6 py-2.5 bg-slate-900 border-b border-slate-700/80 shrink-0 overflow-hidden" role="status" aria-label="Live campus alerts">
+            <span class="inline-flex items-center gap-2 shrink-0 text-[10px] sm:text-xs font-extrabold tracking-wider text-rose-600 uppercase">
+                <span class="relative flex h-2.5 w-2.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-500 opacity-60"></span><span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-600"></span></span>
+                Live Alerts
+            </span>
+            <div class="min-w-0 flex-1 overflow-hidden">
+                <div id="tickerContent" class="flex items-center text-xs sm:text-sm text-slate-100" aria-live="polite">
+                    <span class="ticker-item">Loading campus alerts...</span>
+                </div>
+            </div>
+        </div>
+
         <!-- MAIN WORKSPACE -->
         <div class="flex-1 flex overflow-hidden">
             <!-- SIDEBAR NAVIGATION -->
