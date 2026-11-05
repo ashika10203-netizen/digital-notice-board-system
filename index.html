@@ -2677,12 +2677,19 @@ function facultyQuickLink(targetId) {
       b.onclick=showCampusNotifications; header.insertBefore(b, header.firstChild);
     }
     const tabs=document.getElementById('studentCategoryTabs');
-    // Keep a single category navigation row; the original duplicate filter strip caused misalignment.
+    // Replace the crowded category-card grid with one compact dropdown and a Saved shortcut.
     const extraFilters=document.getElementById('campusExtraFilters');
     if(extraFilters) extraFilters.remove();
     if(tabs) {
-      // Show categories that match the selected notice audience.
-      tabs.style.display='grid';
+      tabs.style.display='none';
+      const toolbar=tabs.closest('.glass-panel');
+      if(toolbar && !document.getElementById('campusCategoryControls')) {
+        const controls=document.createElement('div');
+        controls.id='campusCategoryControls';
+        controls.className='flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full';
+        controls.innerHTML='<label for="campusCategorySelect" class="text-xs font-bold text-slate-500 whitespace-nowrap">Browse by category</label><select id="campusCategorySelect" onchange="filterStudentNotices(this.value)" class="flex-1 min-w-0 rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm font-semibold text-slate-700 outline-none focus:border-blue-500"><option value="all">All Categories</option></select><button id="campusSavedShortcut" type="button" onclick="filterStudentNotices(\'bookmarks\')" class="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-xs font-bold text-slate-600 hover:bg-blue-50"><i class="fa-regular fa-bookmark"></i> Saved</button>';
+        toolbar.insertBefore(controls,tabs);
+      }
       renderCampusCategoryTabs();
     }
     if(!document.getElementById('campusNotificationModal')) {
@@ -2705,26 +2712,36 @@ function facultyQuickLink(targetId) {
   }
 
   function renderCampusCategoryTabs() {
-    const tabs = document.getElementById('studentCategoryTabs');
-    if (!tabs) return;
+    const select = document.getElementById('campusCategorySelect');
+    const savedButton = document.getElementById('campusSavedShortcut');
+    if (!select) return;
     const commonCategories = [
-      ['holidays','fa-umbrella-beach','Holidays'],
-      ['exams','fa-file-lines','Examinations'],
-      ['events','fa-calendar-star','Events'],
-      ['placements','fa-briefcase','Campus Placements'],
-      ['fees','fa-wallet','Fees'],
-      ['alerts','fa-triangle-exclamation','Campus Alerts']
+      ['holidays','Holidays'],
+      ['exams','Examinations'],
+      ['events','Events'],
+      ['placements','Campus Placements'],
+      ['fees','Fees'],
+      ['alerts','Campus Alerts']
     ];
+    // Department mode intentionally keeps only its two useful content groups.
     const departmentCategories = [
-      ['academic','fa-book-open','Academic & Exams'],
-      ['placement','fa-briefcase','Placement & Events'],
-      ['deadline','fa-clock-rotate-left','Deadlines & Fees'],
-      ['bookmarks','fa-bookmark','Saved / Bookmarked']
+      ['academic','Academic & Exams'],
+      ['placement','Placement & Events']
     ];
     const categories = studentNoticeMode === 'department' ? departmentCategories : commonCategories;
-    tabs.innerHTML = categories.map(([key, icon, label]) =>
-      '<button type="button" onclick="filterStudentNotices(&quot;'+key+'&quot;)" data-cat="'+key+'" class="tab-btn'+(studentActiveCategory===key?' active':'')+'"><i class="fa-solid '+icon+'"></i><span>'+label+'</span></button>'
+    select.innerHTML = '<option value="all">All Categories</option>' + categories.map(([key,label]) =>
+      '<option value="'+key+'">'+label+'</option>'
     ).join('');
+    select.value = categories.some(([key]) => key === studentActiveCategory) ? studentActiveCategory : 'all';
+    if (savedButton) {
+      const savedActive = studentActiveCategory === 'bookmarks';
+      savedButton.classList.toggle('bg-blue-600', savedActive);
+      savedButton.classList.toggle('text-white', savedActive);
+      savedButton.classList.toggle('border-blue-600', savedActive);
+      savedButton.classList.toggle('bg-white', !savedActive);
+      savedButton.classList.toggle('text-slate-600', !savedActive);
+      savedButton.innerHTML = '<i class="fa-'+(savedActive?'solid':'regular')+' fa-bookmark"></i> Saved';
+    }
   }
 
   window.campusSetNoticeMode=function(mode) {
@@ -2741,6 +2758,7 @@ function facultyQuickLink(targetId) {
 
   window.campusSetCategory=function(cat) {
     if(typeof studentActiveCategory!=='undefined') studentActiveCategory=cat;
+    renderCampusCategoryTabs();
     if(originalStudentRender) window.renderStudentBoard();
   };
   window.campusSetDate=function(value){ activeDateFilter=value||''; window.renderStudentBoard(); };
