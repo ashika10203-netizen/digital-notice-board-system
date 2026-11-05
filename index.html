@@ -851,6 +851,98 @@
 }
 </style>
 
+
+<style id="campussync-login-motion">
+.campus-login-visual {
+    position: relative;
+    width: min(100%, 365px);
+    min-height: 148px;
+    margin-top: 34px;
+    isolation: isolate;
+}
+.campus-float-card {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 15px;
+    color: #20334c;
+    background: rgba(255,255,255,.96);
+    border: 1px solid rgba(255,255,255,.72);
+    border-radius: 15px;
+    box-shadow: 0 16px 38px rgba(5,24,48,.2);
+    animation: campus-card-float 4.5s ease-in-out infinite;
+}
+.campus-float-card-main {
+    left: 0;
+    top: 7px;
+    width: 285px;
+}
+.campus-float-card-small {
+    right: 0;
+    bottom: 2px;
+    width: 258px;
+    animation-delay: -2.2s;
+}
+.campus-float-card strong {
+    display: block;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1.5;
+}
+.campus-float-card small {
+    display: block;
+    margin-top: 2px;
+    color: #718096;
+    font-size: 9px;
+}
+.campus-visual-icon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 35px;
+    width: 35px;
+    height: 35px;
+    color: #fff;
+    background: linear-gradient(140deg,#147e91,#1aa6a0);
+    border-radius: 11px;
+}
+.campus-visual-icon-blue { background: linear-gradient(140deg,#315c9a,#548bd0); }
+.campus-live-dot {
+    margin-left: auto;
+    color: #20b981;
+    font-size: 7px;
+    animation: campus-dot-pulse 1.7s ease-in-out infinite;
+}
+.campus-visual-orbit {
+    position: absolute;
+    z-index: -1;
+    border: 1px solid rgba(255,255,255,.22);
+    border-radius: 50%;
+    animation: campus-orbit-turn 18s linear infinite;
+}
+.campus-visual-orbit-one { width: 125px; height: 125px; right: 3px; top: -25px; }
+.campus-visual-orbit-two { width: 175px; height: 175px; right: -22px; top: -50px; animation-direction: reverse; }
+@keyframes campus-card-float {
+    0%,100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-9px) rotate(-.7deg); }
+}
+@keyframes campus-dot-pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: .35; transform: scale(1.65); }
+}
+@keyframes campus-orbit-turn {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+@media (max-width:720px) {
+    .campus-login-visual { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .campus-float-card, .campus-live-dot, .campus-visual-orbit { animation: none !important; }
+}
+</style>
+
 </head>
 
 <body class="h-full flex flex-col font-sans overflow-hidden bg-slate-950 text-slate-100">
@@ -871,6 +963,19 @@
                 </div>
                 <h1 class="text-2xl font-extrabold text-white tracking-tight">CampusSync</h1>
                 <p class="text-xs text-slate-400">Institutional Digital Notice Board System</p>
+                <div class="campus-login-visual" aria-hidden="true">
+                    <div class="campus-float-card campus-float-card-main">
+                        <span class="campus-visual-icon"><i class="fa-solid fa-bell"></i></span>
+                        <span><strong>New announcement</strong><small>Stay updated with campus life</small></span>
+                        <i class="fa-solid fa-circle campus-live-dot"></i>
+                    </div>
+                    <div class="campus-float-card campus-float-card-small">
+                        <span class="campus-visual-icon campus-visual-icon-blue"><i class="fa-solid fa-calendar-check"></i></span>
+                        <span><strong>Exam schedule</strong><small>November 25 · Updated</small></span>
+                    </div>
+                    <div class="campus-visual-orbit campus-visual-orbit-one"></div>
+                    <div class="campus-visual-orbit campus-visual-orbit-two"></div>
+                </div>
             </div>
 
             <!-- Role Quick Selector -->
