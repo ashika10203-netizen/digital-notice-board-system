@@ -1043,6 +1043,45 @@
   }
 </style>
 
+<style id="campus-student-filter-layout">
+/* Compact student filters: category controls first, search and priority below. */
+#studentCategoryTabs { display:none !important; }
+.campus-student-filter-toolbar {
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:stretch !important;
+  justify-content:flex-start !important;
+  gap:14px !important;
+  width:100% !important;
+}
+#campusCategoryControls {
+  display:grid !important;
+  grid-template-columns:auto minmax(180px,1fr) auto !important;
+  align-items:center !important;
+  gap:12px !important;
+  width:100% !important;
+}
+#campusCategoryControls label { white-space:nowrap !important; }
+#campusCategorySelect { width:100% !important; min-width:0 !important; }
+#campusSavedShortcut { min-height:42px !important; white-space:nowrap !important; }
+#campusStudentSearchControls {
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-end !important;
+  gap:12px !important;
+  width:100% !important;
+}
+#campusStudentSearchControls > div { flex:1 1 360px !important; max-width:560px !important; min-width:0 !important; }
+#campusStudentSearchControls input { width:100% !important; min-height:42px !important; }
+#campusStudentSearchControls select { flex:0 1 210px !important; min-width:170px !important; min-height:42px !important; }
+@media (max-width:640px) {
+  #campusCategoryControls { grid-template-columns:minmax(0,1fr) auto !important; }
+  #campusCategoryControls label { grid-column:1 / -1 !important; }
+  #campusStudentSearchControls { flex-direction:column !important; align-items:stretch !important; }
+  #campusStudentSearchControls > div,
+  #campusStudentSearchControls select { width:100% !important; max-width:none !important; flex:1 1 auto !important; }
+}
+</style>
 </head>
 
 <body class="h-full flex flex-col font-sans overflow-hidden bg-slate-950 text-slate-100">
@@ -2681,8 +2720,13 @@ function facultyQuickLink(targetId) {
     const extraFilters=document.getElementById('campusExtraFilters');
     if(extraFilters) extraFilters.remove();
     if(tabs) {
-      tabs.style.display='none';
+      tabs.style.setProperty('display','none','important');
       const toolbar=tabs.closest('.glass-panel');
+      if(toolbar) {
+        toolbar.classList.add('campus-student-filter-toolbar');
+        const searchControls=toolbar.querySelector('#studentSearchInput')?.parentElement?.parentElement;
+        if(searchControls) searchControls.id='campusStudentSearchControls';
+      }
       if(toolbar && !document.getElementById('campusCategoryControls')) {
         const controls=document.createElement('div');
         controls.id='campusCategoryControls';
