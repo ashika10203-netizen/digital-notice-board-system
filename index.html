@@ -1427,6 +1427,59 @@ input:focus, select:focus, textarea:focus {
 #studentCategoryTabs .tab-btn.active i { color:#fff !important; }
 </style>
 
+
+<style id="campussync-final-button-colour-fix">
+/* Consistent crimson styling for remaining action buttons and question UI. */
+#mainDashboard button[class*="bg-blue-"],
+#mainDashboard button[class*="bg-indigo-"],
+#mainDashboard button[class*="bg-violet-"],
+#mainDashboard button[class*="bg-teal-"],
+#mainDashboard button[class*="bg-amber-"] {
+  background:#b5122b !important;
+  border-color:#b5122b !important;
+  color:#fff !important;
+}
+#mainDashboard button[class*="bg-blue-"]:hover,
+#mainDashboard button[class*="bg-indigo-"]:hover,
+#mainDashboard button[class*="bg-violet-"]:hover,
+#mainDashboard button[class*="bg-teal-"]:hover,
+#mainDashboard button[class*="bg-amber-"]:hover {
+  background:#920d22 !important;
+  border-color:#920d22 !important;
+}
+#mainDashboard [class*="text-blue-"],
+#mainDashboard [class*="text-indigo-"],
+#mainDashboard [class*="text-violet-"] { color:#a91029 !important; }
+#mainDashboard [class*="border-blue-"],
+#mainDashboard [class*="border-indigo-"],
+#mainDashboard [class*="border-violet-"] { border-color:#e7b9c3 !important; }
+
+/* Question actions and question counts */
+#mainDashboard button[onclick*="Question"],
+#mainDashboard button[onclick*="question"],
+#mainDashboard #adminTabQuestions,
+#mainDashboard #studentQuestionCount,
+#mainDashboard #facultyQuestionCount,
+#mainDashboard #adminQuestionCount {
+  --question-red:#b5122b;
+}
+#mainDashboard #studentQuestionCount,
+#mainDashboard #facultyQuestionCount,
+#mainDashboard #adminQuestionCount {
+  background:#fbe8ec !important;
+  color:#9f1027 !important;
+}
+#mainDashboard .admin-tab-btn.border-blue-600 {
+  border-color:#b5122b !important;
+  color:#9f1027 !important;
+}
+#mainDashboard #adminQuestionsSection,
+#mainDashboard #adminQuestionsList,
+#mainDashboard #facultyQuickViewContent {
+  --question-accent:#b5122b;
+}
+</style>
+
 </head>
 
 <body class="h-full flex flex-col font-sans overflow-hidden bg-slate-950 text-slate-100">
