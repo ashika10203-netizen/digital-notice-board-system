@@ -969,6 +969,24 @@
 #studentCategoryTabs .tab-btn.active i { color: #ffffff !important; }
 </style>
 
+
+<style id="campussync-common-department-modes">
+  #campusNoticeModeTabs .campus-mode-tab {
+    min-height: 68px; background: #ffffff; color: #24436f;
+    border-color: #c9daf3; transition: background .18s ease, border-color .18s ease, box-shadow .18s ease;
+  }
+  #campusNoticeModeTabs .campus-mode-tab:hover { background: #f1f6ff; border-color: #9dbce8; }
+  #campusNoticeModeTabs .campus-mode-tab.campus-mode-active {
+    background: #2563eb; color: #ffffff; border-color: #2563eb;
+    box-shadow: 0 5px 14px rgba(37,99,235,.16);
+  }
+  @media (max-width: 480px) {
+    #campusNoticeModeTabs .campus-mode-tab { padding: 10px; }
+    #campusNoticeModeTabs .campus-mode-tab span:first-child { font-size: 12px; }
+    #campusNoticeModeTabs .campus-mode-tab span:last-child { font-size: 10px; }
+  }
+</style>
+
 </head>
 
 <body class="h-full flex flex-col font-sans overflow-hidden bg-slate-950 text-slate-100">
@@ -2505,6 +2523,7 @@ function facultyQuickLink(targetId) {
   const originalAdminRender = window.renderAdminBoard;
   const originalRoleSwitch = window.switchRole;
   const originalSaveNotice = window.handleSaveNotice;
+  let studentNoticeMode = 'common';
 
   const readJSON = (key, fallback) => { try { return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); } catch (_) { return fallback; } };
   const writeJSON = (key, value) => { try { localStorage.setItem(key, JSON.stringify(value)); } catch (_) {} };
@@ -2519,6 +2538,24 @@ function facultyQuickLink(targetId) {
   window.updateSidebarStats = function () {};
 
   function ensureEnhancementUI() {
+    const studentView = document.getElementById('viewStudent');
+    const existingModeTabs = document.getElementById('campusNoticeModeTabs');
+    const categoryToolbar = document.getElementById('studentCategoryTabs')?.closest('.glass-panel');
+    if (studentView && categoryToolbar && !existingModeTabs) {
+      const modeTabs = document.createElement('div');
+      modeTabs.id = 'campusNoticeModeTabs';
+      modeTabs.className = 'grid grid-cols-2 gap-3';
+      modeTabs.innerHTML = `
+        <button type="button" data-mode="common" onclick="campusSetNoticeMode('common')" class="campus-mode-tab campus-mode-active rounded-xl border px-4 py-3 text-left">
+          <span class="flex items-center gap-2 text-sm font-extrabold"><i class="fa-solid fa-globe"></i> Common Notices</span>
+          <span class="block mt-1 text-xs font-medium opacity-75">Updates for all students</span>
+        </button>
+        <button type="button" data-mode="department" onclick="campusSetNoticeMode('department')" class="campus-mode-tab rounded-xl border px-4 py-3 text-left">
+          <span class="flex items-center gap-2 text-sm font-extrabold"><i class="fa-solid fa-graduation-cap"></i> Department Notices</span>
+          <span class="block mt-1 text-xs font-medium opacity-75">Updates for your department</span>
+        </button>`;
+      studentView.insertBefore(modeTabs, categoryToolbar);
+    }
     const header = document.querySelector('header .flex.items-center.space-x-3');
     if (header && !document.getElementById('campusNotificationButton')) {
       const b = document.createElement('button');
@@ -2571,6 +2608,16 @@ function facultyQuickLink(targetId) {
     updateUnreadCount();
   }
 
+  window.campusSetNoticeMode=function(mode) {
+    studentNoticeMode = mode === 'department' ? 'department' : 'common';
+    document.querySelectorAll('#campusNoticeModeTabs [data-mode]').forEach(button => {
+      const active = button.dataset.mode === studentNoticeMode;
+      button.classList.toggle('campus-mode-active', active);
+      button.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+    window.renderStudentBoard();
+  };
+
   window.campusSetCategory=function(cat) {
     if(typeof studentActiveCategory!=='undefined') studentActiveCategory=cat;
     if(originalStudentRender) window.renderStudentBoard();
@@ -2589,6 +2636,11 @@ function facultyQuickLink(targetId) {
       const category=String(n.category||'').toLowerCase();
       const title=String(n.title||'').toLowerCase(), content=String(n.content||'').toLowerCase();
       const target=String(n.target||'').toLowerCase();
+      const department=String(campusProfile.department||'').trim().toLowerCase();
+      const isCommonTarget=['global','all students','all departments','everyone','campus-wide','campus wide'].includes(target);
+      const isDepartmentTarget=!!department && target===department;
+      if(studentNoticeMode==='common' && !isCommonTarget) return false;
+      if(studentNoticeMode==='department' && !isDepartmentTarget) return false;
       if(activeDateFilter && date!==activeDateFilter) return false;
       if(search && ![title,content,category,date,target].some(v=>v.includes(search))) return false;
       if(cat==='events' && !(category.includes('event')||category.includes('placement'))) return false;
