@@ -579,7 +579,45 @@
             #viewAdmin > div:first-child { border-radius: 14px !important; }
         }
 
-</style>
+
+        
+        /* FINAL TEXT-CONTRAST FIX — readable text on light surfaces */
+        main .text-white,
+        main [class~="text-white"] {
+            color: #172033 !important;
+        }
+        /* Keep white lettering on strong blue action buttons and selected badges */
+        main button.text-white,
+        main button [class~="text-white"],
+        main [class~="bg-indigo-600"].text-white,
+        main [class~="bg-indigo-500"].text-white,
+        main [class~="bg-teal-600"].text-white,
+        main [class~="bg-amber-600"].text-white,
+        main [class~="bg-indigo-600"] .text-white,
+        main [class~="bg-indigo-500"] .text-white {
+            color: #ffffff !important;
+        }
+        /* Ensure notice text and labels remain dark and readable */
+        main .glass-panel,
+        main .glass-card {
+            color: #172033 !important;
+        }
+        main .glass-panel p,
+        main .glass-card p,
+        main .glass-panel span,
+        main .glass-card span,
+        main .glass-panel label,
+        main .glass-card label {
+            text-shadow: none !important;
+        }
+        /* Keep the dark top bar and navigation lettering bright */
+        header .text-white,
+        aside .text-white,
+        nav .text-white {
+            color: #ffffff !important;
+        }
+
+    </style>
 </head>
 
 <body class="h-full flex flex-col font-sans overflow-hidden bg-slate-950 text-slate-100">
