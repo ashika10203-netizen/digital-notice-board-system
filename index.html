@@ -2217,6 +2217,11 @@ function facultyQuickLink(targetId) {
   let readNoticeIds = readJSON('campusSyncReadNotices', []);
   let campusProfile = readJSON('campusSyncProfile', {name:'Ashika I.', department:'Computer Science', registerNo:'Student Register No.'});
   let activeDateFilter = '';
+  const savedApprovals = readJSON('campusSyncNoticeApproval', []);
+  const approvalLookup = new Map(savedApprovals.map(x => [x.id, x.status]));
+  (notices || []).forEach(n => { if (approvalLookup.has(n.id)) n.approvalStatus = approvalLookup.get(n.id); });
+  // The old sidebar counters were removed from the layout, so keep their updater safe.
+  window.updateSidebarStats = function () {};
 
   function ensureEnhancementUI() {
     const header = document.querySelector('header .flex.items-center.space-x-3');
@@ -2271,7 +2276,10 @@ function facultyQuickLink(targetId) {
       if(cat==='academic' && !(category.includes('academic')||category.includes('exam'))) return false;
       return true;
     });
+    const selectedCategory=studentActiveCategory;
+    studentActiveCategory = selectedCategory === 'bookmarks' ? 'bookmarks' : 'all';
     originalStudentRender();
+    studentActiveCategory = selectedCategory;
     notices.forEach(n=>{
       const card=[...document.querySelectorAll('#studentNoticesContainer > div')].find(el=>el.innerText.includes(n.title));
       if(card && !card.querySelector('.campus-department-line')) {
