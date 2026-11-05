@@ -1044,42 +1044,63 @@
 </style>
 
 <style id="campus-student-filter-layout">
-/* Compact student filters: category controls first, search and priority below. */
+/* Interactive compact icon dock for student notice categories. */
 #studentCategoryTabs { display:none !important; }
 .campus-student-filter-toolbar {
-  display:flex !important;
-  flex-direction:column !important;
-  align-items:stretch !important;
-  justify-content:flex-start !important;
-  gap:14px !important;
-  width:100% !important;
+  display:flex !important; flex-direction:column !important; align-items:stretch !important;
+  justify-content:flex-start !important; gap:16px !important; width:100% !important;
 }
 #campusCategoryControls {
-  display:grid !important;
-  grid-template-columns:auto minmax(180px,1fr) auto !important;
-  align-items:center !important;
-  gap:12px !important;
-  width:100% !important;
+  display:flex !important; align-items:stretch !important; gap:10px !important;
+  width:100% !important; overflow-x:auto !important; padding:3px 2px 8px !important;
+  scrollbar-width:thin;
 }
-#campusCategoryControls label { white-space:nowrap !important; }
-#campusCategorySelect { width:100% !important; min-width:0 !important; }
-#campusSavedShortcut { min-height:42px !important; white-space:nowrap !important; }
+#campusCategoryDock {
+  display:flex !important; flex:1 1 auto !important; min-width:0 !important;
+  align-items:stretch !important; gap:9px !important;
+}
+.campus-category-tile {
+  display:flex !important; flex:1 0 94px !important; min-width:88px !important;
+  min-height:72px !important; flex-direction:column !important; align-items:center !important;
+  justify-content:center !important; gap:6px !important; padding:9px 8px !important;
+  border:1px solid #dce6f3 !important; border-radius:15px !important;
+  background:#fff !important; color:#40516b !important;
+  box-shadow:0 3px 10px rgba(25,55,95,.045) !important;
+  font-size:11px !important; font-weight:700 !important; white-space:nowrap !important;
+  transition:transform .18s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease !important;
+}
+.campus-category-tile i { font-size:17px !important; color:#3977bd !important; }
+.campus-category-tile:hover { transform:translateY(-2px); background:#f2f7ff !important; }
+.campus-category-tile.active {
+  background:#e8f1ff !important; color:#174d91 !important; border-color:#6da3e8 !important;
+  box-shadow:inset 0 0 0 1px rgba(61,126,205,.10), 0 5px 14px rgba(37,99,235,.10) !important;
+}
+.campus-category-tile.active i { color:#2563eb !important; }
+.campus-category-count { font-size:9px !important; line-height:1 !important; color:#8492a6 !important; font-weight:600 !important; }
+.campus-category-tile.active .campus-category-count { color:#2862a7 !important; }
+#campusSavedShortcut {
+  display:flex !important; flex:0 0 88px !important; min-height:72px !important;
+  flex-direction:column !important; align-items:center !important; justify-content:center !important;
+  gap:6px !important; border:1px solid #dce6f3 !important; border-radius:15px !important;
+  background:#fff !important; color:#40516b !important; font-size:11px !important; font-weight:700 !important;
+}
+#campusSavedShortcut i { font-size:17px !important; }
+#campusSavedShortcut.bg-blue-600 { background:#2563eb !important; color:#fff !important; border-color:#2563eb !important; }
 #campusStudentSearchControls {
-  display:flex !important;
-  align-items:center !important;
-  justify-content:flex-end !important;
-  gap:12px !important;
-  width:100% !important;
+  display:flex !important; align-items:center !important; justify-content:flex-end !important;
+  gap:12px !important; width:100% !important;
 }
 #campusStudentSearchControls > div { flex:1 1 360px !important; max-width:560px !important; min-width:0 !important; }
 #campusStudentSearchControls input { width:100% !important; min-height:42px !important; }
 #campusStudentSearchControls select { flex:0 1 210px !important; min-width:170px !important; min-height:42px !important; }
 @media (max-width:640px) {
-  #campusCategoryControls { grid-template-columns:minmax(0,1fr) auto !important; }
-  #campusCategoryControls label { grid-column:1 / -1 !important; }
+  #campusCategoryControls { overflow-x:auto !important; }
+  #campusCategoryDock { flex:0 0 auto !important; }
+  .campus-category-tile { flex-basis:88px !important; }
   #campusStudentSearchControls { flex-direction:column !important; align-items:stretch !important; }
-  #campusStudentSearchControls > div,
-  #campusStudentSearchControls select { width:100% !important; max-width:none !important; flex:1 1 auto !important; }
+  #campusStudentSearchControls > div, #campusStudentSearchControls select {
+    width:100% !important; max-width:none !important; flex:1 1 auto !important;
+  }
 }
 </style>
 </head>
@@ -2730,8 +2751,7 @@ function facultyQuickLink(targetId) {
       if(toolbar && !document.getElementById('campusCategoryControls')) {
         const controls=document.createElement('div');
         controls.id='campusCategoryControls';
-        controls.className='flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full';
-        controls.innerHTML='<label for="campusCategorySelect" class="text-xs font-bold text-slate-500 whitespace-nowrap">Browse by category</label><select id="campusCategorySelect" onchange="filterStudentNotices(this.value)" class="flex-1 min-w-0 rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm font-semibold text-slate-700 outline-none focus:border-blue-500"><option value="all">All Categories</option></select><button id="campusSavedShortcut" type="button" onclick="campusShowSaved()" class="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-xs font-bold text-slate-600 hover:bg-blue-50"><i class="fa-regular fa-bookmark"></i> Saved</button>';
+        controls.innerHTML='<div id="campusCategoryDock" aria-label="Notice categories"></div><button id="campusSavedShortcut" type="button" onclick="campusShowSaved()" aria-pressed="false"><i class="fa-regular fa-bookmark"></i><span>Saved</span></button>';
         toolbar.insertBefore(controls,tabs);
       }
       renderCampusCategoryTabs();
@@ -2756,27 +2776,50 @@ function facultyQuickLink(targetId) {
   }
 
   function renderCampusCategoryTabs() {
-    const select = document.getElementById('campusCategorySelect');
+    const dock = document.getElementById('campusCategoryDock');
     const savedButton = document.getElementById('campusSavedShortcut');
-    if (!select) return;
+    if (!dock) return;
     const commonCategories = [
-      ['holidays','Holidays'],
-      ['exams','Examinations'],
-      ['events','Events'],
-      ['placements','Campus Placements'],
-      ['fees','Fees'],
-      ['alerts','Campus Alerts']
+      ['all','All','fa-layer-group'],
+      ['holidays','Holidays','fa-calendar-days'],
+      ['exams','Exams','fa-book-open'],
+      ['events','Events','fa-calendar-heart'],
+      ['placements','Placements','fa-briefcase'],
+      ['fees','Fees','fa-wallet'],
+      ['alerts','Alerts','fa-bell']
     ];
-    // Department mode intentionally keeps only its two useful content groups.
     const departmentCategories = [
-      ['academic','Academic & Exams'],
-      ['placement','Placement & Events']
+      ['all','All','fa-layer-group'],
+      ['academic','Academic & Exams','fa-book-open'],
+      ['placement','Placement & Events','fa-briefcase']
     ];
     const categories = studentNoticeMode === 'department' ? departmentCategories : commonCategories;
-    select.innerHTML = '<option value="all">All Categories</option>' + categories.map(([key,label]) =>
-      '<option value="'+key+'">'+label+'</option>'
-    ).join('');
-    select.value = categories.some(([key]) => key === studentActiveCategory) ? studentActiveCategory : 'all';
+    const approved = (notices || []).filter(n => (!n.approvalStatus || n.approvalStatus === 'Approved') && n.target !== 'Faculty Only');
+    const department = String(campusProfile.department || '').trim().toLowerCase();
+    const scoped = approved.filter(n => {
+      const target = String(n.target || '').toLowerCase();
+      const common = ['global','all students','all departments','everyone','campus-wide','campus wide'].includes(target);
+      return studentNoticeMode === 'common' ? common : (!!department && target === department);
+    });
+    const countFor = key => {
+      if (key === 'all') return scoped.length;
+      return scoped.filter(n => {
+        const category = String(n.category || '').toLowerCase();
+        const hay = [n.title,n.content,n.category].join(' ').toLowerCase();
+        if (key === 'holidays') return category.includes('holiday') || hay.includes('holiday');
+        if (key === 'exams') return category.includes('exam') || hay.includes('exam') || hay.includes('hall ticket');
+        if (key === 'events') return category.includes('event') || hay.includes('event') || hay.includes('annual day') || hay.includes('sports day') || hay.includes('cultural');
+        if (key === 'placements' || key === 'placement') return category.includes('placement') || hay.includes('placement') || hay.includes('recruitment') || hay.includes('company visit');
+        if (key === 'fees') return category.includes('fee') || category.includes('deadline') || hay.includes('fee') || hay.includes('payment');
+        if (key === 'alerts') return category.includes('alert') || hay.includes('alert') || hay.includes('emergency') || hay.includes('safety');
+        if (key === 'academic') return category.includes('academic') || category.includes('exam') || hay.includes('exam');
+        return false;
+      }).length;
+    };
+    dock.innerHTML = categories.map(([key,label,icon]) => {
+      const active = studentActiveCategory === key || (key === 'all' && (!studentActiveCategory || studentActiveCategory === 'all'));
+      return '<button type="button" class="campus-category-tile'+(active?' active':'')+'" data-category="'+key+'" aria-pressed="'+(active?'true':'false')+'" onclick="campusSetCategory(\''+key+'\')"><i class="fa-solid '+icon+'"></i><span>'+label+'</span><span class="campus-category-count">'+countFor(key)+' notices</span></button>';
+    }).join('');
     if (savedButton) {
       const savedActive = studentActiveCategory === 'bookmarks';
       savedButton.classList.toggle('bg-blue-600', savedActive);
@@ -2784,7 +2827,8 @@ function facultyQuickLink(targetId) {
       savedButton.classList.toggle('border-blue-600', savedActive);
       savedButton.classList.toggle('bg-white', !savedActive);
       savedButton.classList.toggle('text-slate-600', !savedActive);
-      savedButton.innerHTML = '<i class="fa-'+(savedActive?'solid':'regular')+' fa-bookmark"></i> Saved';
+      savedButton.setAttribute('aria-pressed', savedActive ? 'true' : 'false');
+      savedButton.innerHTML = '<i class="fa-'+(savedActive?'solid':'regular')+' fa-bookmark"></i><span>Saved</span>';
     }
   }
 
