@@ -2493,6 +2493,7 @@ input:focus, select:focus, textarea:focus {
             const priorityVal = document.getElementById('studentPriorityFilter')?.value || 'all';
 
             let filtered = notices.filter(n => {
+                if (n.approvalStatus === 'Pending' || n.approvalStatus === 'Draft' || n.approvalStatus === 'Rejected') return false;
                 if (n.target === 'Faculty Only') return false;
                 if (studentActiveCategory === 'bookmarks' && !n.bookmarked) return false;
                 if (studentActiveCategory !== 'all' && studentActiveCategory !== 'bookmarks' && n.category !== studentActiveCategory) return false;
@@ -2603,9 +2604,114 @@ function facultyQuickLink(targetId) {
             window.setTimeout(() => target.classList.remove('faculty-link-highlight'), 1600);
         }
 
+        // CampusSync Faculty/Admin dashboard enhancements
+        let campusActivityLog = [];
+        try { campusActivityLog = JSON.parse(localStorage.getItem('campusSyncActivityLog') || '[]'); } catch (e) { campusActivityLog = []; }
+        function campusLog(message) {
+            campusActivityLog.unshift({ message, date: new Date().toLocaleString() });
+            campusActivityLog = campusActivityLog.slice(0, 40);
+            try { localStorage.setItem('campusSyncActivityLog', JSON.stringify(campusActivityLog)); } catch (e) {}
+        }
+        function campusRenderEnhancements() {
+            const faculty = document.getElementById('viewFaculty');
+            const admin = document.getElementById('viewAdmin');
+            if (faculty && !document.getElementById('facultyTeachingOverview')) {
+                const panel = document.createElement('section');
+                panel.id = 'facultyTeachingOverview';
+                panel.className = 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3';
+                panel.innerHTML = '<div class="rounded-xl border border-rose-100 bg-white p-4"><p class="text-xs text-slate-500">My Department</p><p class="mt-1 font-bold text-slate-800">Computer Science</p><p class="text-xs text-slate-500">My Courses</p><p class="text-sm font-semibold text-rose-700">Cyber Security · Computer Science</p></div><div class="rounded-xl border border-rose-100 bg-white p-4"><p class="text-xs text-slate-500">My Published Notices</p><p id="facultyPublishedMetric" class="text-2xl font-bold text-rose-700">0</p><p class="text-xs text-slate-500">Published and pending</p></div><div class="rounded-xl border border-rose-100 bg-white p-4"><p class="text-xs text-slate-500">Pending Student Questions</p><p id="facultyPendingMetric" class="text-2xl font-bold text-rose-700">0</p><button onclick="openFacultyQuickView(\'questions\')" class="text-xs font-semibold text-rose-700">View questions →</button></div><div class="rounded-xl border border-rose-100 bg-white p-4"><p class="text-xs text-slate-500">Upcoming Deadlines</p><p id="facultyDeadlineMetric" class="text-2xl font-bold text-rose-700">0</p><p class="text-xs text-slate-500">Within the next 30 days</p></div>';
+                faculty.insertBefore(panel, faculty.children[1] || null);
+            }
+            if (faculty && !document.getElementById('facultyNoticeWorkflow')) {
+                const panel = document.createElement('section');
+                panel.id='facultyNoticeWorkflow'; panel.className='rounded-2xl border border-rose-100 bg-white p-5 space-y-3';
+                panel.innerHTML='<div class="flex flex-wrap items-center justify-between gap-2"><div><h3 class="font-bold text-slate-800">Notice Management</h3><p class="text-xs text-slate-500">Manage drafts and update your published notices</p></div><button onclick="openNoticeModal(\'faculty\')" class="rounded-lg bg-rose-700 px-3 py-2 text-xs font-semibold text-white">＋ Create notice</button></div><div id="facultyManagedNotices" class="space-y-2"></div>';
+                const quick = faculty.querySelector('.grid.grid-cols-1.lg\\:grid-cols-2');
+                if (quick) quick.insertAdjacentElement('afterend',panel); else faculty.appendChild(panel);
+            }
+            if (admin && !document.getElementById('adminManagementOverview')) {
+                const panel=document.createElement('section'); panel.id='adminManagementOverview'; panel.className='grid grid-cols-2 xl:grid-cols-4 gap-3';
+                panel.innerHTML='<div class="rounded-xl border border-rose-100 bg-white p-4"><p class="text-xs text-slate-500">Total Students</p><p id="adminStudentsMetric" class="text-2xl font-bold text-rose-700">0</p></div><div class="rounded-xl border border-rose-100 bg-white p-4"><p class="text-xs text-slate-500">Total Faculty</p><p id="adminFacultyMetric" class="text-2xl font-bold text-rose-700">0</p></div><div class="rounded-xl border border-rose-100 bg-white p-4"><p class="text-xs text-slate-500">Active Notices</p><p id="adminActiveMetric" class="text-2xl font-bold text-rose-700">0</p></div><div class="rounded-xl border border-rose-100 bg-white p-4"><p class="text-xs text-slate-500">Pending Questions</p><p id="adminPendingMetric" class="text-2xl font-bold text-rose-700">0</p></div>';
+                admin.insertBefore(panel,admin.children[1]||null);
+            }
+            if (admin && !document.getElementById('adminApprovalSection')) {
+                const panel=document.createElement('section'); panel.id='adminApprovalSection'; panel.className='rounded-2xl border border-rose-100 bg-white p-5 space-y-3';
+                panel.innerHTML='<div><h3 class="font-bold text-slate-800">Faculty Notice Approval</h3><p class="text-xs text-slate-500">Review faculty notices before they appear in the student feed.</p></div><div id="adminApprovalList" class="space-y-2"></div>';
+                const tabs=document.getElementById('adminNoticeSection'); if(tabs) tabs.insertAdjacentElement('beforebegin',panel);
+            }
+            if (admin && !document.getElementById('adminActivityReports')) {
+                const panel=document.createElement('section'); panel.id='adminActivityReports'; panel.className='rounded-2xl border border-rose-100 bg-white p-5 space-y-3';
+                panel.innerHTML='<div><h3 class="font-bold text-slate-800">Activity & Reports</h3><p class="text-xs text-slate-500">Recent notice activity and monthly publishing summary</p></div><div id="adminMonthlyStats" class="text-sm font-semibold text-rose-700"></div><div id="adminActivityList" class="space-y-2 text-xs text-slate-600"></div>';
+                const tabs=document.getElementById('adminNoticeSection'); if(tabs) tabs.insertAdjacentElement('beforebegin',panel);
+            }
+            campusRefreshDashboards();
+        }
+        function campusRefreshDashboards() {
+            const mine = notices.filter(n => (n.author || '').includes('Sarah Jenkins'));
+            const pendingQ = noticeQuestions.filter(q => (q.publisher || '').includes('Sarah Jenkins') && !q.answer).length;
+            const due = notices.filter(n => n.deadline && new Date(n.deadline+'T00:00:00') >= new Date() && new Date(n.deadline+'T00:00:00') <= new Date(Date.now()+30*86400000)).length;
+            const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value;};
+            set('facultyPublishedMetric',mine.filter(n=>n.approvalStatus!=='Draft').length);
+            set('facultyPendingMetric',pendingQ);
+            set('facultyDeadlineMetric',due);
+            const managed=document.getElementById('facultyManagedNotices');
+            if(managed) managed.innerHTML=mine.length?mine.map(n=>'<div class="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-slate-100 p-3"><div><p class="text-sm font-semibold text-slate-800">'+escapeQuestionText(n.title)+'</p><p class="text-xs text-slate-500">'+(n.approvalStatus||'Published')+' · '+escapeQuestionText(n.date||'')+'</p></div><div class="flex gap-2"><button onclick="campusEditNotice(\''+n.id+'\')" class="rounded-md border border-rose-200 px-2 py-1 text-xs text-rose-700">Edit</button><button onclick="deleteNotice(\''+n.id+'\')" class="rounded-md border px-2 py-1 text-xs text-slate-500">Delete</button></div></div>').join(''):'<p class="text-xs text-slate-500">You have not created any notices yet.</p>';
+            const students=users.filter(u=>String(u.role).toLowerCase()==='student').length;
+            const faculty=users.filter(u=>String(u.role).toLowerCase()==='faculty').length;
+            set('adminStudentsMetric',students);set('adminFacultyMetric',faculty);
+            set('adminActiveMetric',notices.filter(n=>n.approvalStatus!=='Draft'&&n.approvalStatus!=='Rejected'&&(!n.deadline||new Date(n.deadline)>=new Date())).length);
+            set('adminPendingMetric',noticeQuestions.filter(q=>!q.answer).length);
+            const approvals=document.getElementById('adminApprovalList');
+            if(approvals){const pending=notices.filter(n=>n.approvalStatus==='Pending'); approvals.innerHTML=pending.length?pending.map(n=>'<div class="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-slate-100 p-3"><div><p class="text-sm font-semibold text-slate-800">'+escapeQuestionText(n.title)+'</p><p class="text-xs text-slate-500">'+escapeQuestionText(n.author)+' · '+escapeQuestionText(n.target)+'</p><p class="mt-1 text-xs text-slate-600">'+escapeQuestionText(n.content)+'</p></div><div class="flex gap-2"><button onclick="campusReviewNotice(\''+n.id+'\',\'Approved\')" class="rounded-md bg-rose-700 px-3 py-2 text-xs font-semibold text-white">Approve</button><button onclick="campusReviewNotice(\''+n.id+'\',\'Rejected\')" class="rounded-md border border-rose-200 px-3 py-2 text-xs font-semibold text-rose-700">Reject</button></div></div>').join(''):'<p class="text-xs text-slate-500">No faculty notices are waiting for approval.</p>';}
+            const activity=document.getElementById('adminActivityList');
+            if(activity)activity.innerHTML=campusActivityLog.length?campusActivityLog.slice(0,8).map(a=>'<div class="flex justify-between gap-3 border-b border-slate-100 py-2"><span>'+escapeQuestionText(a.message)+'</span><span class="shrink-0 text-slate-400">'+escapeQuestionText(a.date)+'</span></div>').join(''):'<p>No recent activity recorded yet.</p>';
+            const month=new Date().toLocaleString(undefined,{month:'long',year:'numeric'});
+            const monthCount=notices.filter(n=>(n.date||'').slice(0,7)===new Date().toISOString().slice(0,7)).length;
+            set('adminMonthlyStats',month+': '+monthCount+' notices created · '+notices.filter(n=>n.approvalStatus==='Approved').length+' approved');
+        }
+        function campusReviewNotice(id,status) {
+            const n=notices.find(item=>item.id===id); if(!n||currentRole!=='admin')return;
+            n.approvalStatus=status; campusLog('Notice '+status.toLowerCase()+': '+n.title);
+            renderAdminBoard(); campusRefreshDashboards(); renderLiveTicker(); updateSidebarStats();
+        }
+        function campusEditNotice(id) {
+            const n=notices.find(item=>item.id===id); if(!n||currentRole!=='faculty')return;
+            const title=prompt('Update notice title:',n.title); if(!title||!title.trim())return;
+            const content=prompt('Update notice details:',n.content); if(!content||!content.trim())return;
+            n.title=title.trim();n.content=content.trim();n.date=new Date().toISOString().split('T')[0];n.approvalStatus='Pending';
+            campusLog('Faculty updated notice: '+n.title+' (awaiting admin approval)');
+            campusRefreshDashboards();alert('Notice updated and sent for admin approval.');
+        }
+        function campusSaveDraft() {
+            const title=document.getElementById('noticeTitleInput').value.trim(), content=document.getElementById('noticeContentInput').value.trim();
+            if(!title||!content){alert('Enter a title and notice details to save a draft.');return;}
+            const draft={id:'draft_'+Date.now(),title,content,category:document.getElementById('noticeCategoryInput').value,priority:document.getElementById('noticePriorityInput').value,target:document.getElementById('noticeTargetInput').value,author:document.getElementById('noticeFormAuthor').value,date:new Date().toISOString().split('T')[0],deadline:document.getElementById('noticeDeadlineInput').value||null,bookmarked:false,approvalStatus:'Draft'};
+            notices.unshift(draft);closeNoticeModal();campusLog('Faculty saved a draft: '+title);campusRefreshDashboards();alert('Draft saved in this browser.');
+        }
+        function campusAddDraftButton() {
+            const form=document.getElementById('noticeForm'); if(!form||document.getElementById('campusSaveDraftButton'))return;
+            const submit=form.querySelector('button[type="submit"],input[type="submit"]'); if(!submit)return;
+            const b=document.createElement('button');b.id='campusSaveDraftButton';b.type='button';b.className='rounded-lg border border-rose-200 px-4 py-2 text-xs font-semibold text-rose-700';b.textContent='Save as Draft';b.onclick=campusSaveDraft;
+            submit.parentElement.insertBefore(b,submit);
+        }
+        function campusPersistNoticeChanges() {
+            const original=window.handleSaveNotice;
+            if(!original||original._campusWrapped)return;
+            const wrapped=function(e){
+                const role=currentRole;
+                if(role==='faculty'){
+                    const title=document.getElementById('noticeTitleInput')?.value||'Faculty notice';
+                    const oldLength=notices.length; original(e);
+                    if(notices.length>oldLength){notices[0].approvalStatus='Pending';campusLog('Faculty submitted notice for approval: '+title);}
+                } else { original(e); if(notices.length)campusLog('Admin published notice: '+notices[0].title); }
+                campusRefreshDashboards();
+            };
+            wrapped._campusWrapped=true;window.handleSaveNotice=wrapped;
+        }
         function renderFacultyBoard() {
             const list = document.getElementById('facultyNoticeList');
             const facNotices = notices.filter(n => n.author.includes('Sarah Jenkins') || n.category === 'academic');
+            campusRefreshDashboards();
             updateQuestionBadges();
             document.getElementById('facultyNoticeCountBadge').innerText = `${facNotices.length} Active Posts`;
 
@@ -2647,6 +2753,7 @@ function facultyQuickLink(targetId) {
         }
 
         function renderAdminBoard() {
+            campusRefreshDashboards();
             const tbody = document.getElementById('adminNoticeTableBody');
             tbody.innerHTML = notices.map(n => `
                 <tr class="hover:bg-slate-900/50">
@@ -3397,8 +3504,12 @@ function facultyQuickLink(targetId) {
     });
   };
 
-  document.addEventListener('DOMContentLoaded',ensureEnhancementUI);
-  if(document.readyState!=='loading') ensureEnhancementUI();
+  document.addEventListener('DOMContentLoaded',function(){ensureEnhancementUI();campusRenderEnhancements();campusAddDraftButton();campusPersistNoticeChanges();});
+  if(document.readyState!=='loading'){ensureEnhancementUI();campusRenderEnhancements();campusAddDraftButton();campusPersistNoticeChanges();}
+  const campusOriginalSwitchRole=window.switchRole;
+  if(campusOriginalSwitchRole){window.switchRole=function(role){campusOriginalSwitchRole(role);campusRenderEnhancements();campusAddDraftButton();campusPersistNoticeChanges();campusRefreshDashboards();};}
+  const campusOriginalSaveQuestions=window.saveNoticeQuestions;
+  if(campusOriginalSaveQuestions){window.saveNoticeQuestions=function(){campusOriginalSaveQuestions();campusRefreshDashboards();};}
 })();
 </script>
 
