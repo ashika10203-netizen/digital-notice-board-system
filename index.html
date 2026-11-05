@@ -347,6 +347,7 @@
         .faculty-quick-link { display:flex; align-items:center; gap:10px; padding:13px; border:1px solid #e5dfd4; border-radius:12px; background:#f7f5f0; color:#39372f; font-size:12px; font-weight:600; text-align:left; transition:background .18s ease,border-color .18s ease,transform .18s ease; }
         .faculty-quick-link i { color:#a88b58; width:16px; text-align:center; }
         .faculty-quick-link:hover { background:#eee7da; border-color:#b99a58; transform:translateY(-1px); }
+        .faculty-link-highlight { outline:2px solid #b99a58; outline-offset:4px; transition:outline .2s ease; }
     </style>
 </head>
 
@@ -727,12 +728,12 @@
                     </section>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
                         <section class="glass-panel rounded-2xl p-5 space-y-4">
-                            <h3 class="font-bold text-sm text-slate-100 border-b border-slate-800 pb-3"><i class="fa-solid fa-bolt text-amber-500 mr-2"></i>Quick Links</h3>
+                            <h3 class="font-extrabold text-base tracking-wide text-slate-100 border-b border-slate-800 pb-3"><i class="fa-solid fa-bolt text-amber-500 mr-2"></i>Quick Links</h3>
                             <div class="grid grid-cols-2 gap-3">
                                 <button type="button" onclick="openNoticeModal('faculty')" class="faculty-quick-link"><i class="fa-solid fa-plus"></i><span>Post a notice</span></button>
-                                <button type="button" onclick="document.getElementById('facultyNoticeList').scrollIntoView({behavior:'smooth'})" class="faculty-quick-link"><i class="fa-solid fa-bullhorn"></i><span>My notices</span></button>
-                                <button type="button" onclick="document.getElementById('facultyDirectivesList').scrollIntoView({behavior:'smooth'})" class="faculty-quick-link"><i class="fa-solid fa-inbox"></i><span>Staff directives</span></button>
-                                <button type="button" onclick="document.getElementById('facultyFormsSection').scrollIntoView({behavior:'smooth'})" class="faculty-quick-link"><i class="fa-regular fa-rectangle-list"></i><span>Digital forms</span></button>
+                                <button type="button" onclick="facultyQuickLink('facultyNoticeList')" class="faculty-quick-link"><i class="fa-solid fa-bullhorn"></i><span>My notices</span></button>
+                                <button type="button" onclick="facultyQuickLink('facultyDirectivesList')" class="faculty-quick-link"><i class="fa-solid fa-inbox"></i><span>Staff directives</span></button>
+                                <button type="button" onclick="facultyQuickLink('facultyFormsSection')" class="faculty-quick-link"><i class="fa-regular fa-rectangle-list"></i><span>Digital forms</span></button>
                             </div>
                         </section>
                         <section id="facultyFormsSection" class="glass-panel rounded-2xl p-5 space-y-4">
