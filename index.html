@@ -469,26 +469,8 @@
                 </div>
             </div>
 
-            <!-- Role Selector & Logout -->
+            <!-- Current session actions: role switching is handled through login/logout -->
             <div class="flex items-center space-x-3">
-                <div class="inline-flex p-1 bg-slate-950 rounded-xl border border-slate-800 shadow-inner">
-                    <button onclick="switchRole('admin')" id="roleBtnAdmin"
-                        class="role-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5 text-slate-400 hover:text-white">
-                        <i class="fa-solid fa-user-shield text-amber-400"></i>
-                        <span>Admin</span>
-                    </button>
-                    <button onclick="switchRole('faculty')" id="roleBtnFaculty"
-                        class="role-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5 text-slate-400 hover:text-white">
-                        <i class="fa-solid fa-chalkboard-user text-teal-400"></i>
-                        <span>Faculty</span>
-                    </button>
-                    <button onclick="switchRole('student')" id="roleBtnStudent"
-                        class="role-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5 bg-indigo-600 text-white shadow-md">
-                        <i class="fa-solid fa-user-graduate text-indigo-200"></i>
-                        <span>Student</span>
-                    </button>
-                </div>
-
                 <button onclick="logoutSession()"
                     class="px-3 py-1.5 bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 border border-rose-800/50 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all">
                     <i class="fa-solid fa-right-from-bracket"></i> Logout
