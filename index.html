@@ -726,9 +726,9 @@
                             <h3 id="facultyQuickLinksHeading" class="border-b border-slate-800 pb-3 text-slate-100"><i class="fa-solid fa-bolt text-amber-500 mr-2"></i>Quick Links</h3>
                             <div class="grid grid-cols-2 gap-3">
                                 <button type="button" onclick="openNoticeModal('faculty')" class="faculty-quick-link"><i class="fa-solid fa-plus"></i><span>Post a notice</span></button>
-                                <button type="button" onclick="facultyQuickLink('facultyNoticeList')" class="faculty-quick-link"><i class="fa-solid fa-bullhorn"></i><span>My notices</span></button>
-                                <button type="button" onclick="facultyQuickLink('facultyDirectivesList')" class="faculty-quick-link"><i class="fa-solid fa-inbox"></i><span>Staff directives</span></button>
-                                <button type="button" onclick="facultyQuickLink('facultyFormsSection')" class="faculty-quick-link"><i class="fa-regular fa-rectangle-list"></i><span>Digital forms</span></button>
+                                <button type="button" onclick="openFacultyQuickView('notices')" class="faculty-quick-link"><i class="fa-solid fa-bullhorn"></i><span>My notices</span></button>
+                                <button type="button" onclick="openFacultyQuickView('directives')" class="faculty-quick-link"><i class="fa-solid fa-inbox"></i><span>Staff directives</span></button>
+                                <button type="button" onclick="openFacultyQuickView('forms')" class="faculty-quick-link"><i class="fa-regular fa-rectangle-list"></i><span>Digital forms</span></button>
                             </div>
                         </section>
                         <section id="facultyFormsSection" class="glass-panel rounded-2xl p-5 space-y-4">
@@ -1349,7 +1349,51 @@
         }
 
         // Faculty Board
-        function facultyQuickLink(targetId) {
+        
+        function openFacultyQuickView(section) {
+            const modal = document.getElementById('facultyQuickViewModal');
+            const title = document.getElementById('facultyQuickViewTitle');
+            const content = document.getElementById('facultyQuickViewContent');
+            let source;
+            if (section === 'notices') {
+                title.textContent = 'My Notices';
+                source = document.getElementById('facultyNoticeList');
+                content.innerHTML = source && source.innerHTML.trim() ? source.innerHTML : '<p class="text-sm text-slate-300">No faculty notices are available yet.</p>';
+            } else if (section === 'directives') {
+                title.textContent = 'Staff Directives';
+                source = document.getElementById('facultyDirectivesList');
+                content.innerHTML = source && source.innerHTML.trim() ? source.innerHTML : '<p class="text-sm text-slate-300">No staff directives are available.</p>';
+            } else if (section === 'forms') {
+                title.textContent = 'Digital Forms';
+                source = document.getElementById('facultyFormsSection');
+                content.innerHTML = source ? source.innerHTML : '<p class="text-sm text-slate-300">Digital forms are unavailable.</p>';
+                const input = content.querySelector('#facultyNewFormName');
+                const addButton = content.querySelector('button[onclick="addFacultyForm()"]');
+                if (input) input.id = 'facultyQuickViewNewFormName';
+                if (addButton) addButton.setAttribute('onclick', 'addFacultyFormFromQuickView()');
+            } else {
+                return;
+            }
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeFacultyQuickView() {
+            const modal = document.getElementById('facultyQuickViewModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function addFacultyFormFromQuickView() {
+            const input = document.getElementById('facultyQuickViewNewFormName');
+            const value = input ? input.value.trim() : '';
+            if (!value) { alert('Please enter a form title.'); return; }
+            facultyForms.unshift({ id: 'form_' + Date.now(), title: value });
+            renderFacultyExtras();
+            openFacultyQuickView('forms');
+        }
+
+function facultyQuickLink(targetId) {
             const target = document.getElementById(targetId);
             if (!target) {
                 alert('This section could not be found. Please refresh the page and try again.');
@@ -1512,6 +1556,17 @@
             document.getElementById('sidebarCountUrgent').innerText = notices.filter(n => n.priority === 'Urgent').length;
         }
     </script>
+
+    <div id="facultyQuickViewModal" class="hidden fixed inset-0 z-[80] bg-slate-950/80 backdrop-blur-sm p-4 flex items-center justify-center">
+        <div class="w-full max-w-3xl max-h-[85vh] overflow-y-auto rounded-2xl border border-[#b99a58]/40 bg-[#292824] shadow-2xl p-5 sm:p-7">
+            <div class="flex items-center justify-between gap-3 mb-5 border-b border-slate-700 pb-4">
+                <h2 id="facultyQuickViewTitle" class="text-lg font-extrabold text-[#f1e9d9]">Faculty Section</h2>
+                <button type="button" onclick="closeFacultyQuickView()" class="rounded-lg px-3 py-2 text-sm text-[#e8dfcf] hover:bg-white/10" aria-label="Close section"><i class="fa-solid fa-xmark mr-1"></i> Close</button>
+            </div>
+            <div id="facultyQuickViewContent" class="space-y-4"></div>
+        </div>
+    </div>
+
 </body>
 
 </html>
