@@ -843,19 +843,6 @@
                     </nav>
                 </div>
 
-                <!-- Footer Stats -->
-                <div class="p-4 border-t border-slate-800/80 bg-slate-950/40 text-xs text-slate-400 space-y-2">
-                    <div class="flex justify-between items-center">
-                        <span>Active Broadcasts</span>
-                        <span id="sidebarCountActive"
-                            class="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-semibold">0</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span>Urgent Alerts</span>
-                        <span id="sidebarCountUrgent"
-                            class="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 font-semibold">0</span>
-                    </div>
-                </div>
             </aside>
 
             <!-- CONTENT WORKSPACE CONTAINER -->
@@ -2214,6 +2201,211 @@ function facultyQuickLink(targetId) {
         </div>
     </div>
 
+
+
+<script>
+/* CampusSync enhancement pack — existing UI and original modules retained. */
+(function () {
+  const originalStudentRender = window.renderStudentBoard;
+  const originalAdminRender = window.renderAdminBoard;
+  const originalRoleSwitch = window.switchRole;
+  const originalSaveNotice = window.handleSaveNotice;
+
+  const readJSON = (key, fallback) => { try { return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); } catch (_) { return fallback; } };
+  const writeJSON = (key, value) => { try { localStorage.setItem(key, JSON.stringify(value)); } catch (_) {} };
+  const esc = value => String(value == null ? '' : value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  let readNoticeIds = readJSON('campusSyncReadNotices', []);
+  let campusProfile = readJSON('campusSyncProfile', {name:'Ashika I.', department:'Computer Science', registerNo:'Student Register No.'});
+  let activeDateFilter = '';
+
+  function ensureEnhancementUI() {
+    const header = document.querySelector('header .flex.items-center.space-x-3');
+    if (header && !document.getElementById('campusNotificationButton')) {
+      const b = document.createElement('button');
+      b.id='campusNotificationButton'; b.className='relative px-3 py-2 rounded-xl border border-slate-600 text-white text-xs';
+      b.innerHTML='<i class="fa-regular fa-bell"></i> <span class="hidden sm:inline">Notifications</span> <span id="campusUnreadCount" class="ml-1 rounded-full bg-rose-500 text-white px-1.5 py-0.5 text-[10px]">0</span>';
+      b.onclick=showCampusNotifications; header.insertBefore(b, header.firstChild);
+    }
+    const tabs=document.getElementById('studentCategoryTabs');
+    if(tabs && !document.getElementById('campusExtraFilters')) {
+      const wrap=document.createElement('div'); wrap.id='campusExtraFilters'; wrap.className='flex flex-wrap gap-2 mt-2';
+      wrap.innerHTML='<button class="px-3 py-1.5 rounded-lg text-xs border border-blue-200 bg-blue-50" onclick="campusSetCategory(\'all\')">All</button><button class="px-3 py-1.5 rounded-lg text-xs border" onclick="campusSetCategory(\'academic\')">Academic</button><button class="px-3 py-1.5 rounded-lg text-xs border" onclick="campusSetCategory(\'events\')">Events</button><button class="px-3 py-1.5 rounded-lg text-xs border" onclick="campusSetCategory(\'exams\')">Exams</button><button class="px-3 py-1.5 rounded-lg text-xs border" onclick="campusSetCategory(\'placement\')">Placements</button><label class="ml-auto flex items-center gap-2 text-xs text-slate-500">Posted on <input id="campusDateFilter" type="date" class="rounded-lg border px-2 py-1" onchange="campusSetDate(this.value)"></label>';
+      tabs.parentNode.insertBefore(wrap,tabs.nextSibling);
+    }
+    if(!document.getElementById('campusNotificationModal')) {
+      const modal=document.createElement('div'); modal.id='campusNotificationModal'; modal.className='hidden fixed inset-0 z-[100] bg-slate-950/60 p-4 items-center justify-center';
+      modal.innerHTML='<div class="w-full max-w-xl max-h-[85vh] overflow-y-auto rounded-2xl bg-white p-5 shadow-2xl"><div class="flex justify-between items-center mb-4"><h2 class="font-extrabold text-slate-900">Notifications</h2><button onclick="closeCampusNotifications()" class="text-slate-500 text-xl">&times;</button></div><div id="campusNotificationList" class="space-y-3"></div><button onclick="markAllCampusRead()" class="mt-4 rounded-lg bg-blue-600 px-4 py-2 text-xs font-bold text-white">Mark all as read</button></div>';
+      document.body.appendChild(modal);
+    }
+    const profileCard=document.getElementById('userName');
+    if(profileCard && !profileCard.dataset.profileEditable) {
+      profileCard.dataset.profileEditable='1'; profileCard.title='Click to edit profile';
+      profileCard.style.cursor='pointer'; profileCard.onclick=editCampusProfile;
+    }
+    updateUnreadCount();
+  }
+
+  window.campusSetCategory=function(cat) {
+    if(typeof studentActiveCategory!=='undefined') studentActiveCategory=cat;
+    if(originalStudentRender) window.renderStudentBoard();
+  };
+  window.campusSetDate=function(value){ activeDateFilter=value||''; window.renderStudentBoard(); };
+
+  window.renderStudentBoard=function() {
+    if(!originalStudentRender) return;
+    const all=notices.slice();
+    const search=(document.getElementById('studentSearchInput')?.value||'').toLowerCase().trim();
+    const cat=typeof studentActiveCategory!=='undefined'?studentActiveCategory:'all';
+    notices=all.filter(n=>{
+      const approved=!n.approvalStatus || n.approvalStatus==='Approved';
+      if(!approved || n.target==='Faculty Only') return false;
+      const date=String(n.date||'');
+      const category=String(n.category||'').toLowerCase();
+      const title=String(n.title||'').toLowerCase(), content=String(n.content||'').toLowerCase();
+      const target=String(n.target||'').toLowerCase();
+      if(activeDateFilter && date!==activeDateFilter) return false;
+      if(search && ![title,content,category,date,target].some(v=>v.includes(search))) return false;
+      if(cat==='events' && !(category.includes('event')||category.includes('placement'))) return false;
+      if(cat==='exams' && !(category.includes('exam')||title.includes('exam')||content.includes('exam'))) return false;
+      if(cat==='placement' && !category.includes('placement')) return false;
+      if(cat==='academic' && !(category.includes('academic')||category.includes('exam'))) return false;
+      return true;
+    });
+    originalStudentRender();
+    notices.forEach(n=>{
+      const card=[...document.querySelectorAll('#studentNoticesContainer > div')].find(el=>el.innerText.includes(n.title));
+      if(card && !card.querySelector('.campus-department-line')) {
+        const line=document.createElement('div'); line.className='campus-department-line text-[11px] text-slate-500';
+        line.innerHTML='<i class="fa-solid fa-building-columns mr-1"></i> Department: '+esc(n.target||'All Departments');
+        card.appendChild(line);
+      }
+    });
+    notices=all;
+    updateUnreadCount();
+  };
+
+  window.renderAdminBoard=function() {
+    if(originalAdminRender) originalAdminRender();
+    const body=document.getElementById('adminNoticeTableBody');
+    if(!body) return;
+    body.querySelectorAll('tr').forEach(row=>{
+      const title=row.querySelector('td')?.innerText.trim();
+      const n=notices.find(x=>x.title===title);
+      if(!n) return;
+      const status=n.approvalStatus||'Approved';
+      const cell=document.createElement('td'); cell.className='p-3.5 min-w-36';
+      cell.innerHTML='<span class="inline-block rounded-full px-2 py-1 text-[10px] font-bold '+(status==='Approved'?'bg-green-100 text-green-700':status==='Rejected'?'bg-rose-100 text-rose-700':'bg-amber-100 text-amber-700')+'">'+esc(status)+'</span>'+
+       (status==='Pending'?'<div class="flex gap-1 mt-2"><button class="rounded bg-green-600 px-2 py-1 text-[10px] text-white" onclick="campusReviewNotice(\''+esc(n.id)+'\',\'Approved\')">Approve</button><button class="rounded bg-rose-600 px-2 py-1 text-[10px] text-white" onclick="campusReviewNotice(\''+esc(n.id)+'\',\'Rejected\')">Reject</button></div>':'');
+      row.appendChild(cell);
+    });
+    const head=document.querySelector('#adminNoticeSection thead tr');
+    if(head && !head.querySelector('.campus-approval-head')) { const th=document.createElement('th'); th.className='p-3.5 campus-approval-head'; th.textContent='Approval'; head.appendChild(th); }
+  };
+
+  window.campusReviewNotice=function(id,status){
+    const n=notices.find(x=>x.id===id); if(!n)return;
+    n.approvalStatus=status; writeJSON('campusSyncNoticeApproval',notices.map(x=>({id:x.id,status:x.approvalStatus||'Approved'})));
+    window.renderAdminBoard();
+    alert('Notice '+status.toLowerCase()+'.');
+  };
+
+  window.handleSaveNotice=function(){
+    const before=notices.length;
+    if(originalSaveNotice) originalSaveNotice();
+    if(notices.length>before) {
+      const created=notices[0];
+      created.approvalStatus=currentRole==='faculty'?'Pending':'Approved';
+      window.renderAdminBoard();
+      if(currentRole==='faculty') alert('Notice submitted for admin approval. Students will see it after approval.');
+    }
+  };
+
+  window.switchRole=function(role){
+    if(originalRoleSwitch) originalRoleSwitch(role);
+    if(role==='student') {
+      const heading=document.querySelector('#viewStudent > div:first-child h2');
+      if(heading) heading.textContent='Welcome back, '+(campusProfile.name||'Student');
+      const sub=document.querySelector('#viewStudent > div:first-child p');
+      if(sub) sub.textContent=(campusProfile.department||'Department')+' · Your personalized campus updates and deadlines.';
+    }
+    ensureEnhancementUI();
+    updateUnreadCount();
+  };
+
+  function updateUnreadCount(){
+    const badge=document.getElementById('campusUnreadCount');
+    if(badge) {
+      const unread=(notices||[]).filter(n=>(!n.approvalStatus||n.approvalStatus==='Approved')&&!readNoticeIds.includes(n.id)&&n.target!=='Faculty Only').length;
+      badge.textContent=unread;
+    }
+  }
+  window.showCampusNotifications=function(){
+    ensureEnhancementUI();
+    const list=document.getElementById('campusNotificationList');
+    const items=(notices||[]).filter(n=>(!n.approvalStatus||n.approvalStatus==='Approved')&&n.target!=='Faculty Only');
+    list.innerHTML=items.length?items.map(n=>'<div class="rounded-xl border p-3 '+(readNoticeIds.includes(n.id)?'bg-white':'bg-blue-50 border-blue-200')+'"><div class="flex justify-between gap-2"><b class="text-sm text-slate-800">'+esc(n.title)+'</b><span class="text-[10px] text-slate-500">'+(readNoticeIds.includes(n.id)?'Read':'Unread')+'</span></div><p class="text-xs text-slate-600 mt-1">'+esc(n.date||'')+' · '+esc(n.category||'General')+'</p><button class="mt-2 text-xs font-semibold text-blue-700" onclick="markCampusRead(\''+esc(n.id)+'\')">Mark as read</button></div>').join(''):'<p class="text-sm text-slate-500">No notifications yet.</p>';
+    const modal=document.getElementById('campusNotificationModal'); modal.classList.remove('hidden'); modal.classList.add('flex');
+  };
+  window.closeCampusNotifications=function(){const m=document.getElementById('campusNotificationModal');m.classList.add('hidden');m.classList.remove('flex');};
+  window.markCampusRead=function(id){if(!readNoticeIds.includes(id))readNoticeIds.push(id);writeJSON('campusSyncReadNotices',readNoticeIds);showCampusNotifications();updateUnreadCount();};
+  window.markAllCampusRead=function(){readNoticeIds=(notices||[]).map(n=>n.id);writeJSON('campusSyncReadNotices',readNoticeIds);showCampusNotifications();updateUnreadCount();};
+
+  window.editCampusProfile=function(){
+    const name=prompt('Full name:',campusProfile.name||''); if(name===null||!name.trim())return;
+    const department=prompt('Department:',campusProfile.department||'Computer Science'); if(department===null)return;
+    const registerNo=prompt('Register number:',campusProfile.registerNo||''); if(registerNo===null)return;
+    campusProfile={name:name.trim(),department:department.trim(),registerNo:registerNo.trim()}; writeJSON('campusSyncProfile',campusProfile);
+    if(currentRole==='student')window.switchRole('student');
+    alert('Profile updated on this browser.');
+  };
+
+  /* Lost & Found: faculty custody, claim review and verified handover. */
+  window.submitLostFound=function(event){
+    event.preventDefault();
+    const report={id:'lf_'+Date.now(),type:document.getElementById('lfType').value,title:document.getElementById('lfTitle').value.trim(),location:document.getElementById('lfLocation').value.trim(),description:document.getElementById('lfDescription').value.trim(),contact:document.getElementById('lfContact').value.trim(),reporter:campusProfile.name||'Student',date:new Date().toLocaleDateString(),status:document.getElementById('lfType').value==='Found'?'Awaiting Faculty Verification':'Lost Report',claim:null};
+    lostFoundReports.unshift(report); saveLostFound(); event.target.reset(); renderLostFound(); alert('Report submitted. Found items must be verified and stored by faculty before claims can be approved.');
+  };
+  window.renderLostFound=function(){
+    const box=document.getElementById('lostFoundList'); if(!box)return;
+    if(!lostFoundReports.length){box.innerHTML='<p class="text-sm text-slate-500 text-center py-6">No Lost & Found reports yet.</p>';return;}
+    box.innerHTML=lostFoundReports.map(item=>{
+      const isFound=item.type==='Found';
+      let actions='';
+      if(currentRole==='faculty'&&isFound&&item.status==='Awaiting Faculty Verification') actions='<button onclick="facultyVerifyFound(\''+esc(item.id)+'\')" class="rounded-lg bg-blue-600 px-3 py-2 text-xs font-bold text-white">Verify & store with faculty</button>';
+      if(currentRole==='student'&&isFound&&item.status==='Stored with Faculty'&&!item.claim) actions='<button onclick="requestFoundClaim(\''+esc(item.id)+'\')" class="rounded-lg bg-blue-600 px-3 py-2 text-xs font-bold text-white">Request to claim</button>';
+      if(currentRole==='faculty'&&item.claim&&item.claim.status==='Pending') actions='<div class="flex gap-2"><button onclick="reviewFoundClaim(\''+esc(item.id)+'\',\'Approved\')" class="rounded-lg bg-green-600 px-3 py-2 text-xs text-white">Approve claim</button><button onclick="reviewFoundClaim(\''+esc(item.id)+'\',\'Rejected\')" class="rounded-lg bg-rose-600 px-3 py-2 text-xs text-white">Reject claim</button></div>';
+      if(currentRole==='faculty'&&item.claim&&item.claim.status==='Approved'&&item.status!=='Returned') actions='<button onclick="confirmFoundHandover(\''+esc(item.id)+'\')" class="rounded-lg bg-green-700 px-3 py-2 text-xs text-white">Confirm handover</button>';
+      if(currentRole==='admin') actions='<span class="text-[11px] text-slate-500">Admin monitoring</span>';
+      const claimText=item.claim?'<p class="text-xs text-slate-600">Claim: '+esc(item.claim.status)+' · '+esc(item.claim.student)+'</p>':'';
+      return '<article class="rounded-xl border border-slate-200 bg-white p-4 space-y-2"><div class="flex justify-between gap-2"><h4 class="font-bold text-sm text-slate-900">'+esc(item.title)+'</h4><span class="rounded-full bg-blue-50 px-2 py-1 text-[10px] font-bold text-blue-700">'+esc(item.type)+'</span></div><p class="text-xs text-slate-600">'+esc(item.description)+'</p><p class="text-xs text-slate-500"><i class="fa-solid fa-location-dot mr-1"></i>'+esc(item.location)+' · '+esc(item.date)+'</p><p class="text-xs font-semibold text-amber-700">Status: '+esc(item.status)+'</p>'+claimText+'<div class="flex flex-wrap gap-2">'+actions+'</div></article>';
+    }).join('');
+  };
+  window.facultyVerifyFound=function(id){const item=lostFoundReports.find(x=>x.id===id);if(!item||currentRole!=='faculty')return;item.status='Stored with Faculty';item.verifiedBy='Faculty';saveLostFound();renderLostFound();};
+  window.requestFoundClaim=function(id){const item=lostFoundReports.find(x=>x.id===id);if(!item||currentRole!=='student'||item.status!=='Stored with Faculty')return;const proof=prompt('Describe a detail that proves this item belongs to you:');if(!proof||!proof.trim())return;item.claim={student:campusProfile.name||'Student',proof:proof.trim(),status:'Pending'};saveLostFound();renderLostFound();alert('Claim sent to faculty for verification.');};
+  window.reviewFoundClaim=function(id,status){const item=lostFoundReports.find(x=>x.id===id);if(!item||currentRole!=='faculty'||!item.claim)return;item.claim.status=status;saveLostFound();renderLostFound();};
+  window.confirmFoundHandover=function(id){const item=lostFoundReports.find(x=>x.id===id);if(!item||currentRole!=='faculty'||!item.claim||item.claim.status!=='Approved')return;if(!confirm('Confirm that the item was physically handed to the approved student?'))return;item.status='Returned';item.returnedTo=item.claim.student;saveLostFound();renderLostFound();};
+  window.updateLostFound=function(id,status){const item=lostFoundReports.find(x=>x.id===id);if(item&&currentRole==='faculty'&&status==='Identified')facultyVerifyFound(id);};
+  window.deleteLostFound=function(id){if(currentRole!=='admin'||!confirm('Remove this report?'))return;lostFoundReports=lostFoundReports.filter(x=>x.id!==id);saveLostFound();renderLostFound();};
+
+  // Existing calendar already marks event dates; also mark dates containing notice deadlines.
+  const originalCalendarRender=window.renderCalendar;
+  window.renderCalendar=function(){
+    if(originalCalendarRender)originalCalendarRender();
+    const grid=document.getElementById('calendarDaysGrid'); if(!grid)return;
+    (notices||[]).forEach(n=>{
+      if(!n.deadline)return;
+      const d=new Date(n.deadline+'T00:00:00');
+      if(d.getFullYear()===currentCalDate.getFullYear()&&d.getMonth()===currentCalDate.getMonth()){
+        const day=[...grid.children].find(el=>el.textContent.trim()===String(d.getDate()));
+        if(day){day.style.outline='2px solid #2563eb';day.title='Notice deadline';}
+      }
+    });
+  };
+
+  document.addEventListener('DOMContentLoaded',ensureEnhancementUI);
+  if(document.readyState!=='loading') ensureEnhancementUI();
+})();
+</script>
 
 </body>
 
