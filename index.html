@@ -355,6 +355,30 @@
             letter-spacing: 0.02em;
             line-height: 1.4;
         }
+        /* Clear, visible student dashboard headings */
+        #viewStudent h2,
+        #viewStudent h3,
+        #viewStudent h4 {
+            font-weight: 800 !important;
+            color: #292824 !important;
+            opacity: 1 !important;
+        }
+        #viewStudent > div:first-child h2 {
+            color: #292824 !important;
+            font-size: 1.65rem !important;
+            font-weight: 800 !important;
+        }
+        #viewStudent #studentNoticesContainer h3 {
+            color: #292824 !important;
+            font-weight: 800 !important;
+        }
+        #facultyQuickLinksHeading {
+            display: block !important;
+            color: #292824 !important;
+            font-weight: 800 !important;
+            opacity: 1 !important;
+        }
+
         .faculty-link-highlight {
             outline: 2px solid #b99a58 !important;
             outline-offset: 4px;
@@ -608,7 +632,7 @@
 
                     <!-- Two-Column Grid Layout -->
 
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 hidden">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <div class="lg:col-span-2 space-y-4" id="studentNoticesContainer"></div>
 
                         <!-- Right Sidebar Widgets -->
@@ -739,7 +763,7 @@
                         </section>
                     </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 hidden">
                         <div class="lg:col-span-2 space-y-4">
                             <div class="flex items-center justify-between">
                                 <h3 class="text-base font-bold text-white flex items-center gap-2">
