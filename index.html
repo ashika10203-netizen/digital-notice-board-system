@@ -1251,28 +1251,23 @@
         // Dashboard Role Switcher
         function switchRole(role) {
             currentRole = role;
-            document.querySelectorAll('.role-btn').forEach(btn => {
-                btn.className = "role-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5 text-slate-400 hover:text-white";
-            });
 
+            // Hide every dashboard first, then show only the selected role.
             document.querySelectorAll('.role-view').forEach(view => view.classList.add('hidden'));
 
             if (role === 'student') {
-                document.getElementById('roleBtnStudent').className = "role-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5 bg-indigo-600 text-white shadow-md";
                 document.getElementById('viewStudent').classList.remove('hidden');
                 document.getElementById('userName').innerText = 'Ashika I.';
                 document.getElementById('userRoleBadge').innerText = 'Computer Science (Student)';
                 document.getElementById('userAvatar').innerText = 'AI';
                 renderStudentBoard();
             } else if (role === 'faculty') {
-                document.getElementById('roleBtnFaculty').className = "role-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5 bg-teal-600 text-white shadow-md";
                 document.getElementById('viewFaculty').classList.remove('hidden');
                 document.getElementById('userName').innerText = 'Dr. Sarah Jenkins';
                 document.getElementById('userRoleBadge').innerText = 'Associate Professor (CS)';
                 document.getElementById('userAvatar').innerText = 'SJ';
                 renderFacultyBoard();
             } else if (role === 'admin') {
-                document.getElementById('roleBtnAdmin').className = "role-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5 bg-amber-600 text-white shadow-md";
                 document.getElementById('viewAdmin').classList.remove('hidden');
                 document.getElementById('userName').innerText = 'System Admin';
                 document.getElementById('userRoleBadge').innerText = 'Global Controller';
