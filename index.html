@@ -916,6 +916,9 @@
                         </div>
                     </div>
 
+                    <div class="flex justify-end">
+                        <button type="button" onclick="openMyQuestions()" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold"><i class="fa-regular fa-comments mr-2"></i> My Questions <span id="studentQuestionCount" class="ml-1 bg-white/20 px-1.5 py-0.5 rounded-full">0</span></button>
+                    </div>
                     <!-- Two-Column Grid Layout -->
 
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -1039,6 +1042,7 @@
                                 <button type="button" onclick="openFacultyQuickView('notices')" class="faculty-quick-link"><i class="fa-solid fa-bullhorn"></i><span>My notices</span></button>
                                 <button type="button" onclick="openFacultyQuickView('directives')" class="faculty-quick-link"><i class="fa-solid fa-inbox"></i><span>Staff directives</span></button>
                                 <button type="button" onclick="openFacultyQuickView('forms')" class="faculty-quick-link"><i class="fa-regular fa-rectangle-list"></i><span>Digital forms</span></button>
+                                <button type="button" onclick="openFacultyQuickView('questions')" class="faculty-quick-link"><i class="fa-regular fa-comments"></i><span>Student Questions <span id="facultyQuestionCount" class="ml-1">0</span></span></button>
                             </div>
                         </section>
                         <section id="facultyFormsSection" class="glass-panel rounded-2xl p-5 space-y-4 hidden">
@@ -1639,6 +1643,9 @@
                         <div class="flex items-center justify-between pt-2 border-t border-slate-800 text-xs text-slate-400">
                             <span><i class="fa-solid fa-user-pen mr-1"></i> ${n.author}</span>
                             ${n.deadline ? `<span class="text-rose-400 font-mono"><i class="fa-regular fa-clock mr-1"></i> Due: ${n.deadline}</span>` : ''}
+                        <div class="flex justify-end">
+                            <button type="button" onclick="sendNoticeQuestion('${n.id}')" class="px-3 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold"><i class="fa-regular fa-circle-question mr-1"></i> Ask the Publisher</button>
+                        </div>
                         </div>
                     </div>
                 `;
@@ -1668,6 +1675,9 @@
                 title.textContent = 'Staff Directives';
                 source = document.getElementById('facultyDirectivesList');
                 content.innerHTML = source && source.innerHTML.trim() ? source.innerHTML : '<p class="text-sm text-slate-300">No staff directives are available.</p>';
+            } else if (section === 'questions') {
+                title.textContent = 'Student Questions';
+                content.innerHTML = renderPublisherQuestionsHTML();
             } else if (section === 'forms') {
                 title.textContent = 'Digital Forms';
                 source = document.getElementById('facultyFormsSection');
@@ -1712,6 +1722,7 @@ function facultyQuickLink(targetId) {
         function renderFacultyBoard() {
             const list = document.getElementById('facultyNoticeList');
             const facNotices = notices.filter(n => n.author.includes('Sarah Jenkins') || n.category === 'academic');
+            updateQuestionBadges();
             document.getElementById('facultyNoticeCountBadge').innerText = `${facNotices.length} Active Posts`;
 
             list.innerHTML = facNotices.map(n => `
@@ -1854,6 +1865,66 @@ function facultyQuickLink(targetId) {
                 users.push({ id: 'u_' + Date.now(), name, email, role, dept, status: 'Active' });
                 renderAdminUsers();
             }
+        }
+
+
+        // Private notice enquiries: localStorage demo, shared only within this browser.
+        let noticeQuestions = [];
+        try { noticeQuestions = JSON.parse(localStorage.getItem('campusSyncQuestions') || '[]'); } catch (e) { noticeQuestions = []; }
+        function saveNoticeQuestions() {
+            try { localStorage.setItem('campusSyncQuestions', JSON.stringify(noticeQuestions)); } catch (e) {}
+            updateQuestionBadges();
+        }
+        function escapeQuestionText(value) {
+            return String(value || '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+        }
+        function sendNoticeQuestion(noticeId) {
+            const notice = notices.find(n => n.id === noticeId);
+            if (!notice) return;
+            const question = prompt('Type your question for the publisher of "' + notice.title + '":');
+            if (!question || !question.trim()) return;
+            noticeQuestions.unshift({id:'q_'+Date.now(), noticeId:notice.id, noticeTitle:notice.title, publisher:notice.author, student:'Ashika I.', question:question.trim(), answer:'', status:'Pending', createdAt:new Date().toLocaleString()});
+            saveNoticeQuestions();
+            alert('Your question was sent to ' + notice.author + '. Check My Questions for the reply.');
+        }
+        function openMyQuestions() {
+            const modal=document.getElementById('facultyQuickViewModal');
+            document.getElementById('facultyQuickViewTitle').textContent='My Questions';
+            const mine=noticeQuestions.filter(q=>q.student==='Ashika I.');
+            document.getElementById('facultyQuickViewContent').innerHTML=mine.length?mine.map(q=>`
+                <div class="rounded-xl border border-slate-200 bg-white p-4 space-y-2">
+                    <div class="text-xs font-semibold text-blue-700">${escapeQuestionText(q.noticeTitle)}</div>
+                    <p class="text-sm text-slate-700">${escapeQuestionText(q.question)}</p>
+                    <div class="text-xs font-semibold ${q.answer?'text-green-700':'text-amber-700'}">${q.answer?'Answered':'Pending publisher reply'}</div>
+                    ${q.answer?`<div class="rounded-lg bg-green-50 p-3 text-sm text-slate-800"><b>Publisher reply:</b> ${escapeQuestionText(q.answer)}</div>`:''}
+                    <div class="text-[11px] text-slate-500">Sent to: ${escapeQuestionText(q.publisher)} · ${escapeQuestionText(q.createdAt)}</div>
+                </div>`).join(''):'<p class="text-sm text-slate-600">No questions yet. Open a notice and select Ask the Publisher.</p>';
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+        }
+        function renderPublisherQuestionsHTML() {
+            const mine=noticeQuestions.filter(q=>q.publisher.includes('Sarah Jenkins'));
+            if(!mine.length)return '<p class="text-sm text-slate-600">No student questions yet. Questions about your notices will appear here.</p>';
+            return mine.map(q=>`
+                <div class="rounded-xl border border-slate-200 bg-white p-4 space-y-3">
+                    <div class="flex justify-between gap-2"><span class="text-xs font-bold text-blue-700">${escapeQuestionText(q.noticeTitle)}</span><span class="text-xs rounded-full px-2 py-1 ${q.answer?'bg-green-100 text-green-700':'bg-amber-100 text-amber-700'}">${q.answer?'Answered':'Pending'}</span></div>
+                    <p class="text-xs text-slate-500">From ${escapeQuestionText(q.student)} · ${escapeQuestionText(q.createdAt)}</p>
+                    <p class="text-sm text-slate-800">${escapeQuestionText(q.question)}</p>
+                    ${q.answer?`<div class="rounded-lg bg-green-50 p-3 text-sm text-slate-800"><b>Your reply:</b> ${escapeQuestionText(q.answer)}</div>`:`
+                        <textarea id="reply_${q.id}" rows="2" class="w-full rounded-lg border border-slate-300 p-3 text-sm text-slate-800" placeholder="Write your reply..."></textarea>
+                        <div class="flex justify-end"><button type="button" onclick="replyToNoticeQuestion('${q.id}')" class="rounded-lg bg-blue-600 px-4 py-2 text-xs font-semibold text-white">Send Reply</button></div>`}
+                </div>`).join('');
+        }
+        function replyToNoticeQuestion(questionId) {
+            const q=noticeQuestions.find(item=>item.id===questionId);
+            const field=document.getElementById('reply_'+questionId);
+            if(!q||!field||!field.value.trim()){alert('Please write a reply first.');return;}
+            q.answer=field.value.trim(); q.status='Answered'; saveNoticeQuestions(); openFacultyQuickView('questions');
+        }
+        function updateQuestionBadges() {
+            const studentBadge=document.getElementById('studentQuestionCount');
+            const facultyBadge=document.getElementById('facultyQuestionCount');
+            if(studentBadge)studentBadge.textContent=noticeQuestions.filter(q=>q.student==='Ashika I.').length;
+            if(facultyBadge)facultyBadge.textContent=noticeQuestions.filter(q=>q.publisher.includes('Sarah Jenkins')&&!q.answer).length;
         }
 
         function updateSidebarStats() {
