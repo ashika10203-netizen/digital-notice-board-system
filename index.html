@@ -1137,6 +1137,7 @@
                             class="admin-tab-btn border-b-2 border-transparent text-slate-400 hover:text-slate-200 pb-3 text-sm font-semibold flex items-center gap-2">
                             <i class="fa-solid fa-users-gear"></i> User Control
                         </button>
+                        <button onclick="switchAdminTab('questions')" id="adminTabQuestions" class="admin-tab-btn border-b-2 border-transparent text-slate-400 pb-3 text-sm font-semibold flex items-center gap-2"><i class="fa-solid fa-comments"></i> Student Questions <span id="adminQuestionCount" class="rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-bold text-blue-700">0</span></button>
                     </div>
 
                     <div id="adminNoticeSection" class="space-y-4">
@@ -1196,6 +1197,7 @@
                             </div>
                         </div>
                     </div>
+                    <div id="adminQuestionsSection" class="space-y-4 hidden"><div class="glass-panel rounded-xl p-4 flex items-center justify-between"><div><h3 class="text-sm font-bold text-slate-800">Student Questions & Replies</h3><p class="mt-1 text-xs text-slate-500">Review all student questions and publisher responses.</p></div><span id="adminQuestionSummary" class="text-xs font-semibold text-blue-700">0 questions</span></div><div id="adminQuestionsList" class="space-y-3"></div></div>
                 </div>
 
             </main>
@@ -1753,19 +1755,13 @@ function facultyQuickLink(targetId) {
         // Admin Board
         function switchAdminTab(tab) {
             currentAdminTab = tab;
-            document.querySelectorAll('.admin-tab-btn').forEach(btn => {
-                btn.className = "admin-tab-btn border-b-2 border-transparent text-slate-400 hover:text-slate-200 pb-3 text-sm font-semibold flex items-center gap-2";
-            });
-            if (tab === 'notices') {
-                document.getElementById('adminTabNotices').className = "admin-tab-btn border-b-2 border-amber-500 text-amber-400 pb-3 text-sm font-semibold flex items-center gap-2";
-                document.getElementById('adminNoticeSection').classList.remove('hidden');
-                document.getElementById('adminUserSection').classList.add('hidden');
-            } else {
-                document.getElementById('adminTabUsers').className = "admin-tab-btn border-b-2 border-amber-500 text-amber-400 pb-3 text-sm font-semibold flex items-center gap-2";
-                document.getElementById('adminNoticeSection').classList.add('hidden');
-                document.getElementById('adminUserSection').classList.remove('hidden');
-                renderAdminUsers();
-            }
+            document.querySelectorAll('.admin-tab-btn').forEach(btn => btn.className = "admin-tab-btn border-b-2 border-transparent text-slate-400 hover:text-slate-200 pb-3 text-sm font-semibold flex items-center gap-2");
+            ['adminNoticeSection','adminUserSection','adminQuestionsSection'].forEach(id => document.getElementById(id).classList.add('hidden'));
+            const active = document.getElementById(tab === 'notices' ? 'adminTabNotices' : tab === 'users' ? 'adminTabUsers' : 'adminTabQuestions');
+            active.className = "admin-tab-btn border-b-2 border-blue-600 text-blue-700 pb-3 text-sm font-semibold flex items-center gap-2";
+            if (tab === 'notices') document.getElementById('adminNoticeSection').classList.remove('hidden');
+            else if (tab === 'users') { document.getElementById('adminUserSection').classList.remove('hidden'); renderAdminUsers(); }
+            else { document.getElementById('adminQuestionsSection').classList.remove('hidden'); renderAdminQuestions(); }
         }
 
         function renderAdminBoard() {
@@ -1918,13 +1914,36 @@ function facultyQuickLink(targetId) {
             const q=noticeQuestions.find(item=>item.id===questionId);
             const field=document.getElementById('reply_'+questionId);
             if(!q||!field||!field.value.trim()){alert('Please write a reply first.');return;}
-            q.answer=field.value.trim(); q.status='Answered'; saveNoticeQuestions(); openFacultyQuickView('questions');
+            q.answer=field.value.trim(); q.status='Answered'; saveNoticeQuestions();
+            if (currentRole === 'admin' && currentAdminTab === 'questions') renderAdminQuestions(); else openFacultyQuickView('questions');
         }
+        function renderAdminQuestions() {
+            const list=document.getElementById('adminQuestionsList'), summary=document.getElementById('adminQuestionSummary');
+            if(!list)return;
+            const pending=noticeQuestions.filter(q=>!q.answer).length;
+            if(summary)summary.textContent=noticeQuestions.length+' total · '+pending+' pending';
+            if(!noticeQuestions.length){list.innerHTML='<div class="rounded-xl border border-slate-200 bg-white p-6 text-center text-sm text-slate-500">No student questions have been submitted yet.</div>';return;}
+            list.innerHTML=noticeQuestions.map(q=>`
+                <div class="rounded-xl border border-slate-200 bg-white p-4 space-y-3">
+                    <div class="flex flex-wrap items-center justify-between gap-2"><span class="text-sm font-bold text-slate-800">${escapeQuestionText(q.noticeTitle)}</span><span class="rounded-full px-2.5 py-1 text-[11px] font-semibold ${q.answer?'bg-green-100 text-green-700':'bg-amber-100 text-amber-700'}">${q.answer?'Answered':'Pending'}</span></div>
+                    <div class="text-xs text-slate-500">Student: ${escapeQuestionText(q.student)} · Publisher: ${escapeQuestionText(q.publisher)} · ${escapeQuestionText(q.createdAt)}</div>
+                    <p class="text-sm text-slate-700">${escapeQuestionText(q.question)}</p>
+                    ${q.answer?`<div class="rounded-lg bg-green-50 p-3 text-sm text-slate-800"><b>Reply:</b> ${escapeQuestionText(q.answer)}</div>`:`<textarea id="adminReply_${q.id}" rows="2" class="w-full rounded-lg border border-slate-300 p-3 text-sm text-slate-800" placeholder="Write an admin reply..."></textarea><div class="flex justify-end"><button type="button" onclick="replyToNoticeQuestionFromAdmin('${q.id}')" class="rounded-lg bg-blue-600 px-4 py-2 text-xs font-semibold text-white">Send Admin Reply</button></div>`}
+                </div>`).join('');
+        }
+        function replyToNoticeQuestionFromAdmin(id) {
+            const q=noticeQuestions.find(item=>item.id===id), field=document.getElementById('adminReply_'+id);
+            if(!q||!field||!field.value.trim()){alert('Please write a reply first.');return;}
+            q.answer=field.value.trim();q.status='Answered';q.repliedBy='Admin';saveNoticeQuestions();renderAdminQuestions();
+        }
+
         function updateQuestionBadges() {
             const studentBadge=document.getElementById('studentQuestionCount');
             const facultyBadge=document.getElementById('facultyQuestionCount');
+            const adminBadge=document.getElementById('adminQuestionCount');
             if(studentBadge)studentBadge.textContent=noticeQuestions.filter(q=>q.student==='Ashika I.').length;
             if(facultyBadge)facultyBadge.textContent=noticeQuestions.filter(q=>q.publisher.includes('Sarah Jenkins')&&!q.answer).length;
+            if(adminBadge)adminBadge.textContent=noticeQuestions.length;
         }
 
         function updateSidebarStats() {
