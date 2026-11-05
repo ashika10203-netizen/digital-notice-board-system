@@ -1261,6 +1261,92 @@ input:focus, select:focus, textarea:focus {
 }
 </style>
 
+
+<style id="campussync-university-red-white-theme">
+/* University identity palette: white, crimson red and soft rose. CSS-only. */
+:root {
+  --campus-brand-red:#b5122b;
+  --campus-brand-red-dark:#920d22;
+  --campus-brand-rose:#fbe9ed;
+  --campus-brand-rose-soft:#fff5f6;
+  --campus-brand-ink:#382d30;
+  --campus-brand-muted:#786b6e;
+}
+body {
+  background:#fff !important;
+  color:var(--campus-brand-ink);
+}
+header, .top-header, .dashboard-header, .main-header {
+  background:linear-gradient(110deg,#9f1027 0%,#bd1834 58%,#d04457 100%) !important;
+}
+aside, .sidebar {
+  background:#fff !important;
+  border-color:#f0dce0 !important;
+}
+.sidebar a:hover, .sidebar button:hover {
+  background:#fff0f2 !important;
+  color:var(--campus-brand-red) !important;
+}
+.sidebar .active, .sidebar a.active, .sidebar button.active {
+  background:#fbe8ec !important;
+  color:var(--campus-brand-red) !important;
+}
+.glass-panel, .glass-card, .dashboard-card, .stat-card, .notice-card,
+[class*="glass-panel"], [class*="notice-card"] {
+  background:#fff !important;
+  border-color:#eee1e3 !important;
+  box-shadow:0 8px 24px rgba(112,24,43,.055) !important;
+}
+button.primary, .btn-primary, .bg-blue-600, button.bg-blue-600 {
+  background:var(--campus-brand-red) !important;
+  border-color:var(--campus-brand-red) !important;
+  color:#fff !important;
+}
+button.primary:hover, .btn-primary:hover, .bg-blue-600:hover, button.bg-blue-600:hover {
+  background:var(--campus-brand-red-dark) !important;
+}
+.text-blue-600, .text-blue-700, .text-indigo-600 { color:var(--campus-brand-red) !important; }
+.border-blue-500, .border-blue-600 { border-color:#d77b8b !important; }
+input:focus, select:focus, textarea:focus {
+  border-color:#c42b45 !important;
+  box-shadow:0 0 0 3px rgba(181,18,43,.12) !important;
+  outline:none !important;
+}
+.campus-category-tile, #campusSavedShortcut {
+  background:#fff !important;
+  border-color:#eee0e3 !important;
+  color:#59464a !important;
+}
+.campus-category-tile i, #campusSavedShortcut i { color:#b5122b !important; }
+.campus-category-tile:hover { background:#fff3f5 !important; }
+.campus-category-tile.active, #campusSavedShortcut.bg-blue-600 {
+  background:#fbe8ec !important;
+  border-color:#d77b8b !important;
+  color:#9f1027 !important;
+}
+.campus-category-tile.active i { color:#a91029 !important; }
+#campusNoticeModeTabs .campus-mode-tab {
+  background:#fff !important;
+  border-color:#ead9dd !important;
+  color:#624d52 !important;
+}
+#campusNoticeModeTabs .campus-mode-tab.campus-mode-active {
+  background:#b5122b !important;
+  border-color:#b5122b !important;
+  color:#fff !important;
+}
+#tickerContent, .ticker-wrap {
+  background:#fff1f3 !important;
+  border-color:#f0cbd2 !important;
+  color:#71313e !important;
+}
+.login-container, .auth-card, .login-card {
+  background:#fff !important;
+  border-color:#f0dce0 !important;
+  box-shadow:0 18px 48px rgba(112,24,43,.10) !important;
+}
+</style>
+
 </head>
 
 <body class="h-full flex flex-col font-sans overflow-hidden bg-slate-950 text-slate-100">
