@@ -67,613 +67,9 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Reliable live ticker animation independent of Tailwind's CDN compiler */
-        @keyframes ticker-scroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-
-        #tickerContent {
-            display: flex;
-            width: max-content;
-            min-width: max-content;
-            animation: ticker-scroll 30s linear infinite;
-            will-change: transform;
-        }
-
-        #tickerContent .ticker-item {
-            display: inline-flex;
-            align-items: center;
-            flex-shrink: 0;
-            white-space: nowrap;
-            padding-right: 3rem;
-        }
-
-        .ticker-wrap:hover #tickerContent {
+        .ticker-wrap:hover .animate-ticker {
             animation-play-state: paused;
         }
-    
-
-        /* =====================================================
-           CHARCOAL + CHAMPAGNE — PREMIUM MINIMAL THEME
-           Visual-only overrides; existing app logic is unchanged.
-           ===================================================== */
-        :root {
-            color-scheme: light;
-            --campus-charcoal: #292824;
-            --campus-charcoal-soft: #39372f;
-            --campus-ink: #302e29;
-            --campus-muted: #777268;
-            --campus-ivory: #f7f5f0;
-            --campus-cream: #f1ede4;
-            --campus-champagne: #e8dfcf;
-            --campus-gold: #a88b58;
-            --campus-gold-dark: #8c7042;
-            --campus-line: #e5dfd4;
-            --campus-card: #fffefa;
-        }
-
-        html, body {
-            background: var(--campus-ivory) !important;
-            color: var(--campus-ink) !important;
-        }
-
-        body { font-family: 'Inter', sans-serif; }
-
-        ::-webkit-scrollbar-track { background: #eeeae2 !important; }
-        ::-webkit-scrollbar-thumb { background: #c8bda9 !important; }
-        ::-webkit-scrollbar-thumb:hover { background: #a88b58 !important; }
-
-        /* Main application surfaces */
-        [class~="bg-slate-950"],
-        [class~="bg-slate-950/40"],
-        [class~="bg-slate-950/80"] {
-            background-color: var(--campus-ivory) !important;
-        }
-        [class~="bg-slate-900"],
-        [class~="bg-slate-900/90"],
-        [class~="bg-slate-900/80"],
-        [class~="bg-slate-900/60"] {
-            background-color: var(--campus-card) !important;
-        }
-        [class~="bg-slate-800"],
-        [class~="bg-slate-800/80"],
-        [class~="bg-slate-800/40"] {
-            background-color: var(--campus-cream) !important;
-        }
-        [class~="bg-slate-700"] { background-color: #e6dfd3 !important; }
-
-        /* Login screen */
-        #fullLoginPage { background: var(--campus-ivory) !important; }
-        #fullLoginPage > .absolute {
-            background: radial-gradient(circle at 50% 0%, #eee5d5 0%, #f7f5f0 62%) !important;
-            opacity: 1 !important;
-        }
-        .glass-panel {
-            background: rgba(255, 254, 250, .96) !important;
-            border: 1px solid var(--campus-line) !important;
-            backdrop-filter: blur(14px);
-            box-shadow: 0 18px 50px rgba(48, 43, 33, .07) !important;
-        }
-        .glass-card {
-            background: var(--campus-card) !important;
-            border: 1px solid var(--campus-line) !important;
-            backdrop-filter: none;
-            box-shadow: 0 5px 18px rgba(48, 43, 33, .035);
-        }
-
-        /* Header, sidebar and footer */
-        header[class~="bg-slate-900/90"],
-        nav[class~="bg-slate-900"],
-        aside[class~="bg-slate-900"] {
-            background: var(--campus-charcoal) !important;
-            border-color: #454239 !important;
-        }
-        header [class~="text-white"],
-        aside [class~="text-white"],
-        nav [class~="text-white"] { color: #fffdf8 !important; }
-        header [class~="text-slate-400"],
-        aside [class~="text-slate-400"] { color: #c2bcae !important; }
-
-        /* Typography */
-        [class~="text-slate-100"],
-        [class~="text-slate-200"],
-        [class~="text-slate-300"] { color: var(--campus-ink) !important; }
-        [class~="text-slate-400"],
-        [class~="text-slate-500"] { color: var(--campus-muted) !important; }
-        [class~="text-slate-700"] { color: #4c4941 !important; }
-
-        /* Champagne replaces the former indigo / violet brand accents */
-        [class~="bg-indigo-600"],
-        [class~="bg-indigo-500"],
-        [class~="bg-teal-600"],
-        [class~="bg-amber-600"] {
-            background-color: var(--campus-charcoal-soft) !important;
-        }
-        [class~="hover:bg-indigo-600"]:hover,
-        [class~="hover:bg-teal-500"]:hover,
-        [class~="hover:bg-amber-500"]:hover {
-            background-color: var(--campus-gold-dark) !important;
-        }
-        [class~="text-indigo-400"],
-        [class~="text-indigo-300"],
-        [class~="text-indigo-200"],
-        [class~="text-violet-400"],
-        [class~="text-teal-400"],
-        [class~="text-teal-300"],
-        [class~="text-amber-400"],
-        [class~="text-amber-300"] { color: var(--campus-gold-dark) !important; }
-
-        [class~="bg-indigo-500/20"],
-        [class~="bg-indigo-600/20"],
-        [class~="bg-violet-500/20"],
-        [class~="bg-teal-500/20"],
-        [class~="bg-teal-500/10"],
-        [class~="bg-amber-500/20"] {
-            background-color: #f0e9dc !important;
-        }
-        [class~="border-indigo-500/30"],
-        [class~="border-indigo-500/20"],
-        [class~="border-teal-500/30"],
-        [class~="border-teal-500/20"],
-        [class~="border-amber-500/30"],
-        [class~="border-amber-500/20"] {
-            border-color: #d9cbb3 !important;
-        }
-
-        /* Dashboard hero panels */
-        #viewStudent > div:first-child,
-        #viewFaculty > div:first-child,
-        #viewAdmin > div:first-child {
-            background: linear-gradient(115deg, #e9e0d1 0%, #f4f0e8 58%, #eee9df 100%) !important;
-            border: 1px solid #dfd5c4 !important;
-            box-shadow: 0 12px 28px rgba(48, 43, 33, .045) !important;
-        }
-        #viewStudent > div:first-child h2,
-        #viewFaculty > div:first-child h2,
-        #viewAdmin > div:first-child h2 { color: var(--campus-charcoal) !important; }
-        #viewStudent > div:first-child p,
-        #viewFaculty > div:first-child p,
-        #viewAdmin > div:first-child p { color: #625d52 !important; }
-
-        /* Borders, tables, inputs and interactive states */
-        [class~="border-slate-800"],
-        [class~="border-slate-800/80"],
-        [class~="border-slate-700"],
-        [class~="border-slate-700/80"],
-        [class~="border-slate-700/70"],
-        [class~="border-slate-700/50"],
-        [class~="divide-slate-800/60"] {
-            border-color: var(--campus-line) !important;
-        }
-        input, select, textarea {
-            background: #fffefa !important;
-            color: var(--campus-ink) !important;
-            border-color: #d9d2c6 !important;
-        }
-        input::placeholder, textarea::placeholder { color: #a39c8f !important; }
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--campus-gold) !important;
-            box-shadow: 0 0 0 3px rgba(168, 139, 88, .13) !important;
-            outline: none !important;
-        }
-        table thead { background: #f0ece4 !important; }
-        table tbody tr:hover { background: #f8f5ef !important; }
-        button { transition: background-color .18s ease, border-color .18s ease, box-shadow .18s ease; }
-
-        /* Keep alerts/status colors meaningful while softening their surfaces */
-        [class~="bg-rose-950/40"],
-        [class~="bg-rose-950/70"],
-        [class~="bg-rose-900/40"] { background-color: #f8e9e5 !important; }
-        [class~="text-rose-300"],
-        [class~="text-rose-200"],
-        [class~="text-rose-400"] { color: #a4473e !important; }
-        [class~="border-rose-800/50"],
-        [class~="border-rose-900/50"],
-        [class~="border-rose-700/50"] { border-color: #e9c9c2 !important; }
-
-        /* Reduce overly heavy dark shadows from the previous theme */
-        [class~="shadow-indigo-500/30"],
-        [class~="shadow-indigo-600/30"],
-        [class~="shadow-teal-600/30"],
-        [class~="shadow-amber-600/30"] {
-            --tw-shadow-color: rgba(48, 43, 33, .08) !important;
-        }
-
-        @media (max-width: 640px) {
-            #viewStudent > div:first-child,
-            #viewFaculty > div:first-child,
-            #viewAdmin > div:first-child { border-radius: 16px !important; }
-        }
-
-    
-
-        /* Event calendars open in a popup instead of taking dashboard space */
-        #eventCalendarWidget { display: none; }
-        #adminEventCalendar { display: none !important; }
-        /* Student Event Calendar — charcoal panel with champagne details */
-        #eventCalendarWidget {
-            background: linear-gradient(145deg, #302e29 0%, #25241f 100%) !important;
-            border: 1px solid #4a463d !important;
-            box-shadow: 0 16px 34px rgba(35, 31, 24, .16) !important;
-            color: #f5efe4 !important;
-        }
-        #eventCalendarWidget h3,
-        #eventCalendarWidget h4,
-        #eventCalendarWidget #calendarMonthYear {
-            color: #f5efe4 !important;
-        }
-        #eventCalendarWidget .border-b,
-        #eventCalendarWidget .border-t { border-color: #514b40 !important; }
-        #eventCalendarWidget .text-slate-400,
-        #eventCalendarWidget .text-slate-500 { color: #c3b9a8 !important; }
-        #eventCalendarWidget #calendarDaysGrid > div {
-            color: #e9e1d4 !important;
-            background: #3b3932 !important;
-            border: 1px solid #575247 !important;
-            border-radius: 9px !important;
-            padding: 8px 4px !important;
-        }
-        #eventCalendarWidget #calendarDaysGrid > div:empty {
-            background: transparent !important;
-            border-color: transparent !important;
-        }
-        #eventCalendarWidget #calendarDaysGrid > div[onclick] {
-            cursor: pointer;
-            transition: background .16s ease, border-color .16s ease;
-        }
-        #eventCalendarWidget #calendarDaysGrid > div[onclick]:hover {
-            background: #514b40 !important;
-            border-color: #b69a6b !important;
-        }
-        #eventCalendarWidget #calendarDaysGrid > div[class*="bg-indigo"] {
-            background: #b69a6b !important;
-            color: #28251f !important;
-            border-color: #d5c09a !important;
-        }
-        #eventCalendarWidget #calendarEventsList > div {
-            background: #3a3831 !important;
-            border: 1px solid #575145 !important;
-            border-radius: 10px !important;
-            color: #f5efe4 !important;
-        }
-        #eventCalendarWidget #calendarEventsList .text-slate-200 { color: #f5efe4 !important; }
-        #eventCalendarWidget #calendarEventsList .text-slate-400 { color: #c3b9a8 !important; }
-        #eventCalendarWidget #calendarEventsList [class*="bg-violet"] {
-            background: #514735 !important;
-            color: #e6d2a9 !important;
-        }
-        #eventCalendarWidget button { color: #d8c7a8 !important; }
-        #eventCalendarWidget button:hover { color: #fff7e8 !important; }
-
-
-        .faculty-quick-link { display:flex; align-items:center; gap:10px; padding:13px; border:1px solid #e5dfd4; border-radius:12px; background:#f7f5f0; color:#39372f; font-size:12px; font-weight:600; text-align:left; transition:background .18s ease,border-color .18s ease,transform .18s ease; }
-        .faculty-quick-link i { color:#a88b58; width:16px; text-align:center; }
-        .faculty-quick-link:hover { background:#eee7da; border-color:#b99a58; transform:translateY(-1px); }
-        .faculty-link-highlight { outline:2px solid #b99a58; outline-offset:4px; transition:outline .2s ease; }
-    
-        #facultyQuickLinksHeading {
-            font-size: 17px !important;
-            font-weight: 800 !important;
-            letter-spacing: 0.02em;
-            line-height: 1.4;
-        }
-        /* Clear, visible student dashboard headings */
-        #viewStudent h2,
-        #viewStudent h3,
-        #viewStudent h4 {
-            font-weight: 800 !important;
-            color: #292824 !important;
-            opacity: 1 !important;
-        }
-        #viewStudent > div:first-child h2 {
-            color: #292824 !important;
-            font-size: 1.65rem !important;
-            font-weight: 800 !important;
-        }
-        #viewStudent #studentNoticesContainer h3 {
-            color: #292824 !important;
-            font-weight: 800 !important;
-        }
-        #facultyQuickLinksHeading {
-            display: block !important;
-            color: #292824 !important;
-            font-weight: 800 !important;
-            opacity: 1 !important;
-        }
-
-        .faculty-link-highlight {
-            outline: 2px solid #b99a58 !important;
-            outline-offset: 4px;
-            box-shadow: 0 0 0 5px rgba(185,154,88,0.12);
-            transition: outline .2s ease, box-shadow .2s ease;
-        }
-
-        /* =====================================================
-           CAMPUSSYNC — CLEAN BLUE / WHITE PROFESSIONAL THEME
-           High contrast, crisp cards, clear typography.
-           ===================================================== */
-        :root {
-            --campus-navy: #14213d;
-            --campus-blue: #2563eb;
-            --campus-blue-dark: #1d4ed8;
-            --campus-blue-pale: #eff6ff;
-            --campus-page: #f4f7fb;
-            --campus-surface: #ffffff;
-            --campus-text: #172033;
-            --campus-muted: #596579;
-            --campus-border: #dce4ef;
-        }
-        html, body, #mainDashboard, main {
-            background: var(--campus-page) !important;
-            color: var(--campus-text) !important;
-        }
-        body { font-family: 'Inter', sans-serif !important; }
-        header[class~="bg-slate-900/90"],
-        aside[class~="bg-slate-900/60"] {
-            background: var(--campus-navy) !important;
-            border-color: #263653 !important;
-        }
-        header h1, header .text-white, aside .text-white { color: #ffffff !important; }
-        header .text-slate-400, aside .text-slate-400 { color: #c5d0e0 !important; }
-        main { background: var(--campus-page) !important; }
-        .glass-panel, .glass-card {
-            background: var(--campus-surface) !important;
-            border: 1px solid var(--campus-border) !important;
-            border-radius: 16px !important;
-            box-shadow: 0 5px 18px rgba(20, 33, 61, .055) !important;
-            backdrop-filter: none !important;
-        }
-        [class~="bg-slate-950"], [class~="bg-slate-950/40"],
-        [class~="bg-slate-900"], [class~="bg-slate-900/90"],
-        [class~="bg-slate-900/80"], [class~="bg-slate-900/60"] {
-            background-color: #ffffff !important;
-        }
-        [class~="bg-slate-800"], [class~="bg-slate-800/80"],
-        [class~="bg-slate-800/40"], [class~="bg-slate-700"] {
-            background-color: #eef3f9 !important;
-        }
-        [class~="text-slate-100"], [class~="text-slate-200"],
-        [class~="text-slate-300"], [class~="text-slate-400"],
-        [class~="text-slate-500"] {
-            color: var(--campus-text) !important;
-        }
-        [class~="text-slate-400"], [class~="text-slate-500"] {
-            color: var(--campus-muted) !important;
-        }
-        [class~="border-slate-800"], [class~="border-slate-800/80"],
-        [class~="border-slate-700"], [class~="border-slate-700/80"],
-        [class~="border-slate-700/70"], [class~="border-slate-700/50"] {
-            border-color: var(--campus-border) !important;
-        }
-        [class~="bg-indigo-600"], [class~="bg-indigo-500"],
-        [class~="bg-teal-600"], [class~="bg-amber-600"] {
-            background-color: var(--campus-blue) !important;
-            color: #ffffff !important;
-        }
-        [class~="hover:bg-indigo-600"]:hover,
-        [class~="hover:bg-teal-500"]:hover,
-        [class~="hover:bg-amber-500"]:hover {
-            background-color: var(--campus-blue-dark) !important;
-        }
-        [class~="text-indigo-400"], [class~="text-indigo-300"],
-        [class~="text-indigo-200"], [class~="text-violet-400"],
-        [class~="text-teal-400"], [class~="text-teal-300"],
-        [class~="text-amber-400"], [class~="text-amber-300"] {
-            color: var(--campus-blue-dark) !important;
-        }
-        [class~="bg-indigo-500/20"], [class~="bg-indigo-600/20"],
-        [class~="bg-violet-500/20"], [class~="bg-teal-500/20"],
-        [class~="bg-teal-500/10"], [class~="bg-amber-500/20"] {
-            background-color: #eaf2ff !important;
-        }
-        [class~="border-indigo-500/30"], [class~="border-indigo-500/20"],
-        [class~="border-teal-500/30"], [class~="border-teal-500/20"],
-        [class~="border-amber-500/30"], [class~="border-amber-500/20"] {
-            border-color: #bfd3f5 !important;
-        }
-        #fullLoginPage {
-            background: linear-gradient(135deg, #eaf2ff 0%, #f7f9fc 55%, #e9f0fb 100%) !important;
-        }
-        #fullLoginPage > .absolute {
-            background: radial-gradient(circle at 50% 0%, #dce9ff 0%, #f4f7fb 68%) !important;
-        }
-        #fullLoginPage .glass-panel {
-            background: #ffffff !important;
-            border: 1px solid #dbe5f2 !important;
-            box-shadow: 0 24px 70px rgba(20, 33, 61, .13) !important;
-        }
-        #fullLoginPage h1, #fullLoginPage label { color: #172033 !important; }
-        #fullLoginPage p { color: #596579 !important; }
-        #viewStudent > div:first-child,
-        #viewFaculty > div:first-child,
-        #viewAdmin > div:first-child {
-            background: linear-gradient(115deg, #e8f1ff 0%, #f7faff 58%, #edf4ff 100%) !important;
-            border: 1px solid #d4e2f7 !important;
-            border-radius: 18px !important;
-            box-shadow: 0 10px 28px rgba(37, 99, 235, .07) !important;
-        }
-        #viewStudent > div:first-child h2,
-        #viewFaculty > div:first-child h2,
-        #viewAdmin > div:first-child h2 {
-            color: #14213d !important;
-            font-weight: 800 !important;
-        }
-        #viewStudent > div:first-child p,
-        #viewFaculty > div:first-child p,
-        #viewAdmin > div:first-child p { color: #52627a !important; }
-        #viewStudent h2, #viewStudent h3, #viewStudent h4,
-        #viewFaculty h2, #viewFaculty h3, #viewFaculty h4,
-        #viewAdmin h2, #viewAdmin h3, #viewAdmin h4 {
-            color: #172033 !important;
-            font-weight: 800 !important;
-        }
-        #viewStudent .text-white, #viewFaculty .text-white, #viewAdmin .text-white {
-            color: #172033 !important;
-        }
-        #viewStudent button, #viewFaculty button, #viewAdmin button {
-            font-weight: 600;
-        }
-        #eventCalendarWidget {
-            background: #ffffff !important;
-            border: 1px solid var(--campus-border) !important;
-            color: var(--campus-text) !important;
-            box-shadow: 0 5px 18px rgba(20, 33, 61, .055) !important;
-        }
-        #eventCalendarWidget h3, #eventCalendarWidget h4,
-        #eventCalendarWidget #calendarMonthYear { color: #172033 !important; }
-        #eventCalendarWidget .text-slate-400,
-        #eventCalendarWidget .text-slate-500 { color: #596579 !important; }
-        #eventCalendarWidget .border-b, #eventCalendarWidget .border-t {
-            border-color: var(--campus-border) !important;
-        }
-        #eventCalendarWidget #calendarDaysGrid > div {
-            color: #27364d !important;
-            background: #f5f8fc !important;
-            border: 1px solid #e1e8f1 !important;
-            border-radius: 9px !important;
-        }
-        #eventCalendarWidget #calendarDaysGrid > div:empty {
-            background: transparent !important;
-            border-color: transparent !important;
-        }
-        #eventCalendarWidget #calendarDaysGrid > div[class*="bg-indigo"] {
-            background: #2563eb !important;
-            color: #ffffff !important;
-            border-color: #2563eb !important;
-        }
-        #eventCalendarWidget #calendarEventsList > div {
-            background: #f7f9fc !important;
-            border: 1px solid #e1e8f1 !important;
-            color: #172033 !important;
-        }
-        #eventCalendarWidget #calendarEventsList .text-slate-200 { color: #172033 !important; }
-        #eventCalendarWidget #calendarEventsList .text-slate-400 { color: #596579 !important; }
-        #eventCalendarWidget button { color: #2563eb !important; }
-        .faculty-quick-link {
-            background: #f6f9ff !important;
-            color: #172033 !important;
-            border: 1px solid #dce6f5 !important;
-            border-radius: 12px !important;
-        }
-        .faculty-quick-link:hover {
-            background: #eaf2ff !important;
-            border-color: #8fb4f0 !important;
-        }
-        #facultyQuickLinksHeading { color: #172033 !important; font-weight: 800 !important; }
-        input, select, textarea {
-            background: #ffffff !important;
-            color: #172033 !important;
-            border: 1px solid #cfd9e7 !important;
-            border-radius: 9px !important;
-        }
-        input::placeholder, textarea::placeholder { color: #78869a !important; }
-        input:focus, select:focus, textarea:focus {
-            border-color: #4f83df !important;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, .12) !important;
-        }
-        table thead { background: #edf3fb !important; color: #334155 !important; }
-        table tbody tr:hover { background: #f5f8fd !important; }
-        .ticker-wrap { background: transparent !important; }
-        @media (max-width: 640px) {
-            main { padding: 14px !important; }
-            #viewStudent > div:first-child,
-            #viewFaculty > div:first-child,
-            #viewAdmin > div:first-child { border-radius: 14px !important; }
-        }
-
-
-        
-        /* FINAL TEXT-CONTRAST FIX — readable text on light surfaces */
-        main .text-white,
-        main [class~="text-white"] {
-            color: #172033 !important;
-        }
-        /* Keep white lettering on strong blue action buttons and selected badges */
-        main button.text-white,
-        main button [class~="text-white"],
-        main [class~="bg-indigo-600"].text-white,
-        main [class~="bg-indigo-500"].text-white,
-        main [class~="bg-teal-600"].text-white,
-        main [class~="bg-amber-600"].text-white,
-        main [class~="bg-indigo-600"] .text-white,
-        main [class~="bg-indigo-500"] .text-white {
-            color: #ffffff !important;
-        }
-        /* Ensure notice text and labels remain dark and readable */
-        main .glass-panel,
-        main .glass-card {
-            color: #172033 !important;
-        }
-        main .glass-panel p,
-        main .glass-card p,
-        main .glass-panel span,
-        main .glass-card span,
-        main .glass-panel label,
-        main .glass-card label {
-            text-shadow: none !important;
-        }
-        /* Keep the dark top bar and navigation lettering bright */
-        header .text-white,
-        aside .text-white,
-        nav .text-white {
-            color: #ffffff !important;
-        }
-
-    
-        
-        /* Faculty Quick Links modal: enforce readable contrast in all copied sections */
-        #facultyQuickViewModal > div {
-            background: #ffffff !important;
-            color: #172033 !important;
-            border: 1px solid #dce4ef !important;
-        }
-        #facultyQuickViewModal #facultyQuickViewTitle {
-            color: #14213d !important;
-        }
-        #facultyQuickViewModal #facultyQuickViewContent,
-        #facultyQuickViewModal #facultyQuickViewContent * {
-            color: #172033;
-        }
-        #facultyQuickViewModal #facultyQuickViewContent .glass-panel,
-        #facultyQuickViewModal #facultyQuickViewContent .glass-card {
-            background: #f7f9fc !important;
-            border: 1px solid #dce4ef !important;
-            color: #172033 !important;
-        }
-        #facultyQuickViewModal #facultyQuickViewContent [class*="text-white"],
-        #facultyQuickViewModal #facultyQuickViewContent [class*="text-slate-"],
-        #facultyQuickViewModal #facultyQuickViewContent [class*="text-teal-"],
-        #facultyQuickViewModal #facultyQuickViewContent [class*="text-amber-"] {
-            color: #172033 !important;
-        }
-        #facultyQuickViewModal #facultyQuickViewContent [class*="bg-amber-950"],
-        #facultyQuickViewModal #facultyQuickViewContent [class*="bg-slate-900"],
-        #facultyQuickViewModal #facultyQuickViewContent [class*="bg-slate-800"] {
-            background: #f1f5fb !important;
-        }
-        #facultyQuickViewModal #facultyQuickViewContent input,
-        #facultyQuickViewModal #facultyQuickViewContent select,
-        #facultyQuickViewModal #facultyQuickViewContent textarea {
-            background: #ffffff !important;
-            color: #172033 !important;
-            border: 1px solid #cfd9e7 !important;
-        }
-        #facultyQuickViewModal #facultyQuickViewContent button {
-            background: #2563eb !important;
-            color: #ffffff !important;
-        }
-        #facultyQuickViewModal #facultyQuickViewContent button i {
-            color: #ffffff !important;
-        }
-        #facultyQuickViewModal > div > div:first-child button {
-            background: #eef3f9 !important;
-            color: #172033 !important;
-        }
-        #facultyQuickViewModal > div > div:first-child button i {
-            color: #172033 !important;
-        }
-
     </style>
 </head>
 
@@ -782,8 +178,26 @@
                 </div>
             </div>
 
-            <!-- Current session actions: role switching is handled through login/logout -->
+            <!-- Role Selector & Logout -->
             <div class="flex items-center space-x-3">
+                <div class="inline-flex p-1 bg-slate-950 rounded-xl border border-slate-800 shadow-inner">
+                    <button onclick="switchRole('admin')" id="roleBtnAdmin"
+                        class="role-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5 text-slate-400 hover:text-white">
+                        <i class="fa-solid fa-user-shield text-amber-400"></i>
+                        <span>Admin</span>
+                    </button>
+                    <button onclick="switchRole('faculty')" id="roleBtnFaculty"
+                        class="role-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5 text-slate-400 hover:text-white">
+                        <i class="fa-solid fa-chalkboard-user text-teal-400"></i>
+                        <span>Faculty</span>
+                    </button>
+                    <button onclick="switchRole('student')" id="roleBtnStudent"
+                        class="role-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5 bg-indigo-600 text-white shadow-md">
+                        <i class="fa-solid fa-user-graduate text-indigo-200"></i>
+                        <span>Student</span>
+                    </button>
+                </div>
+
                 <button onclick="logoutSession()"
                     class="px-3 py-1.5 bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 border border-rose-800/50 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all">
                     <i class="fa-solid fa-right-from-bracket"></i> Logout
@@ -799,7 +213,7 @@
                 <i class="fa-solid fa-bolt animate-pulse"></i> Live Flash
             </div>
             <div class="ticker-wrap flex-1 overflow-hidden relative whitespace-nowrap ml-4">
-                <div id="tickerContent" class="text-xs text-rose-200 font-medium"></div>
+                <div id="tickerContent" class="inline-block animate-ticker text-xs text-rose-200 font-medium"></div>
             </div>
         </div>
 
@@ -828,13 +242,18 @@
                             class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-indigo-600/20 text-indigo-300 font-semibold text-xs border border-indigo-500/30">
                             <i class="fa-solid fa-table-columns text-sm"></i> Main Notice Feed
                         </a>
-                        <a href="#" onclick="openEventCalendar(); return false;"
+                        <a href="#eventCalendarWidget"
                             class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 text-xs transition-all">
                             <i class="fa-solid fa-calendar-days text-sm"></i> Event Calendar
                         </a>
                         <a href="#" onclick="filterStudentNotices('bookmarks')"
                             class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 text-xs transition-all">
                             <i class="fa-solid fa-bookmark text-sm"></i> Bookmarks
+                        </a>
+                        <a href="#" onclick="openLostFound(); return false;"
+                            class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 text-xs transition-all">
+                            <i class="fa-solid fa-magnifying-glass-location text-sm text-amber-400"></i>
+                            Lost & Found
                         </a>
                     </nav>
                 </div>
@@ -919,11 +338,7 @@
                         </div>
                     </div>
 
-                    <div class="flex justify-end">
-                        <button type="button" onclick="openMyQuestions()" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold"><i class="fa-regular fa-comments mr-2"></i> My Questions <span id="studentQuestionCount" class="ml-1 bg-white/20 px-1.5 py-0.5 rounded-full">0</span></button>
-                    </div>
                     <!-- Two-Column Grid Layout -->
-
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <div class="lg:col-span-2 space-y-4" id="studentNoticesContainer"></div>
 
@@ -1019,45 +434,7 @@
                         </button>
                     </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 hidden">
-                        <section id="facultyProfileCard" class="glass-panel rounded-2xl p-5">
-                            <div class="flex items-center gap-4">
-                                <div class="w-14 h-14 rounded-full bg-[#e8dfcf] text-[#39372f] flex items-center justify-center text-xl font-bold border-2 border-[#b99a58]">SJ</div>
-                                <div><h3 class="font-bold text-base text-slate-100">Dr. Sarah Jenkins</h3><p class="text-xs text-slate-400 mt-1">Faculty Member</p><p class="text-xs text-slate-500 mt-1">Department of Computer Science & Engineering</p></div>
-                            </div>
-                            <div class="mt-4 pt-3 border-t border-slate-800 flex justify-between text-xs"><span class="text-slate-400">Faculty profile</span><span class="text-amber-400 font-semibold">Active</span></div>
-                        </section>
-                        <section class="glass-panel rounded-2xl p-5 lg:col-span-2">
-                            <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-3"><h3 class="font-bold text-sm text-slate-100"><i class="fa-regular fa-bell text-amber-500 mr-2"></i>Notifications</h3><span id="facultyNotificationCount" class="text-xs rounded-full px-2.5 py-1 bg-amber-500/15 text-amber-700">0 updates</span></div>
-                            <div id="facultyNotificationsList" class="space-y-3 max-h-36 overflow-y-auto"><p class="text-xs text-slate-500">No new notifications.</p></div>
-                        </section>
-                    </div>
-                    <section class="grid grid-cols-1 sm:grid-cols-3 gap-4 hidden">
-                        <div class="glass-panel rounded-2xl p-5"><p class="text-xs text-slate-500">Active notices</p><p id="facultyStatNotices" class="text-3xl font-semibold text-amber-600 mt-2">0</p><p class="text-xs text-slate-400 mt-1">Faculty notice posts</p></div>
-                        <div class="glass-panel rounded-2xl p-5"><p class="text-xs text-slate-500">Scheduled notices</p><p id="facultyStatScheduled" class="text-3xl font-semibold text-amber-600 mt-2">0</p><p class="text-xs text-slate-400 mt-1">Notices with deadlines</p></div>
-                        <div class="glass-panel rounded-2xl p-5"><p class="text-xs text-slate-500">Department updates</p><p id="facultyStatDirectives" class="text-3xl font-semibold text-amber-600 mt-2">0</p><p class="text-xs text-slate-400 mt-1">Staff-only announcements</p></div>
-                    </section>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
-                        <section class="glass-panel rounded-2xl p-5 space-y-4">
-                            <h3 id="facultyQuickLinksHeading" class="border-b border-slate-800 pb-3 text-slate-100"><i class="fa-solid fa-bolt text-amber-500 mr-2"></i>Quick Links</h3>
-                            <div class="grid grid-cols-2 gap-3">
-                                <button type="button" onclick="openEventCalendar()" class="faculty-quick-link"><i class="fa-solid fa-calendar-days"></i><span>Event Calendar</span></button>
-                                <button type="button" onclick="openNoticeModal('faculty')" class="faculty-quick-link"><i class="fa-solid fa-plus"></i><span>Post a notice</span></button>
-                                <button type="button" onclick="openFacultyQuickView('notices')" class="faculty-quick-link"><i class="fa-solid fa-bullhorn"></i><span>My notices</span></button>
-                                <button type="button" onclick="openFacultyQuickView('directives')" class="faculty-quick-link"><i class="fa-solid fa-inbox"></i><span>Staff directives</span></button>
-                                <button type="button" onclick="openFacultyQuickView('forms')" class="faculty-quick-link"><i class="fa-regular fa-rectangle-list"></i><span>Digital forms</span></button>
-                                <button type="button" onclick="openFacultyQuickView('questions')" class="faculty-quick-link"><i class="fa-regular fa-comments"></i><span>Student Questions <span id="facultyQuestionCount" class="ml-1">0</span></span></button>
-                            </div>
-                        </section>
-                        <section id="facultyFormsSection" class="glass-panel rounded-2xl p-5 space-y-4 hidden">
-                            <div class="flex items-center justify-between gap-3 border-b border-slate-800 pb-3"><div><h3 class="font-bold text-sm text-slate-100"><i class="fa-regular fa-rectangle-list text-amber-500 mr-2"></i>Digital Forms</h3><p class="text-xs text-slate-400 mt-1">Share forms with students</p></div><span id="facultyFormsCount" class="text-xs text-amber-700 bg-amber-500/15 rounded-full px-2.5 py-1">3 forms</span></div>
-                            <div id="facultyFormsList" class="space-y-2"></div>
-                            <div class="flex flex-col sm:flex-row gap-2"><input id="facultyNewFormName" type="text" maxlength="60" placeholder="Enter a form title" class="flex-1 rounded-lg border px-3 py-2 text-xs"><button type="button" onclick="addFacultyForm()" class="px-4 py-2 rounded-lg bg-[#39372f] text-white text-xs font-semibold hover:bg-[#8c7042]"><i class="fa-solid fa-share mr-1"></i> Add form</button></div>
-                            <p class="text-[10px] text-slate-500">Prototype: form titles are stored in this browser only.</p>
-                        </section>
-                    </div>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 hidden">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <div class="lg:col-span-2 space-y-4">
                             <div class="flex items-center justify-between">
                                 <h3 class="text-base font-bold text-white flex items-center gap-2">
@@ -1099,35 +476,11 @@
                             <p class="text-sm text-slate-300 mt-1">Global oversight, access governance, and
                                 institution-wide broadcasts.</p>
                         </div>
-                        <div class="flex flex-wrap gap-2"><button type="button" onclick="openEventCalendar()" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center gap-2"><i class="fa-solid fa-calendar-days"></i> Event Calendar</button><button onclick="openNoticeModal('admin')" class="px-4 py-2.5 bg-amber-600 hover:bg-amber-500 text-white rounded-xl text-xs font-bold shadow-lg shadow-amber-600/30 flex items-center gap-2 transition-all"><i class="fa-solid fa-tower-broadcast"></i> Global Broadcast</button></div>
+                        <button onclick="openNoticeModal('admin')"
+                            class="px-4 py-2.5 bg-amber-600 hover:bg-amber-500 text-white rounded-xl text-xs font-bold shadow-lg shadow-amber-600/30 flex items-center gap-2 transition-all">
+                            <i class="fa-solid fa-tower-broadcast"></i> Global Broadcast
+                        </button>
                     </div>
-
-                    <!-- ADMIN EVENT CALENDAR -->
-                    <section id="adminEventCalendar" class="glass-panel p-5 rounded-2xl space-y-4">
-                        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
-                            <div>
-                                <h3 class="font-bold text-sm text-slate-100 flex items-center gap-2">
-                                    <i class="fa-solid fa-calendar-days text-violet-400"></i> Event Calendar
-                                </h3>
-                                <p class="text-xs text-slate-400 mt-1">View campus events and important deadlines</p>
-                            </div>
-                            <div class="flex items-center gap-3 text-xs">
-                                <button type="button" onclick="changeAdminCalendarMonth(-1)" aria-label="Previous month"
-                                    class="p-2 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700"><i class="fa-solid fa-chevron-left"></i></button>
-                                <span id="adminCalendarMonthYear" class="font-bold text-slate-200 font-mono min-w-20 text-center">Nov 2026</span>
-                                <button type="button" onclick="changeAdminCalendarMonth(1)" aria-label="Next month"
-                                    class="p-2 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700"><i class="fa-solid fa-chevron-right"></i></button>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-semibold text-slate-400">
-                            <div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div>
-                        </div>
-                        <div id="adminCalendarDaysGrid" class="grid grid-cols-7 gap-1 text-center text-xs font-mono"></div>
-                        <div class="pt-3 border-t border-slate-800/80">
-                            <h4 class="text-[11px] font-semibold text-slate-400 mb-2">Scheduled Events</h4>
-                            <div id="adminCalendarEventsList" class="space-y-2 max-h-48 overflow-y-auto pr-1"></div>
-                        </div>
-                    </section>
 
                     <div class="flex border-b border-slate-800 gap-4">
                         <button onclick="switchAdminTab('notices')" id="adminTabNotices"
@@ -1138,7 +491,6 @@
                             class="admin-tab-btn border-b-2 border-transparent text-slate-400 hover:text-slate-200 pb-3 text-sm font-semibold flex items-center gap-2">
                             <i class="fa-solid fa-users-gear"></i> User Control
                         </button>
-                        <button onclick="switchAdminTab('questions')" id="adminTabQuestions" class="admin-tab-btn border-b-2 border-transparent text-slate-400 pb-3 text-sm font-semibold flex items-center gap-2"><i class="fa-solid fa-comments"></i> Student Questions <span id="adminQuestionCount" class="rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-bold text-blue-700">0</span></button>
                     </div>
 
                     <div id="adminNoticeSection" class="space-y-4">
@@ -1198,7 +550,6 @@
                             </div>
                         </div>
                     </div>
-                    <div id="adminQuestionsSection" class="space-y-4 hidden"><div class="glass-panel rounded-xl p-4 flex items-center justify-between"><div><h3 class="text-sm font-bold text-slate-800">Student Questions & Replies</h3><p class="mt-1 text-xs text-slate-500">Review all student questions and publisher responses.</p></div><span id="adminQuestionSummary" class="text-xs font-semibold text-blue-700">0 questions</span></div><div id="adminQuestionsList" class="space-y-3"></div></div>
                 </div>
 
             </main>
@@ -1286,6 +637,60 @@
             </form>
         </div>
     </div>
+    <!-- LOST AND FOUND MODAL -->
+    <div id="lostFoundModal"
+        class="fixed inset-0 z-[60] bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+
+        <div class="glass-panel w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl p-6">
+
+            <div class="flex justify-between items-center mb-5">
+                <div>
+                    <h2 class="text-xl font-bold text-white">
+                        <i class="fa-solid fa-magnifying-glass-location text-amber-400 mr-2"></i>
+                        Campus Lost & Found
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-1">Report and track lost or found belongings.</p>
+                </div>
+                <button onclick="closeLostFound()" class="text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <div id="lostFoundStudentForm" class="bg-slate-900 p-4 rounded-xl mb-5">
+                <h3 class="font-semibold text-sm mb-3 text-indigo-300">Submit a Report</h3>
+
+                <form onsubmit="submitLostFound(event)" class="space-y-3">
+
+                    <select id="lfType" required
+                        class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-xs">
+                        <option value="Lost">I Lost an Item</option>
+                        <option value="Found">I Found an Item</option>
+                    </select>
+
+                    <input id="lfTitle" required placeholder="Item name (e.g. Black Wallet)"
+                        class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-xs">
+
+                    <input id="lfLocation" required placeholder="Location (e.g. Library)"
+                        class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-xs">
+
+                    <textarea id="lfDescription" required rows="2" placeholder="Describe the item..."
+                        class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-xs"></textarea>
+
+                    <input id="lfContact" required placeholder="Contact details"
+                        class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-xs">
+
+                    <button type="submit"
+                        class="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-lg text-xs font-bold">
+                        Submit Report
+                    </button>
+                </form>
+            </div>
+
+            <h3 class="text-sm font-bold text-white mb-3">Reported Items</h3>
+            <div id="lostFoundList" class="space-y-3">
+            </div>
+        </div>
+    </div>
 
     <!-- APPLICATION CONTROLLER SCRIPT -->
     <script>
@@ -1294,7 +699,6 @@
         let currentAdminTab = 'notices';
         let studentActiveCategory = 'all';
         let currentCalDate = new Date(2026, 10, 1);
-        let adminCalDate = new Date(2026, 10, 1);
 
         let notices = [
             {
@@ -1404,24 +808,18 @@
 
         // Live Ticker
         function renderLiveTicker() {
+            const urgentAlerts = notices.filter(n => n.priority === 'Urgent' || n.priority === 'High');
             const tickerEl = document.getElementById('tickerContent');
-            if (!tickerEl) return;
-
-            const urgentAlerts = notices.filter(n =>
-                n.priority === 'Urgent' || n.priority === 'High'
-            );
-
-            const tickerMessage = urgentAlerts.length
-                ? urgentAlerts.map(a => `
-                    <span class="ticker-item">
-                        <span class="px-1.5 py-0.5 rounded bg-rose-500/40 font-bold uppercase text-[10px] text-white mr-2">${a.priority}</span>
-                        <span><strong>${a.title}</strong> — ${a.content}</span>
-                    </span>
-                `).join('')
-                : '<span class="ticker-item">No urgent notifications broadcasted at this moment.</span>';
-
-            // Duplicate the content for continuous scrolling without a blank gap.
-            tickerEl.innerHTML = tickerMessage + tickerMessage;
+            if (urgentAlerts.length === 0) {
+                tickerEl.innerText = "No urgent notifications broadcasted at this moment.";
+                return;
+            }
+            tickerEl.innerHTML = urgentAlerts.map(a => `
+                <span class="inline-flex items-center gap-2 mr-12">
+                    <span class="px-1.5 py-0.5 rounded bg-rose-500/40 font-bold uppercase text-[10px] text-white">${a.priority}</span>
+                    <span><strong>${a.title}</strong> — ${a.content}</span>
+                </span>
+            `).join('');
         }
 
         // Unique AI Assistant Widget Q&A
@@ -1439,13 +837,6 @@
         }
 
         // Calendar
-                // Student calendar hides internal faculty-only meetings.
-        function getStudentCalendarEvents() {
-            return calendarEvents.filter(event =>
-                event.type !== 'meeting' && !/faculty/i.test(event.title)
-            );
-        }
-
         function renderCalendar() {
             const year = currentCalDate.getFullYear();
             const month = currentCalDate.getMonth();
@@ -1465,7 +856,7 @@
 
             for (let d = 1; d <= daysInMonth; d++) {
                 const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-                const hasEvent = getStudentCalendarEvents().some(e => e.date === dateStr);
+                const hasEvent = calendarEvents.some(e => e.date === dateStr);
 
                 let dayClasses = "p-1.5 rounded-lg border border-slate-800/50 transition-all cursor-pointer hover:bg-slate-800 ";
                 if (hasEvent) {
@@ -1480,36 +871,6 @@
             renderCalendarEventsList();
         }
 
-        let eventCalendarOriginalParent = null;
-        let eventCalendarOriginalNext = null;
-        function openEventCalendar() {
-            const widget = document.getElementById('eventCalendarWidget');
-            const content = document.getElementById('eventCalendarModalContent');
-            const modal = document.getElementById('eventCalendarModal');
-            if (!widget || !content || !modal) return;
-            if (!eventCalendarOriginalParent) {
-                eventCalendarOriginalParent = widget.parentNode;
-                eventCalendarOriginalNext = widget.nextSibling;
-            }
-            content.appendChild(widget);
-            widget.style.display = 'block';
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            renderCalendar();
-            renderCalendarEventsList();
-        }
-        function closeEventCalendar() {
-            const widget = document.getElementById('eventCalendarWidget');
-            const modal = document.getElementById('eventCalendarModal');
-            if (widget && eventCalendarOriginalParent) {
-                if (eventCalendarOriginalNext && eventCalendarOriginalNext.parentNode === eventCalendarOriginalParent) eventCalendarOriginalParent.insertBefore(widget, eventCalendarOriginalNext);
-                else eventCalendarOriginalParent.appendChild(widget);
-                widget.style.display = 'none';
-            }
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
         function changeCalendarMonth(delta) {
             currentCalDate.setMonth(currentCalDate.getMonth() + delta);
             renderCalendar();
@@ -1517,7 +878,7 @@
 
         function renderCalendarEventsList(filterDate = null) {
             const container = document.getElementById('calendarEventsList');
-            let eventsToDisplay = getStudentCalendarEvents();
+            let eventsToDisplay = calendarEvents;
 
             if (filterDate) {
                 eventsToDisplay = calendarEvents.filter(e => e.date === filterDate);
@@ -1543,78 +904,31 @@
             renderCalendarEventsList(dateStr);
         }
 
-        // Admin Event Calendar (separate display, shared event data)
-        function renderAdminCalendar() {
-            const year = adminCalDate.getFullYear();
-            const month = adminCalDate.getMonth();
-            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-            const monthLabel = document.getElementById('adminCalendarMonthYear');
-            const grid = document.getElementById('adminCalendarDaysGrid');
-            if (!monthLabel || !grid) return;
-
-            monthLabel.innerText = `${monthNames[month]} ${year}`;
-            grid.innerHTML = '';
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-            for (let i = 0; i < firstDay; i++) grid.innerHTML += '<div class="p-2"></div>';
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                const hasEvent = calendarEvents.some(event => event.date === dateStr);
-                const classes = hasEvent
-                    ? 'p-2 rounded-lg bg-violet-600/30 text-violet-200 border border-violet-500/40 font-bold cursor-pointer hover:bg-violet-600/50'
-                    : 'p-2 rounded-lg text-slate-300 border border-slate-800/50 cursor-pointer hover:bg-slate-800';
-                grid.innerHTML += `<button type="button" onclick="selectAdminCalendarDay('${dateStr}')" class="${classes}">${day}${hasEvent ? '<span class="block mx-auto mt-1 w-1 h-1 rounded-full bg-violet-300"></span>' : ''}</button>`;
-            }
-            renderAdminCalendarEvents();
-        }
-
-        function changeAdminCalendarMonth(delta) {
-            adminCalDate.setMonth(adminCalDate.getMonth() + delta);
-            renderAdminCalendar();
-        }
-
-        function selectAdminCalendarDay(dateStr) {
-            renderAdminCalendarEvents(dateStr);
-        }
-
-        function renderAdminCalendarEvents(filterDate = null) {
-            const container = document.getElementById('adminCalendarEventsList');
-            if (!container) return;
-            const events = filterDate
-                ? calendarEvents.filter(event => event.date === filterDate)
-                : calendarEvents;
-            container.innerHTML = events.length
-                ? events.map(event => `
-                    <div class="p-3 rounded-lg bg-slate-900/80 border border-slate-800 flex justify-between items-center gap-3">
-                        <div><div class="font-semibold text-slate-200 text-xs">${event.title}</div>
-                        <div class="text-[10px] text-slate-400 font-mono mt-1">${event.date}</div></div>
-                        <span class="text-[10px] px-2 py-1 rounded bg-violet-500/20 text-violet-300 capitalize">${event.type}</span>
-                    </div>
-                `).join('')
-                : '<p class="text-xs text-slate-500 text-center py-3">No events scheduled for this date.</p>';
-        }
-
         // Dashboard Role Switcher
         function switchRole(role) {
             currentRole = role;
+            document.querySelectorAll('.role-btn').forEach(btn => {
+                btn.className = "role-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5 text-slate-400 hover:text-white";
+            });
 
-            // Hide every dashboard first, then show only the selected role.
             document.querySelectorAll('.role-view').forEach(view => view.classList.add('hidden'));
 
             if (role === 'student') {
+                document.getElementById('roleBtnStudent').className = "role-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5 bg-indigo-600 text-white shadow-md";
                 document.getElementById('viewStudent').classList.remove('hidden');
                 document.getElementById('userName').innerText = 'Ashika I.';
                 document.getElementById('userRoleBadge').innerText = 'Computer Science (Student)';
                 document.getElementById('userAvatar').innerText = 'AI';
                 renderStudentBoard();
             } else if (role === 'faculty') {
+                document.getElementById('roleBtnFaculty').className = "role-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5 bg-teal-600 text-white shadow-md";
                 document.getElementById('viewFaculty').classList.remove('hidden');
                 document.getElementById('userName').innerText = 'Dr. Sarah Jenkins';
                 document.getElementById('userRoleBadge').innerText = 'Associate Professor (CS)';
                 document.getElementById('userAvatar').innerText = 'SJ';
                 renderFacultyBoard();
             } else if (role === 'admin') {
+                document.getElementById('roleBtnAdmin').className = "role-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5 bg-amber-600 text-white shadow-md";
                 document.getElementById('viewAdmin').classList.remove('hidden');
                 document.getElementById('userName').innerText = 'System Admin';
                 document.getElementById('userRoleBadge').innerText = 'Global Controller';
@@ -1676,9 +990,6 @@
                         <div class="flex items-center justify-between pt-2 border-t border-slate-800 text-xs text-slate-400">
                             <span><i class="fa-solid fa-user-pen mr-1"></i> ${n.author}</span>
                             ${n.deadline ? `<span class="text-rose-400 font-mono"><i class="fa-regular fa-clock mr-1"></i> Due: ${n.deadline}</span>` : ''}
-                        <div class="flex justify-end">
-                            <button type="button" onclick="sendNoticeQuestion('${n.id}')" class="px-3 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold"><i class="fa-regular fa-circle-question mr-1"></i> Ask the Publisher</button>
-                        </div>
                         </div>
                     </div>
                 `;
@@ -1694,68 +1005,9 @@
         }
 
         // Faculty Board
-        
-        function openFacultyQuickView(section) {
-            const modal = document.getElementById('facultyQuickViewModal');
-            const title = document.getElementById('facultyQuickViewTitle');
-            const content = document.getElementById('facultyQuickViewContent');
-            let source;
-            if (section === 'notices') {
-                title.textContent = 'My Notices';
-                source = document.getElementById('facultyNoticeList');
-                content.innerHTML = source && source.innerHTML.trim() ? source.innerHTML : '<p class="text-sm text-slate-300">No faculty notices are available yet.</p>';
-            } else if (section === 'directives') {
-                title.textContent = 'Staff Directives';
-                source = document.getElementById('facultyDirectivesList');
-                content.innerHTML = source && source.innerHTML.trim() ? source.innerHTML : '<p class="text-sm text-slate-300">No staff directives are available.</p>';
-            } else if (section === 'questions') {
-                title.textContent = 'Student Questions';
-                content.innerHTML = renderPublisherQuestionsHTML();
-            } else if (section === 'forms') {
-                title.textContent = 'Digital Forms';
-                source = document.getElementById('facultyFormsSection');
-                content.innerHTML = source ? source.innerHTML : '<p class="text-sm text-slate-300">Digital forms are unavailable.</p>';
-                const input = content.querySelector('#facultyNewFormName');
-                const addButton = content.querySelector('button[onclick="addFacultyForm()"]');
-                if (input) input.id = 'facultyQuickViewNewFormName';
-                if (addButton) addButton.setAttribute('onclick', 'addFacultyFormFromQuickView()');
-            } else {
-                return;
-            }
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-
-        function closeFacultyQuickView() {
-            const modal = document.getElementById('facultyQuickViewModal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
-        function addFacultyFormFromQuickView() {
-            const input = document.getElementById('facultyQuickViewNewFormName');
-            const value = input ? input.value.trim() : '';
-            if (!value) { alert('Please enter a form title.'); return; }
-            facultyForms.unshift({ id: 'form_' + Date.now(), title: value });
-            renderFacultyExtras();
-            openFacultyQuickView('forms');
-        }
-
-function facultyQuickLink(targetId) {
-            const target = document.getElementById(targetId);
-            if (!target) {
-                alert('This section could not be found. Please refresh the page and try again.');
-                return;
-            }
-            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            target.classList.add('faculty-link-highlight');
-            window.setTimeout(() => target.classList.remove('faculty-link-highlight'), 1600);
-        }
-
         function renderFacultyBoard() {
             const list = document.getElementById('facultyNoticeList');
             const facNotices = notices.filter(n => n.author.includes('Sarah Jenkins') || n.category === 'academic');
-            updateQuestionBadges();
             document.getElementById('facultyNoticeCountBadge').innerText = `${facNotices.length} Active Posts`;
 
             list.innerHTML = facNotices.map(n => `
@@ -1786,13 +1038,19 @@ function facultyQuickLink(targetId) {
         // Admin Board
         function switchAdminTab(tab) {
             currentAdminTab = tab;
-            document.querySelectorAll('.admin-tab-btn').forEach(btn => btn.className = "admin-tab-btn border-b-2 border-transparent text-slate-400 hover:text-slate-200 pb-3 text-sm font-semibold flex items-center gap-2");
-            ['adminNoticeSection','adminUserSection','adminQuestionsSection'].forEach(id => document.getElementById(id).classList.add('hidden'));
-            const active = document.getElementById(tab === 'notices' ? 'adminTabNotices' : tab === 'users' ? 'adminTabUsers' : 'adminTabQuestions');
-            active.className = "admin-tab-btn border-b-2 border-blue-600 text-blue-700 pb-3 text-sm font-semibold flex items-center gap-2";
-            if (tab === 'notices') document.getElementById('adminNoticeSection').classList.remove('hidden');
-            else if (tab === 'users') { document.getElementById('adminUserSection').classList.remove('hidden'); renderAdminUsers(); }
-            else { document.getElementById('adminQuestionsSection').classList.remove('hidden'); renderAdminQuestions(); }
+            document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+                btn.className = "admin-tab-btn border-b-2 border-transparent text-slate-400 hover:text-slate-200 pb-3 text-sm font-semibold flex items-center gap-2";
+            });
+            if (tab === 'notices') {
+                document.getElementById('adminTabNotices').className = "admin-tab-btn border-b-2 border-amber-500 text-amber-400 pb-3 text-sm font-semibold flex items-center gap-2";
+                document.getElementById('adminNoticeSection').classList.remove('hidden');
+                document.getElementById('adminUserSection').classList.add('hidden');
+            } else {
+                document.getElementById('adminTabUsers').className = "admin-tab-btn border-b-2 border-amber-500 text-amber-400 pb-3 text-sm font-semibold flex items-center gap-2";
+                document.getElementById('adminNoticeSection').classList.add('hidden');
+                document.getElementById('adminUserSection').classList.remove('hidden');
+                renderAdminUsers();
+            }
         }
 
         function renderAdminBoard() {
@@ -1894,115 +1152,161 @@ function facultyQuickLink(targetId) {
             }
         }
 
-
-        // Private notice enquiries: localStorage demo, shared only within this browser.
-        let noticeQuestions = [];
-        try { noticeQuestions = JSON.parse(localStorage.getItem('campusSyncQuestions') || '[]'); } catch (e) { noticeQuestions = []; }
-        function saveNoticeQuestions() {
-            try { localStorage.setItem('campusSyncQuestions', JSON.stringify(noticeQuestions)); } catch (e) {}
-            updateQuestionBadges();
-        }
-        function escapeQuestionText(value) {
-            return String(value || '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-        }
-        function sendNoticeQuestion(noticeId) {
-            const notice = notices.find(n => n.id === noticeId);
-            if (!notice) return;
-            const question = prompt('Type your question for the publisher of "' + notice.title + '":');
-            if (!question || !question.trim()) return;
-            noticeQuestions.unshift({id:'q_'+Date.now(), noticeId:notice.id, noticeTitle:notice.title, publisher:notice.author, student:'Ashika I.', question:question.trim(), answer:'', status:'Pending', createdAt:new Date().toLocaleString()});
-            saveNoticeQuestions();
-            alert('Your question was sent to ' + notice.author + '. Check My Questions for the reply.');
-        }
-        function openMyQuestions() {
-            const modal=document.getElementById('facultyQuickViewModal');
-            document.getElementById('facultyQuickViewTitle').textContent='My Questions';
-            const mine=noticeQuestions.filter(q=>q.student==='Ashika I.');
-            document.getElementById('facultyQuickViewContent').innerHTML=mine.length?mine.map(q=>`
-                <div class="rounded-xl border border-slate-200 bg-white p-4 space-y-2">
-                    <div class="text-xs font-semibold text-blue-700">${escapeQuestionText(q.noticeTitle)}</div>
-                    <p class="text-sm text-slate-700">${escapeQuestionText(q.question)}</p>
-                    <div class="text-xs font-semibold ${q.answer?'text-green-700':'text-amber-700'}">${q.answer?'Answered':'Pending publisher reply'}</div>
-                    ${q.answer?`<div class="rounded-lg bg-green-50 p-3 text-sm text-slate-800"><b>Publisher reply:</b> ${escapeQuestionText(q.answer)}</div>`:''}
-                    <div class="text-[11px] text-slate-500">Sent to: ${escapeQuestionText(q.publisher)} · ${escapeQuestionText(q.createdAt)}</div>
-                </div>`).join(''):'<p class="text-sm text-slate-600">No questions yet. Open a notice and select Ask the Publisher.</p>';
-            modal.classList.remove('hidden'); modal.classList.add('flex');
-        }
-        function renderPublisherQuestionsHTML() {
-            const mine=noticeQuestions.filter(q=>q.publisher.includes('Sarah Jenkins'));
-            if(!mine.length)return '<p class="text-sm text-slate-600">No student questions yet. Questions about your notices will appear here.</p>';
-            return mine.map(q=>`
-                <div class="rounded-xl border border-slate-200 bg-white p-4 space-y-3">
-                    <div class="flex justify-between gap-2"><span class="text-xs font-bold text-blue-700">${escapeQuestionText(q.noticeTitle)}</span><span class="text-xs rounded-full px-2 py-1 ${q.answer?'bg-green-100 text-green-700':'bg-amber-100 text-amber-700'}">${q.answer?'Answered':'Pending'}</span></div>
-                    <p class="text-xs text-slate-500">From ${escapeQuestionText(q.student)} · ${escapeQuestionText(q.createdAt)}</p>
-                    <p class="text-sm text-slate-800">${escapeQuestionText(q.question)}</p>
-                    ${q.answer?`<div class="rounded-lg bg-green-50 p-3 text-sm text-slate-800"><b>Your reply:</b> ${escapeQuestionText(q.answer)}</div>`:`
-                        <textarea id="reply_${q.id}" rows="2" class="w-full rounded-lg border border-slate-300 p-3 text-sm text-slate-800" placeholder="Write your reply..."></textarea>
-                        <div class="flex justify-end"><button type="button" onclick="replyToNoticeQuestion('${q.id}')" class="rounded-lg bg-blue-600 px-4 py-2 text-xs font-semibold text-white">Send Reply</button></div>`}
-                </div>`).join('');
-        }
-        function replyToNoticeQuestion(questionId) {
-            const q=noticeQuestions.find(item=>item.id===questionId);
-            const field=document.getElementById('reply_'+questionId);
-            if(!q||!field||!field.value.trim()){alert('Please write a reply first.');return;}
-            q.answer=field.value.trim(); q.status='Answered'; saveNoticeQuestions();
-            if (currentRole === 'admin' && currentAdminTab === 'questions') renderAdminQuestions(); else openFacultyQuickView('questions');
-        }
-        function renderAdminQuestions() {
-            const list=document.getElementById('adminQuestionsList'), summary=document.getElementById('adminQuestionSummary');
-            if(!list)return;
-            const pending=noticeQuestions.filter(q=>!q.answer).length;
-            if(summary)summary.textContent=noticeQuestions.length+' total · '+pending+' pending';
-            if(!noticeQuestions.length){list.innerHTML='<div class="rounded-xl border border-slate-200 bg-white p-6 text-center text-sm text-slate-500">No student questions have been submitted yet.</div>';return;}
-            list.innerHTML=noticeQuestions.map(q=>`
-                <div class="rounded-xl border border-slate-200 bg-white p-4 space-y-3">
-                    <div class="flex flex-wrap items-center justify-between gap-2"><span class="text-sm font-bold text-slate-800">${escapeQuestionText(q.noticeTitle)}</span><span class="rounded-full px-2.5 py-1 text-[11px] font-semibold ${q.answer?'bg-green-100 text-green-700':'bg-amber-100 text-amber-700'}">${q.answer?'Answered':'Pending'}</span></div>
-                    <div class="text-xs text-slate-500">Student: ${escapeQuestionText(q.student)} · Publisher: ${escapeQuestionText(q.publisher)} · ${escapeQuestionText(q.createdAt)}</div>
-                    <p class="text-sm text-slate-700">${escapeQuestionText(q.question)}</p>
-                    ${q.answer?`<div class="rounded-lg bg-green-50 p-3 text-sm text-slate-800"><b>Reply:</b> ${escapeQuestionText(q.answer)}</div>`:`<textarea id="adminReply_${q.id}" rows="2" class="w-full rounded-lg border border-slate-300 p-3 text-sm text-slate-800" placeholder="Write an admin reply..."></textarea><div class="flex justify-end"><button type="button" onclick="replyToNoticeQuestionFromAdmin('${q.id}')" class="rounded-lg bg-blue-600 px-4 py-2 text-xs font-semibold text-white">Send Admin Reply</button></div>`}
-                </div>`).join('');
-        }
-        function replyToNoticeQuestionFromAdmin(id) {
-            const q=noticeQuestions.find(item=>item.id===id), field=document.getElementById('adminReply_'+id);
-            if(!q||!field||!field.value.trim()){alert('Please write a reply first.');return;}
-            q.answer=field.value.trim();q.status='Answered';q.repliedBy='Admin';saveNoticeQuestions();renderAdminQuestions();
-        }
-
-        function updateQuestionBadges() {
-            const studentBadge=document.getElementById('studentQuestionCount');
-            const facultyBadge=document.getElementById('facultyQuestionCount');
-            const adminBadge=document.getElementById('adminQuestionCount');
-            if(studentBadge)studentBadge.textContent=noticeQuestions.filter(q=>q.student==='Ashika I.').length;
-            if(facultyBadge)facultyBadge.textContent=noticeQuestions.filter(q=>q.publisher.includes('Sarah Jenkins')&&!q.answer).length;
-            if(adminBadge)adminBadge.textContent=noticeQuestions.length;
-        }
-
         function updateSidebarStats() {
             document.getElementById('sidebarCountActive').innerText = notices.length;
             document.getElementById('sidebarCountUrgent').innerText = notices.filter(n => n.priority === 'Urgent').length;
         }
+        // LOST AND FOUND SYSTEM
+
+        let lostFoundReports = JSON.parse(
+            localStorage.getItem('campusSyncLostFound') || '[]'
+        );
+
+        function saveLostFound() {
+            localStorage.setItem(
+                'campusSyncLostFound',
+                JSON.stringify(lostFoundReports)
+            );
+        }
+
+        function openLostFound() {
+            document.getElementById('lostFoundModal').classList.remove('hidden');
+
+            document.getElementById('lostFoundStudentForm').classList.toggle(
+                'hidden',
+                currentRole !== 'student'
+            );
+
+            renderLostFound();
+        }
+
+        function closeLostFound() {
+            document.getElementById('lostFoundModal').classList.add('hidden');
+        }
+
+        function escapeLF(value) {
+            return String(value).replace(/[&<>"']/g, char => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            })[char]);
+        }
+
+        function submitLostFound(event) {
+            event.preventDefault();
+
+            const report = {
+                id: 'lf_' + Date.now(),
+                type: document.getElementById('lfType').value,
+                title: document.getElementById('lfTitle').value.trim(),
+                location: document.getElementById('lfLocation').value.trim(),
+                description: document.getElementById('lfDescription').value.trim(),
+                contact: document.getElementById('lfContact').value.trim(),
+                reporter: currentRole === 'student' ? 'Ashika I.' : 'Campus User',
+                date: new Date().toLocaleDateString(),
+                status: 'Open'
+            };
+
+            lostFoundReports.unshift(report);
+            saveLostFound();
+
+            event.target.reset();
+            renderLostFound();
+
+            alert('Your Lost & Found report has been submitted!');
+        }
+
+        function renderLostFound() {
+            const container = document.getElementById('lostFoundList');
+
+            if (!lostFoundReports.length) {
+                container.innerHTML =
+                    '<p class="text-xs text-slate-400 text-center py-6">No Lost & Found reports yet.</p>';
+                return;
+            }
+
+            container.innerHTML = lostFoundReports.map(item => `
+        <div class="bg-slate-900 border border-slate-700 rounded-xl p-4 space-y-2">
+
+            <div class="flex justify-between gap-2">
+                <h4 class="font-bold text-sm text-white">
+                    ${escapeLF(item.title)}
+                </h4>
+
+                <span class="text-xs px-2 py-1 rounded-lg ${item.type === 'Lost'
+                    ? 'bg-rose-500/20 text-rose-300'
+                    : 'bg-emerald-500/20 text-emerald-300'
+                }">${escapeLF(item.type)}</span>
+            </div>
+
+            <p class="text-xs text-slate-300">${escapeLF(item.description)}</p>
+
+            <p class="text-xs text-slate-400">
+                <i class="fa-solid fa-location-dot mr-1"></i>
+                ${escapeLF(item.location)}
+            </p>
+
+            <p class="text-xs text-slate-400">
+                Reported by: ${escapeLF(item.reporter)} |
+                ${escapeLF(item.date)}
+            </p>
+
+            <p class="text-xs text-indigo-300">
+                Contact: ${escapeLF(item.contact)}
+            </p>
+
+            <p class="text-xs font-semibold text-amber-300">
+                Status: ${escapeLF(item.status)}
+            </p>
+
+            ${currentRole === 'faculty' && item.status === 'Open'
+                    ? `<button onclick="updateLostFound('${item.id}', 'Identified')"
+                    class="text-xs bg-teal-600 px-3 py-1.5 rounded-lg">
+                    Mark Identified
+                  </button>`
+                    : ''
+                }
+
+            ${currentRole === 'admin'
+                    ? `<div class="flex gap-2">
+                    <button onclick="updateLostFound('${item.id}', 'Returned')"
+                        class="text-xs bg-emerald-600 px-3 py-1.5 rounded-lg">
+                        Mark Returned
+                    </button>
+                    <button onclick="deleteLostFound('${item.id}')"
+                        class="text-xs bg-rose-600 px-3 py-1.5 rounded-lg">
+                        Remove
+                    </button>
+                   </div>`
+                    : ''
+                }
+        </div>
+    `).join('');
+        }
+
+        function updateLostFound(id, status) {
+            const item = lostFoundReports.find(report => report.id === id);
+
+            if (item) {
+                item.status = status;
+                saveLostFound();
+                renderLostFound();
+            }
+        }
+
+        function deleteLostFound(id) {
+            if (!confirm('Remove this report?')) return;
+
+            lostFoundReports = lostFoundReports.filter(
+                item => item.id !== id
+            );
+
+            saveLostFound();
+            renderLostFound();
+        }
     </script>
-
-    <div id="eventCalendarModal" class="hidden fixed inset-0 z-[90] bg-slate-950/70 backdrop-blur-sm p-3 sm:p-6 items-center justify-center">
-        <div class="w-full max-w-4xl max-h-[92vh] overflow-y-auto rounded-2xl bg-white p-4 sm:p-6 shadow-2xl">
-            <div class="flex items-center justify-between gap-3 mb-4 border-b border-slate-200 pb-3">
-                <div><h2 class="text-lg font-extrabold text-slate-900">Campus Event Calendar</h2><p class="text-xs text-slate-500 mt-1">Upcoming events and important deadlines</p></div>
-                <button type="button" onclick="closeEventCalendar()" class="rounded-lg px-3 py-2 text-sm text-slate-600 hover:bg-slate-100"><i class="fa-solid fa-xmark mr-1"></i> Close</button>
-            </div>
-            <div id="eventCalendarModalContent"></div>
-        </div>
-    </div>
-
-    <div id="facultyQuickViewModal" class="hidden fixed inset-0 z-[80] bg-slate-950/80 backdrop-blur-sm p-4 flex items-center justify-center">
-        <div class="w-full max-w-3xl max-h-[85vh] overflow-y-auto rounded-2xl border border-[#b99a58]/40 bg-[#292824] shadow-2xl p-5 sm:p-7">
-            <div class="flex items-center justify-between gap-3 mb-5 border-b border-slate-700 pb-4">
-                <h2 id="facultyQuickViewTitle" class="text-lg font-extrabold text-[#f1e9d9]">Faculty Section</h2>
-                <button type="button" onclick="closeFacultyQuickView()" class="rounded-lg px-3 py-2 text-sm text-[#e8dfcf] hover:bg-white/10" aria-label="Close section"><i class="fa-solid fa-xmark mr-1"></i> Close</button>
-            </div>
-            <div id="facultyQuickViewContent" class="space-y-4"></div>
-        </div>
-    </div>
-
 </body>
 
 </html>
