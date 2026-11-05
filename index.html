@@ -2568,26 +2568,8 @@ function facultyQuickLink(targetId) {
     const extraFilters=document.getElementById('campusExtraFilters');
     if(extraFilters) extraFilters.remove();
     if(tabs) {
-      tabs.style.display='grid';
-      tabs.style.gridTemplateColumns='repeat(5, minmax(0, 1fr))';
-      tabs.style.gap='10px';
-      tabs.style.width='100%';
-      tabs.style.overflow='visible';
-      tabs.style.paddingBottom='0';
-      tabs.querySelectorAll('button').forEach((button,index)=>{
-        button.style.width='100%';
-        button.style.minWidth='0';
-        button.style.minHeight='42px';
-        button.style.display='flex';
-        button.style.alignItems='center';
-        button.style.justifyContent='center';
-        button.style.textAlign='center';
-        button.style.whiteSpace='normal';
-        button.style.lineHeight='1.25';
-        button.style.padding='10px 12px';
-        if(index===1) button.innerHTML='<i class="fa-solid fa-book-open mr-2"></i>Assignments & Exams';
-        if(index===2) button.innerHTML='<i class="fa-solid fa-briefcase mr-2"></i>Placements & Events';
-      });
+      // The two main modes (Common / Department) replace the older category tabs.
+      tabs.style.display='none';
     }
     if(!document.getElementById('campusNotificationModal')) {
       const modal=document.createElement('div'); modal.id='campusNotificationModal'; modal.className='hidden fixed inset-0 z-[100] bg-slate-950/60 p-4 items-center justify-center';
