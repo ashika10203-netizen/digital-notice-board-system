@@ -674,7 +674,96 @@
             color: #172033 !important;
         }
 
-    </style>
+    
+        /* =====================================================
+           CAMPUSSYNC — CAMPUS LIFE THEME
+           Visual-only student-friendly refresh; app logic untouched.
+           ===================================================== */
+        :root {
+            --campus-page: #f7f8ff;
+            --campus-surface: #ffffff;
+            --campus-text: #202747;
+            --campus-muted: #68718d;
+            --campus-border: #e5e7f4;
+            --campus-blue: #536dfe;
+            --campus-blue-dark: #4056df;
+            --campus-blue-pale: #eef0ff;
+        }
+        body { font-family: 'Inter', sans-serif !important; }
+        html, body, #mainDashboard, main { background: #f7f8ff !important; }
+        #mainDashboard main { gap: 1.35rem !important; }
+        #mainDashboard header[class~="bg-slate-900/90"] {
+            background: linear-gradient(105deg, #3547b7 0%, #5967e9 55%, #7b63e8 100%) !important;
+            border-bottom: 0 !important;
+            box-shadow: 0 5px 22px rgba(73, 83, 194, .18);
+        }
+        #mainDashboard aside[class~="bg-slate-900/60"] {
+            background: #ffffff !important;
+            border-color: #e8e9f5 !important;
+            box-shadow: 5px 0 22px rgba(47, 57, 115, .035);
+        }
+        #mainDashboard aside .text-white { color: #252c4a !important; }
+        #mainDashboard aside .text-slate-400 { color: #707995 !important; }
+        #mainDashboard aside nav a { border-radius: 13px !important; transition: all .2s ease; }
+        #mainDashboard aside nav a:hover { background: #f0efff !important; color: #4d55ce !important; }
+        #mainDashboard .glass-panel, #mainDashboard .glass-card {
+            background: #ffffff !important;
+            border: 1px solid #e7e8f5 !important;
+            border-radius: 19px !important;
+            box-shadow: 0 8px 24px rgba(54, 61, 125, .055) !important;
+        }
+        #viewStudent > div:first-child, #viewFaculty > div:first-child, #viewAdmin > div:first-child {
+            background: linear-gradient(115deg, #e7eaff 0%, #f2eaff 48%, #e4f7f7 100%) !important;
+            border: 1px solid #e0e2fb !important;
+            border-radius: 23px !important;
+            box-shadow: 0 12px 30px rgba(91, 91, 190, .09) !important;
+        }
+        #viewStudent > div:first-child h2, #viewFaculty > div:first-child h2, #viewAdmin > div:first-child h2 {
+            color: #252c55 !important;
+            letter-spacing: -.035em;
+        }
+        #viewStudent > div:first-child p, #viewFaculty > div:first-child p, #viewAdmin > div:first-child p {
+            color: #606987 !important;
+        }
+        #mainDashboard button { transition: transform .18s ease, box-shadow .18s ease, background-color .18s ease; }
+        #mainDashboard button:hover { filter: saturate(1.08); }
+        #mainDashboard .ticker-wrap {
+            background: linear-gradient(90deg, #fff0f2 0%, #fff7ed 50%, #fff0f5 100%) !important;
+            border-color: #ffe0e5 !important;
+        }
+        #mainDashboard .ticker-wrap > span { color: #d34867 !important; }
+        #mainDashboard #tickerContent { color: #49334b !important; }
+        #campusCategoryDock button, #campusCategoryDock .category-tile {
+            border-radius: 16px !important;
+            box-shadow: 0 5px 14px rgba(66, 73, 140, .06);
+        }
+        #mainDashboard input, #mainDashboard select, #mainDashboard textarea {
+            border-radius: 12px !important;
+            border-color: #dfe2f2 !important;
+        }
+        #mainDashboard input:focus, #mainDashboard select:focus, #mainDashboard textarea:focus {
+            border-color: #818cf8 !important;
+            box-shadow: 0 0 0 3px rgba(129, 140, 248, .15) !important;
+            outline: none !important;
+        }
+        #fullLoginPage {
+            background: radial-gradient(circle at 12% 12%, #e6eaff 0, transparent 32%),
+                        radial-gradient(circle at 88% 82%, #e5f8f2 0, transparent 30%),
+                        linear-gradient(135deg, #f8f7ff 0%, #f3f5ff 55%, #fff7f4 100%) !important;
+        }
+        #fullLoginPage .glass-panel {
+            border: 1px solid rgba(255,255,255,.9) !important;
+            border-radius: 24px !important;
+            box-shadow: 0 24px 65px rgba(66, 73, 140, .14) !important;
+        }
+        @media (max-width: 640px) {
+            #mainDashboard main { padding: 14px !important; }
+            #viewStudent > div:first-child, #viewFaculty > div:first-child, #viewAdmin > div:first-child {
+                border-radius: 18px !important;
+            }
+        }
+
+        </style>
 <style id="campus-filter-alignment">
 #studentCategoryTabs { display:grid !important; grid-template-columns:repeat(5,minmax(0,1fr)) !important; gap:10px !important; align-items:stretch !important; width:100% !important; overflow:visible !important; }
 #studentCategoryTabs .tab-btn { width:100% !important; min-width:0 !important; min-height:44px !important; display:flex !important; align-items:center !important; justify-content:center !important; text-align:center !important; white-space:normal !important; line-height:1.25 !important; padding:10px 12px !important; border:1px solid rgba(148,163,184,.22) !important; border-radius:12px !important; }
