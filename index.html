@@ -944,15 +944,11 @@
 </style>
 
 
+
+
+
 <style id="campussync-notice-tab-refresh">
-/* Remove the top floating announcement card from the login visual */
-.campus-login-visual .campus-float-card-main { display: none !important; }
-.campus-login-visual .campus-float-card-small {
-    left: 50% !important;
-    top: 50% !important;
-    transform: translate(-50%, -50%) !important;
-}
-/* Clear blue palette for All Notices and the other category tabs */
+/* Blue-and-white styling for the dashboard notice category tabs */
 #studentCategoryTabs .tab-btn {
     background: #eaf2ff !important;
     color: #24436f !important;
@@ -1101,18 +1097,6 @@
                 </button>
             </div>
         </header>
-
-        <!-- LIVE URGENT TICKER BAR -->
-        <div
-            class="bg-rose-950/70 border-b border-rose-900/50 h-9 flex items-center px-4 overflow-hidden relative z-10 shrink-0">
-            <div
-                class="flex items-center gap-2 bg-rose-600 text-white px-2.5 py-0.5 rounded text-[11px] font-extrabold uppercase tracking-wider shrink-0 z-10 shadow-md">
-                <i class="fa-solid fa-bolt animate-pulse"></i> Live Flash
-            </div>
-            <div class="ticker-wrap flex-1 overflow-hidden relative whitespace-nowrap ml-4">
-                <div id="tickerContent" class="text-xs text-rose-200 font-medium"></div>
-            </div>
-        </div>
 
         <!-- MAIN WORKSPACE -->
         <div class="flex-1 flex overflow-hidden">
