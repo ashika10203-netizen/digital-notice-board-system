@@ -991,7 +991,7 @@
 <style id="campussync-student-category-cards">
   #studentCategoryTabs {
     display: grid !important;
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
     gap: 12px !important;
     width: 100% !important;
     overflow: visible !important;
@@ -2617,8 +2617,9 @@ function facultyQuickLink(targetId) {
     const extraFilters=document.getElementById('campusExtraFilters');
     if(extraFilters) extraFilters.remove();
     if(tabs) {
-      // Keep the four focused category shortcuts beneath the Common / Department switcher.
+      // Show categories that match the selected notice audience.
       tabs.style.display='grid';
+      renderCampusCategoryTabs();
     }
     if(!document.getElementById('campusNotificationModal')) {
       const modal=document.createElement('div'); modal.id='campusNotificationModal'; modal.className='hidden fixed inset-0 z-[100] bg-slate-950/60 p-4 items-center justify-center';
@@ -2639,6 +2640,29 @@ function facultyQuickLink(targetId) {
     updateUnreadCount();
   }
 
+  function renderCampusCategoryTabs() {
+    const tabs = document.getElementById('studentCategoryTabs');
+    if (!tabs) return;
+    const commonCategories = [
+      ['holidays','fa-umbrella-beach','Holidays'],
+      ['exams','fa-file-lines','Examinations'],
+      ['events','fa-calendar-star','Events'],
+      ['placements','fa-briefcase','Campus Placements'],
+      ['fees','fa-wallet','Fees'],
+      ['alerts','fa-triangle-exclamation','Campus Alerts']
+    ];
+    const departmentCategories = [
+      ['academic','fa-book-open','Academic & Exams'],
+      ['placement','fa-briefcase','Placement & Events'],
+      ['deadline','fa-clock-rotate-left','Deadlines & Fees'],
+      ['bookmarks','fa-bookmark','Saved / Bookmarked']
+    ];
+    const categories = studentNoticeMode === 'department' ? departmentCategories : commonCategories;
+    tabs.innerHTML = categories.map(([key, icon, label]) =>
+      '<button type="button" onclick="filterStudentNotices(\\''+key+'\\')" data-cat="'+key+'" class="tab-btn'+(studentActiveCategory===key?' active':'')+'"><i class="fa-solid '+icon+'"></i><span>'+label+'</span></button>'
+    ).join('');
+  }
+
   window.campusSetNoticeMode=function(mode) {
     studentNoticeMode = mode === 'department' ? 'department' : 'common';
     document.querySelectorAll('#campusNoticeModeTabs [data-mode]').forEach(button => {
@@ -2646,6 +2670,8 @@ function facultyQuickLink(targetId) {
       button.classList.toggle('campus-mode-active', active);
       button.setAttribute('aria-pressed', active ? 'true' : 'false');
     });
+    studentActiveCategory = 'all';
+    renderCampusCategoryTabs();
     window.renderStudentBoard();
   };
 
@@ -2674,10 +2700,14 @@ function facultyQuickLink(targetId) {
       if(studentNoticeMode==='department' && !isDepartmentTarget) return false;
       if(activeDateFilter && date!==activeDateFilter) return false;
       if(search && ![title,content,category,date,target].some(v=>v.includes(search))) return false;
-      if(cat==='events' && !(category.includes('event')||category.includes('placement'))) return false;
-      if(cat==='exams' && !(category.includes('exam')||title.includes('exam')||content.includes('exam'))) return false;
-      if(cat==='placement' && !category.includes('placement')) return false;
-      if(cat==='academic' && !(category.includes('academic')||category.includes('exam'))) return false;
+      const haystack = [title,content,category].join(' ');
+      if(cat==='holidays' && !(category.includes('holiday')||haystack.includes('holiday'))) return false;
+      if(cat==='exams' && !(category.includes('exam')||haystack.includes('exam')||haystack.includes('hall ticket'))) return false;
+      if(cat==='events' && !(category.includes('event')||haystack.includes('event')||haystack.includes('annual day')||haystack.includes('sports day')||haystack.includes('cultural'))) return false;
+      if((cat==='placement'||cat==='placements') && !(category.includes('placement')||haystack.includes('placement')||haystack.includes('recruitment')||haystack.includes('company visit'))) return false;
+      if((cat==='fees'||cat==='deadline') && !(category.includes('fee')||category.includes('deadline')||haystack.includes('fee')||haystack.includes('payment'))) return false;
+      if(cat==='alerts' && !(category.includes('alert')||haystack.includes('alert')||haystack.includes('emergency')||haystack.includes('safety'))) return false;
+      if(cat==='academic' && !(category.includes('academic')||category.includes('exam')||haystack.includes('exam'))) return false;
       return true;
     });
     const selectedCategory=studentActiveCategory;
