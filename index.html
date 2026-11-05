@@ -612,42 +612,6 @@
 
                     <!-- Two-Column Grid Layout -->
 
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
-                        <section id="facultyProfileCard" class="glass-panel rounded-2xl p-5">
-                            <div class="flex items-center gap-4">
-                                <div class="w-14 h-14 rounded-full bg-[#e8dfcf] text-[#39372f] flex items-center justify-center text-xl font-bold border-2 border-[#b99a58]">SJ</div>
-                                <div><h3 class="font-bold text-base text-slate-100">Dr. Sarah Jenkins</h3><p class="text-xs text-slate-400 mt-1">Faculty Member</p><p class="text-xs text-slate-500 mt-1">Department of Computer Science & Engineering</p></div>
-                            </div>
-                            <div class="mt-4 pt-3 border-t border-slate-800 flex justify-between text-xs"><span class="text-slate-400">Faculty profile</span><span class="text-amber-400 font-semibold">Active</span></div>
-                        </section>
-                        <section class="glass-panel rounded-2xl p-5 lg:col-span-2">
-                            <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-3"><h3 class="font-bold text-sm text-slate-100"><i class="fa-regular fa-bell text-amber-500 mr-2"></i>Notifications</h3><span id="facultyNotificationCount" class="text-xs rounded-full px-2.5 py-1 bg-amber-500/15 text-amber-700">0 updates</span></div>
-                            <div id="facultyNotificationsList" class="space-y-3 max-h-36 overflow-y-auto"><p class="text-xs text-slate-500">No new notifications.</p></div>
-                        </section>
-                    </div>
-                    <section class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div class="glass-panel rounded-2xl p-5"><p class="text-xs text-slate-500">Active notices</p><p id="facultyStatNotices" class="text-3xl font-semibold text-amber-600 mt-2">0</p><p class="text-xs text-slate-400 mt-1">Faculty notice posts</p></div>
-                        <div class="glass-panel rounded-2xl p-5"><p class="text-xs text-slate-500">Scheduled notices</p><p id="facultyStatScheduled" class="text-3xl font-semibold text-amber-600 mt-2">0</p><p class="text-xs text-slate-400 mt-1">Notices with deadlines</p></div>
-                        <div class="glass-panel rounded-2xl p-5"><p class="text-xs text-slate-500">Department updates</p><p id="facultyStatDirectives" class="text-3xl font-semibold text-amber-600 mt-2">0</p><p class="text-xs text-slate-400 mt-1">Staff-only announcements</p></div>
-                    </section>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
-                        <section class="glass-panel rounded-2xl p-5 space-y-4">
-                            <h3 class="font-bold text-sm text-slate-100 border-b border-slate-800 pb-3"><i class="fa-solid fa-bolt text-amber-500 mr-2"></i>Quick Links</h3>
-                            <div class="grid grid-cols-2 gap-3">
-                                <button type="button" onclick="openNoticeModal('faculty')" class="faculty-quick-link"><i class="fa-solid fa-plus"></i><span>Post a notice</span></button>
-                                <button type="button" onclick="document.getElementById('facultyNoticeList').scrollIntoView({behavior:'smooth'})" class="faculty-quick-link"><i class="fa-solid fa-bullhorn"></i><span>My notices</span></button>
-                                <button type="button" onclick="document.getElementById('facultyDirectivesList').scrollIntoView({behavior:'smooth'})" class="faculty-quick-link"><i class="fa-solid fa-inbox"></i><span>Staff directives</span></button>
-                                <button type="button" onclick="document.getElementById('facultyFormsSection').scrollIntoView({behavior:'smooth'})" class="faculty-quick-link"><i class="fa-regular fa-rectangle-list"></i><span>Digital forms</span></button>
-                            </div>
-                        </section>
-                        <section id="facultyFormsSection" class="glass-panel rounded-2xl p-5 space-y-4">
-                            <div class="flex items-center justify-between gap-3 border-b border-slate-800 pb-3"><div><h3 class="font-bold text-sm text-slate-100"><i class="fa-regular fa-rectangle-list text-amber-500 mr-2"></i>Digital Forms</h3><p class="text-xs text-slate-400 mt-1">Share forms with students</p></div><span id="facultyFormsCount" class="text-xs text-amber-700 bg-amber-500/15 rounded-full px-2.5 py-1">3 forms</span></div>
-                            <div id="facultyFormsList" class="space-y-2"></div>
-                            <div class="flex flex-col sm:flex-row gap-2"><input id="facultyNewFormName" type="text" maxlength="60" placeholder="Enter a form title" class="flex-1 rounded-lg border px-3 py-2 text-xs"><button type="button" onclick="addFacultyForm()" class="px-4 py-2 rounded-lg bg-[#39372f] text-white text-xs font-semibold hover:bg-[#8c7042]"><i class="fa-solid fa-share mr-1"></i> Add form</button></div>
-                            <p class="text-[10px] text-slate-500">Prototype: form titles are stored in this browser only.</p>
-                        </section>
-                    </div>
-
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <div class="lg:col-span-2 space-y-4" id="studentNoticesContainer"></div>
 
@@ -741,6 +705,42 @@
                             class="px-4 py-2.5 bg-teal-600 hover:bg-teal-500 text-white rounded-xl text-xs font-bold shadow-lg shadow-teal-600/30 flex items-center gap-2 transition-all">
                             <i class="fa-solid fa-plus"></i> Post Course Notice
                         </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                        <section id="facultyProfileCard" class="glass-panel rounded-2xl p-5">
+                            <div class="flex items-center gap-4">
+                                <div class="w-14 h-14 rounded-full bg-[#e8dfcf] text-[#39372f] flex items-center justify-center text-xl font-bold border-2 border-[#b99a58]">SJ</div>
+                                <div><h3 class="font-bold text-base text-slate-100">Dr. Sarah Jenkins</h3><p class="text-xs text-slate-400 mt-1">Faculty Member</p><p class="text-xs text-slate-500 mt-1">Department of Computer Science & Engineering</p></div>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-slate-800 flex justify-between text-xs"><span class="text-slate-400">Faculty profile</span><span class="text-amber-400 font-semibold">Active</span></div>
+                        </section>
+                        <section class="glass-panel rounded-2xl p-5 lg:col-span-2">
+                            <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-3"><h3 class="font-bold text-sm text-slate-100"><i class="fa-regular fa-bell text-amber-500 mr-2"></i>Notifications</h3><span id="facultyNotificationCount" class="text-xs rounded-full px-2.5 py-1 bg-amber-500/15 text-amber-700">0 updates</span></div>
+                            <div id="facultyNotificationsList" class="space-y-3 max-h-36 overflow-y-auto"><p class="text-xs text-slate-500">No new notifications.</p></div>
+                        </section>
+                    </div>
+                    <section class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="glass-panel rounded-2xl p-5"><p class="text-xs text-slate-500">Active notices</p><p id="facultyStatNotices" class="text-3xl font-semibold text-amber-600 mt-2">0</p><p class="text-xs text-slate-400 mt-1">Faculty notice posts</p></div>
+                        <div class="glass-panel rounded-2xl p-5"><p class="text-xs text-slate-500">Scheduled notices</p><p id="facultyStatScheduled" class="text-3xl font-semibold text-amber-600 mt-2">0</p><p class="text-xs text-slate-400 mt-1">Notices with deadlines</p></div>
+                        <div class="glass-panel rounded-2xl p-5"><p class="text-xs text-slate-500">Department updates</p><p id="facultyStatDirectives" class="text-3xl font-semibold text-amber-600 mt-2">0</p><p class="text-xs text-slate-400 mt-1">Staff-only announcements</p></div>
+                    </section>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                        <section class="glass-panel rounded-2xl p-5 space-y-4">
+                            <h3 class="font-bold text-sm text-slate-100 border-b border-slate-800 pb-3"><i class="fa-solid fa-bolt text-amber-500 mr-2"></i>Quick Links</h3>
+                            <div class="grid grid-cols-2 gap-3">
+                                <button type="button" onclick="openNoticeModal('faculty')" class="faculty-quick-link"><i class="fa-solid fa-plus"></i><span>Post a notice</span></button>
+                                <button type="button" onclick="document.getElementById('facultyNoticeList').scrollIntoView({behavior:'smooth'})" class="faculty-quick-link"><i class="fa-solid fa-bullhorn"></i><span>My notices</span></button>
+                                <button type="button" onclick="document.getElementById('facultyDirectivesList').scrollIntoView({behavior:'smooth'})" class="faculty-quick-link"><i class="fa-solid fa-inbox"></i><span>Staff directives</span></button>
+                                <button type="button" onclick="document.getElementById('facultyFormsSection').scrollIntoView({behavior:'smooth'})" class="faculty-quick-link"><i class="fa-regular fa-rectangle-list"></i><span>Digital forms</span></button>
+                            </div>
+                        </section>
+                        <section id="facultyFormsSection" class="glass-panel rounded-2xl p-5 space-y-4">
+                            <div class="flex items-center justify-between gap-3 border-b border-slate-800 pb-3"><div><h3 class="font-bold text-sm text-slate-100"><i class="fa-regular fa-rectangle-list text-amber-500 mr-2"></i>Digital Forms</h3><p class="text-xs text-slate-400 mt-1">Share forms with students</p></div><span id="facultyFormsCount" class="text-xs text-amber-700 bg-amber-500/15 rounded-full px-2.5 py-1">3 forms</span></div>
+                            <div id="facultyFormsList" class="space-y-2"></div>
+                            <div class="flex flex-col sm:flex-row gap-2"><input id="facultyNewFormName" type="text" maxlength="60" placeholder="Enter a form title" class="flex-1 rounded-lg border px-3 py-2 text-xs"><button type="button" onclick="addFacultyForm()" class="px-4 py-2 rounded-lg bg-[#39372f] text-white text-xs font-semibold hover:bg-[#8c7042]"><i class="fa-solid fa-share mr-1"></i> Add form</button></div>
+                            <p class="text-[10px] text-slate-500">Prototype: form titles are stored in this browser only.</p>
+                        </section>
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
