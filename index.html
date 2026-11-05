@@ -348,7 +348,20 @@
         .faculty-quick-link i { color:#a88b58; width:16px; text-align:center; }
         .faculty-quick-link:hover { background:#eee7da; border-color:#b99a58; transform:translateY(-1px); }
         .faculty-link-highlight { outline:2px solid #b99a58; outline-offset:4px; transition:outline .2s ease; }
-    </style>
+    
+        #facultyQuickLinksHeading {
+            font-size: 17px !important;
+            font-weight: 800 !important;
+            letter-spacing: 0.02em;
+            line-height: 1.4;
+        }
+        .faculty-link-highlight {
+            outline: 2px solid #b99a58 !important;
+            outline-offset: 4px;
+            box-shadow: 0 0 0 5px rgba(185,154,88,0.12);
+            transition: outline .2s ease, box-shadow .2s ease;
+        }
+</style>
 </head>
 
 <body class="h-full flex flex-col font-sans overflow-hidden bg-slate-950 text-slate-100">
@@ -728,7 +741,7 @@
                     </section>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
                         <section class="glass-panel rounded-2xl p-5 space-y-4">
-                            <h3 class="font-extrabold text-base tracking-wide text-slate-100 border-b border-slate-800 pb-3"><i class="fa-solid fa-bolt text-amber-500 mr-2"></i>Quick Links</h3>
+                            <h3 id="facultyQuickLinksHeading" class="border-b border-slate-800 pb-3 text-slate-100"><i class="fa-solid fa-bolt text-amber-500 mr-2"></i>Quick Links</h3>
                             <div class="grid grid-cols-2 gap-3">
                                 <button type="button" onclick="openNoticeModal('faculty')" class="faculty-quick-link"><i class="fa-solid fa-plus"></i><span>Post a notice</span></button>
                                 <button type="button" onclick="facultyQuickLink('facultyNoticeList')" class="faculty-quick-link"><i class="fa-solid fa-bullhorn"></i><span>My notices</span></button>
@@ -1354,6 +1367,17 @@
         }
 
         // Faculty Board
+        function facultyQuickLink(targetId) {
+            const target = document.getElementById(targetId);
+            if (!target) {
+                alert('This section could not be found. Please refresh the page and try again.');
+                return;
+            }
+            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            target.classList.add('faculty-link-highlight');
+            window.setTimeout(() => target.classList.remove('faculty-link-highlight'), 1600);
+        }
+
         function renderFacultyBoard() {
             const list = document.getElementById('facultyNoticeList');
             const facNotices = notices.filter(n => n.author.includes('Sarah Jenkins') || n.category === 'academic');
