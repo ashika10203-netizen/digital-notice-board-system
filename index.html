@@ -2066,7 +2066,7 @@ input:focus, select:focus, textarea:focus {
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div><label class="block text-xs font-semibold text-slate-500 mb-1">Publish Date & Time</label><input type="datetime-local" id="campusPublishAt" class="w-full rounded-lg border px-3 py-2 text-xs"></div>
                     <div><label class="block text-xs font-semibold text-slate-500 mb-1">Expiry Date</label><input type="date" id="campusExpiresAt" class="w-full rounded-lg border px-3 py-2 text-xs"></div>
-                    <div><label class="block text-xs font-semibold text-slate-500 mb-1">Audience Year</label><select id="campusAudienceYear" class="w-full rounded-lg border px-3 py-2 text-xs"><option>All Years</option><option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option></select></div>
+                    <div><label class="block text-xs font-semibold text-slate-500 mb-1">Audience Year</label><select id="campusAudienceYear" class="w-full rounded-lg border px-3 py-2 text-xs"><option>All Years</option><option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option></select></div><div><label class="block text-xs font-semibold text-slate-500 mb-1">Notice Template</label><select id="campusNoticeTemplate" onchange="campusApplyNoticeTemplate(this.value)" class="w-full rounded-lg border px-3 py-2 text-xs"><option value="">Choose template</option><option>Exam Announcement</option><option>Event Announcement</option><option>Holiday Notice</option><option>Department Circular</option></select></div>
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 mb-1">Detailed Content *</label>
@@ -2735,7 +2735,7 @@ function facultyQuickLink(targetId) {
                 if(role==='faculty'){
                     const title=document.getElementById('noticeTitleInput')?.value||'Faculty notice';
                     const oldLength=notices.length; original(e);
-                    if(notices.length>oldLength){const n=notices[0];n.approvalStatus='Pending';n.publishAt=document.getElementById('campusPublishAt')?.value||'';n.expiresAt=document.getElementById('campusExpiresAt')?.value||'';n.audienceYear=document.getElementById('campusAudienceYear')?.value||'All Years';n.viewCount=0;n.bookmarkCount=0;n.acknowledgements=0;if(n.publishAt&&new Date(n.publishAt)>new Date())n.approvalStatus='Scheduled';campusLog('Faculty submitted notice for approval: '+title);}
+                    if(notices.length>oldLength){const n=notices[0];n.approvalStatus='Pending';n.publishAt=document.getElementById('campusPublishAt')?.value||'';n.expiresAt=document.getElementById('campusExpiresAt')?.value||'';n.audienceYear=document.getElementById('campusAudienceYear')?.value||'All Years';n.viewCount=0;n.bookmarkCount=0;n.acknowledgements=0;campusLog('Faculty submitted notice for approval: '+title);}
                 } else { original(e); if(notices.length)campusLog('Admin published notice: '+notices[0].title); }
                 campusRefreshDashboards();
             };
