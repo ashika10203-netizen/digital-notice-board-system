@@ -2644,11 +2644,7 @@ function facultyQuickLink(targetId) {
                 const quick = faculty.querySelector('.grid.grid-cols-1.lg\\:grid-cols-2');
                 if (quick) quick.insertAdjacentElement('afterend',panel); else faculty.appendChild(panel);
             }
-            if (faculty && !document.getElementById('facultyDigitalNoticeHub')) {
-                const h=document.createElement('section');h.id='facultyDigitalNoticeHub';h.className='rounded-2xl border border-rose-100 bg-white p-5 space-y-3';
-                h.innerHTML='<div><h3 class="font-bold text-slate-800">Digital Notice Centre</h3><p class="text-xs text-slate-500">Create reusable notices and manage their publishing lifecycle</p></div><div class="flex flex-wrap gap-2"><button class="rounded-lg bg-rose-700 px-3 py-2 text-xs text-white" onclick="campusShowFacultyTool(\'templates\')">Notice Templates</button><button class="rounded-lg border px-3 py-2 text-xs" onclick="campusShowFacultyTool(\'scheduled\')">Scheduled Notices</button><button class="rounded-lg border px-3 py-2 text-xs" onclick="campusShowFacultyTool(\'archive\')">Notice Archive</button><button class="rounded-lg border px-3 py-2 text-xs" onclick="campusShowFacultyTool(\'engagement\')">Notice Engagement</button></div><div id="facultyNoticeToolContent"></div>';
-                const w=document.getElementById('facultyNoticeWorkflow');if(w)w.insertAdjacentElement('afterend',h);else faculty.appendChild(h);
-            }
+
             if (admin && !document.getElementById('adminManagementOverview')) {
                 const panel=document.createElement('section'); panel.id='adminManagementOverview'; panel.className='grid grid-cols-2 xl:grid-cols-4 gap-3';
                 panel.innerHTML='<div class="rounded-xl border border-rose-100 bg-white p-4"><p class="text-xs text-slate-500">Total Students</p><p id="adminStudentsMetric" class="text-2xl font-bold text-rose-700">0</p></div><div class="rounded-xl border border-rose-100 bg-white p-4"><p class="text-xs text-slate-500">Total Faculty</p><p id="adminFacultyMetric" class="text-2xl font-bold text-rose-700">0</p></div><div class="rounded-xl border border-rose-100 bg-white p-4"><p class="text-xs text-slate-500">Active Notices</p><p id="adminActiveMetric" class="text-2xl font-bold text-rose-700">0</p></div><div class="rounded-xl border border-rose-100 bg-white p-4"><p class="text-xs text-slate-500">Pending Questions</p><p id="adminPendingMetric" class="text-2xl font-bold text-rose-700">0</p></div>';
@@ -3606,7 +3602,7 @@ function facultyQuickLink(targetId) {
     });
   };
 
-  document.addEventListener('DOMContentLoaded',function(){ensureEnhancementUI();campusRenderEnhancements();campusAddDraftButton();campusPersistNoticeChanges();campusShowFacultyTool('templates');});
+  document.addEventListener('DOMContentLoaded',function(){ensureEnhancementUI();campusRenderEnhancements();campusAddDraftButton();campusPersistNoticeChanges();});
   if(document.readyState!=='loading'){ensureEnhancementUI();campusRenderEnhancements();campusAddDraftButton();campusPersistNoticeChanges();campusShowFacultyTool('templates');}
   const campusOriginalSwitchRole=window.switchRole;
   if(campusOriginalSwitchRole){window.switchRole=function(role){campusOriginalSwitchRole(role);campusRenderEnhancements();campusAddDraftButton();campusPersistNoticeChanges();campusRefreshDashboards();};}
