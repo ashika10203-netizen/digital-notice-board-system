@@ -2692,7 +2692,7 @@ function facultyQuickLink(targetId) {
             if(!isHidden)return;
             const list=document.getElementById('facultyDeadlinesList');
             if(!list)return;
-            const mine=notices.filter(n=>(n.author||'').includes('Sarah Jenkins')&&n.deadline);
+            const mine=notices.filter(n=>(n.author||'').includes('Sarah Jenkins')&&n.deadline&&campusIsStaffDeadline(n));
             mine.sort((a,b)=>new Date(a.deadline+'T00:00:00')-new Date(b.deadline+'T00:00:00'));
             if(!mine.length){list.innerHTML='<p class="text-sm text-slate-500">No deadlines have been added to your notices yet. Add a deadline while creating a notice.</p>';return;}
             const today=new Date();today.setHours(0,0,0,0);
@@ -2703,6 +2703,34 @@ function facultyQuickLink(targetId) {
                 return '<div class="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-slate-100 p-3"><div class="min-w-0"><p class="text-sm font-semibold text-slate-800">'+escapeQuestionText(n.title)+'</p><p class="text-xs text-slate-500">Deadline: '+escapeQuestionText(n.deadline)+'</p></div><div class="flex items-center gap-2"><span class="rounded-full px-2 py-1 text-xs '+statusClass+'">'+status+'</span><span class="text-xs font-semibold text-slate-600">'+(days<0?Math.abs(days)+' days overdue':days===0?'Today':days+' days left')+'</span></div></div>';
             }).join('');
         }
+        function campusDeadlineStatus(date) {
+            const d=new Date(date+'T00:00:00'); const today=new Date(); today.setHours(0,0,0,0);
+            const days=Math.ceil((d-today)/86400000);
+            return {days,status:days<0?'Overdue':days===0?'Due today':days<=7?'Due soon':'Upcoming',label:days<0?Math.abs(days)+' days overdue':days===0?'Today':days+' days left',style:days<0?'bg-slate-100 text-slate-600':days<=7?'bg-rose-100 text-rose-700':'bg-emerald-50 text-emerald-700'};
+        }
+        function campusIsStaffDeadline(n) {
+            const text=[n.title,n.content,n.category].join(' ').toLowerCase();
+            return /staff|faculty|lesson plan|internal marks|attendance report|department report|staff meeting|faculty document|course file|question paper|exam duty/.test(text);
+        }
+        function campusIsStudentDeadline(n) {
+            const text=[n.title,n.content,n.category].join(' ').toLowerCase();
+            return /exam|examination|assignment|record|project|hall ticket|fee|payment|student document|registration|application|submission/.test(text);
+        }
+        window.campusOpenStudentDeadlines=function() {
+            const panel=document.getElementById('studentDeadlinesPanel'); if(!panel)return;
+            const hidden=panel.classList.contains('hidden'); panel.classList.toggle('hidden');
+            if(!hidden)return;
+            const list=document.getElementById('studentDeadlinesList'); if(!list)return;
+            const dept=String(campusProfile.department||'').trim().toLowerCase();
+            const items=(notices||[]).filter(n=>{
+                const approved=!n.approvalStatus||n.approvalStatus==='Approved';
+                const target=String(n.target||'').toLowerCase();
+                const common=['global','all students','all departments','everyone','campus-wide','campus wide'].includes(target);
+                return approved&&n.deadline&&campusIsStudentDeadline(n)&&n.target!=='Faculty Only'&&(common||target===dept);
+            }).sort((a,b)=>new Date(a.deadline)-new Date(b.deadline));
+            if(!items.length){list.innerHTML='<p class="text-sm text-slate-500">No examination, assignment or student submission deadlines are available yet.</p>';return;}
+            list.innerHTML=items.map(n=>{const s=campusDeadlineStatus(n.deadline);return '<article class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white p-4"><div><p class="font-semibold text-slate-800">'+escapeQuestionText(n.title)+'</p><p class="mt-1 text-xs text-slate-500">'+escapeQuestionText(n.category||'Student task')+' · Due: '+escapeQuestionText(n.deadline)+'</p></div><div class="flex items-center gap-2"><span class="rounded-full px-2.5 py-1 text-xs font-bold '+s.style+'">'+s.status+'</span><span class="text-xs font-semibold text-slate-600">'+s.label+'</span></div></article>';}).join('');
+        };
         function campusRefreshDashboards() {
             const mine = notices.filter(n => (n.author || '').includes('Sarah Jenkins'));
             const pendingQ = noticeQuestions.filter(q => (q.publisher || '').includes('Sarah Jenkins') && !q.answer).length;
@@ -3272,6 +3300,17 @@ function facultyQuickLink(targetId) {
           <span class="block mt-1 text-xs font-medium opacity-75">Updates for your department</span>
         </button>`;
       studentView.insertBefore(modeTabs, categoryToolbar);
+    }
+    if (studentView && !document.getElementById('studentDeadlinesPanel')) {
+      const panel=document.createElement('section'); panel.id='studentDeadlinesPanel'; panel.className='hidden rounded-2xl border border-rose-200 bg-white p-5 space-y-3';
+      panel.innerHTML='<div class="flex items-center justify-between gap-2"><div><h3 class="text-lg font-extrabold text-slate-800">My Academic Deadlines</h3><p class="text-xs text-slate-500">Examinations, assignments, fees and student document submissions</p></div><button type="button" onclick="document.getElementById(\'studentDeadlinesPanel\').classList.add(\'hidden\')" class="rounded-lg border px-3 py-1.5 text-xs">Close</button></div><div id="studentDeadlinesList" class="space-y-2"></div>';
+      const mode=document.getElementById('campusNoticeModeTabs'); if(mode)mode.insertAdjacentElement('afterend',panel); else studentView.insertBefore(panel,studentView.children[1]||null);
+    }
+    if (studentView && !document.getElementById('studentDeadlinesShortcut')) {
+      const shortcut=document.createElement('button'); shortcut.id='studentDeadlinesShortcut'; shortcut.type='button'; shortcut.className='w-full rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-left text-sm font-bold text-rose-800 hover:bg-rose-100';
+      shortcut.innerHTML='<i class="fa-regular fa-calendar-check mr-2"></i> View My Academic Deadlines <span class="float-right">→</span>';
+      shortcut.onclick=campusOpenStudentDeadlines;
+      const panel=document.getElementById('studentDeadlinesPanel'); if(panel)panel.insertAdjacentElement('beforebegin',shortcut);
     }
     const header = document.querySelector('header .flex.items-center.space-x-3');
     if (header && !document.getElementById('campusNotificationButton')) {
