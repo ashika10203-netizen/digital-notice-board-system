@@ -2063,6 +2063,11 @@ input:focus, select:focus, textarea:focus {
                     </div>
                 </div>
 
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div><label class="block text-xs font-semibold text-slate-500 mb-1">Publish Date & Time</label><input type="datetime-local" id="campusPublishAt" class="w-full rounded-lg border px-3 py-2 text-xs"></div>
+                    <div><label class="block text-xs font-semibold text-slate-500 mb-1">Expiry Date</label><input type="date" id="campusExpiresAt" class="w-full rounded-lg border px-3 py-2 text-xs"></div>
+                    <div><label class="block text-xs font-semibold text-slate-500 mb-1">Audience Year</label><select id="campusAudienceYear" class="w-full rounded-lg border px-3 py-2 text-xs"><option>All Years</option><option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option></select></div>
+                </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 mb-1">Detailed Content *</label>
                     <textarea id="noticeContentInput" rows="4" required placeholder="Write full circular details..."
@@ -2495,7 +2500,9 @@ input:focus, select:focus, textarea:focus {
             const priorityVal = document.getElementById('studentPriorityFilter')?.value || 'all';
 
             let filtered = notices.filter(n => {
-                if (n.approvalStatus === 'Pending' || n.approvalStatus === 'Draft' || n.approvalStatus === 'Rejected') return false;
+                if (n.approvalStatus === 'Pending' || n.approvalStatus === 'Draft' || n.approvalStatus === 'Rejected' || n.approvalStatus === 'Scheduled' || n.approvalStatus === 'Expired') return false;
+                if (n.publishAt && new Date(n.publishAt)>new Date()) return false;
+                if (n.expiresAt && new Date(n.expiresAt+'T23:59:59')<new Date()) return false;
                 if (n.target === 'Faculty Only') return false;
                 if (studentActiveCategory === 'bookmarks' && !n.bookmarked) return false;
                 if (studentActiveCategory !== 'all' && studentActiveCategory !== 'bookmarks' && n.category !== studentActiveCategory) return false;
@@ -2543,6 +2550,7 @@ input:focus, select:focus, textarea:focus {
             const n = notices.find(item => item.id === id);
             if (n) {
                 n.bookmarked = !n.bookmarked;
+                n.bookmarkCount = Math.max(0,Number(n.bookmarkCount||0)+(n.bookmarked?1:-1));
                 renderStudentBoard();
             }
         }
@@ -2631,6 +2639,11 @@ function facultyQuickLink(targetId) {
                 const quick = faculty.querySelector('.grid.grid-cols-1.lg\\:grid-cols-2');
                 if (quick) quick.insertAdjacentElement('afterend',panel); else faculty.appendChild(panel);
             }
+            if (faculty && !document.getElementById('facultyDigitalNoticeHub')) {
+                const h=document.createElement('section');h.id='facultyDigitalNoticeHub';h.className='rounded-2xl border border-rose-100 bg-white p-5 space-y-3';
+                h.innerHTML='<div><h3 class="font-bold text-slate-800">Digital Notice Centre</h3><p class="text-xs text-slate-500">Create reusable notices and manage their publishing lifecycle</p></div><div class="flex flex-wrap gap-2"><button class="rounded-lg bg-rose-700 px-3 py-2 text-xs text-white" onclick="campusShowFacultyTool(\'templates\')">Notice Templates</button><button class="rounded-lg border px-3 py-2 text-xs" onclick="campusShowFacultyTool(\'scheduled\')">Scheduled Notices</button><button class="rounded-lg border px-3 py-2 text-xs" onclick="campusShowFacultyTool(\'archive\')">Notice Archive</button><button class="rounded-lg border px-3 py-2 text-xs" onclick="campusShowFacultyTool(\'engagement\')">Notice Engagement</button></div><div id="facultyNoticeToolContent"></div>';
+                const w=document.getElementById('facultyNoticeWorkflow');if(w)w.insertAdjacentElement('afterend',h);else faculty.appendChild(h);
+            }
             if (admin && !document.getElementById('adminManagementOverview')) {
                 const panel=document.createElement('section'); panel.id='adminManagementOverview'; panel.className='grid grid-cols-2 xl:grid-cols-4 gap-3';
                 panel.innerHTML='<div class="rounded-xl border border-rose-100 bg-white p-4"><p class="text-xs text-slate-500">Total Students</p><p id="adminStudentsMetric" class="text-2xl font-bold text-rose-700">0</p></div><div class="rounded-xl border border-rose-100 bg-white p-4"><p class="text-xs text-slate-500">Total Faculty</p><p id="adminFacultyMetric" class="text-2xl font-bold text-rose-700">0</p></div><div class="rounded-xl border border-rose-100 bg-white p-4"><p class="text-xs text-slate-500">Active Notices</p><p id="adminActiveMetric" class="text-2xl font-bold text-rose-700">0</p></div><div class="rounded-xl border border-rose-100 bg-white p-4"><p class="text-xs text-slate-500">Pending Questions</p><p id="adminPendingMetric" class="text-2xl font-bold text-rose-700">0</p></div>';
@@ -2647,6 +2660,24 @@ function facultyQuickLink(targetId) {
                 const tabs=document.getElementById('adminNoticeSection'); if(tabs) tabs.insertAdjacentElement('beforebegin',panel);
             }
             campusRefreshDashboards();
+        }
+        function campusShowFacultyTool(tab) {
+            const box=document.getElementById('facultyNoticeToolContent');if(!box)return;
+            const mine=notices.filter(n=>(n.author||'').includes('Sarah Jenkins'));const now=new Date();const safe=escapeQuestionText;
+            if(tab==='templates')box.innerHTML='<p class="text-xs text-slate-600">Use the template selector in Create Notice to start an exam, event, holiday or department circular.</p><button onclick="openNoticeModal(\'faculty\')" class="mt-2 rounded-lg bg-rose-700 px-3 py-2 text-xs text-white">Create from template</button>';
+            if(tab==='scheduled'){const a=mine.filter(n=>n.publishAt&&new Date(n.publishAt)>now);box.innerHTML=a.length?a.map(n=>'<p class="rounded-lg border p-3 text-xs"><b>'+safe(n.title)+'</b> · '+safe(new Date(n.publishAt).toLocaleString())+'</p>').join(''):'<p class="text-xs text-slate-500">No upcoming scheduled notices.</p>';}
+            if(tab==='archive'){const a=mine.filter(n=>n.approvalStatus==='Expired'||n.approvalStatus==='Rejected'||(n.expiresAt&&new Date(n.expiresAt+'T23:59:59')<now));box.innerHTML=a.length?a.map(n=>'<p class="rounded-lg border p-3 text-xs"><b>'+safe(n.title)+'</b> · '+safe(n.approvalStatus||'Expired')+'</p>').join(''):'<p class="text-xs text-slate-500">No expired or rejected notices yet.</p>';}
+            if(tab==='engagement')box.innerHTML=mine.length?mine.map(n=>'<p class="rounded-lg border p-3 text-xs"><b>'+safe(n.title)+'</b> · Views: '+Number(n.viewCount||0)+' · Bookmarks: '+Number(n.bookmarkCount||0)+' · Acknowledgements: '+Number(n.acknowledgements||0)+' <button class="ml-2 text-rose-700 font-semibold" onclick="campusDuplicateNotice(\''+n.id+'\')">Duplicate</button></p>').join(''):'<p class="text-xs text-slate-500">Engagement details will appear here.</p>';
+        }
+        function campusApplyNoticeTemplate(type) {
+            const t={'Exam Announcement':['Examination Schedule Announcement','The examination schedule has been released. Please check the details and follow the instructions provided by your department.','academic','High'],'Event Announcement':['Department Event Announcement','Our department is organising an event. Please review the event details and participate as instructed.','placement','Normal'],'Holiday Notice':['Campus Holiday Notice','This is to inform students that the campus will remain closed on the announced date.','general','Normal'],'Department Circular':['Important Department Circular','All students of the department are requested to read this circular and follow the instructions.','general','Normal']}[type];
+            if(!t)return;document.getElementById('noticeTitleInput').value=t[0];document.getElementById('noticeContentInput').value=t[1];document.getElementById('noticeCategoryInput').value=t[2];document.getElementById('noticePriorityInput').value=t[3];
+        }
+        function campusDuplicateNotice(id) {
+            const n=notices.find(x=>x.id===id);if(!n||currentRole!=='faculty')return;openNoticeModal('faculty');
+            document.getElementById('noticeTitleInput').value='Copy of '+n.title;document.getElementById('noticeContentInput').value=n.content||'';
+            document.getElementById('noticeCategoryInput').value=n.category||'general';document.getElementById('noticePriorityInput').value=n.priority||'Normal';document.getElementById('noticeTargetInput').value=n.target||'Global';
+            if(document.getElementById('campusAudienceYear'))document.getElementById('campusAudienceYear').value=n.audienceYear||'All Years';
         }
         function campusRefreshDashboards() {
             const mine = notices.filter(n => (n.author || '').includes('Sarah Jenkins'));
@@ -2704,7 +2735,7 @@ function facultyQuickLink(targetId) {
                 if(role==='faculty'){
                     const title=document.getElementById('noticeTitleInput')?.value||'Faculty notice';
                     const oldLength=notices.length; original(e);
-                    if(notices.length>oldLength){notices[0].approvalStatus='Pending';campusLog('Faculty submitted notice for approval: '+title);}
+                    if(notices.length>oldLength){const n=notices[0];n.approvalStatus='Pending';n.publishAt=document.getElementById('campusPublishAt')?.value||'';n.expiresAt=document.getElementById('campusExpiresAt')?.value||'';n.audienceYear=document.getElementById('campusAudienceYear')?.value||'All Years';n.viewCount=0;n.bookmarkCount=0;n.acknowledgements=0;if(n.publishAt&&new Date(n.publishAt)>new Date())n.approvalStatus='Scheduled';campusLog('Faculty submitted notice for approval: '+title);}
                 } else { original(e); if(notices.length)campusLog('Admin published notice: '+notices[0].title); }
                 campusRefreshDashboards();
             };
@@ -3512,8 +3543,8 @@ function facultyQuickLink(targetId) {
     });
   };
 
-  document.addEventListener('DOMContentLoaded',function(){ensureEnhancementUI();campusRenderEnhancements();campusAddDraftButton();campusPersistNoticeChanges();});
-  if(document.readyState!=='loading'){ensureEnhancementUI();campusRenderEnhancements();campusAddDraftButton();campusPersistNoticeChanges();}
+  document.addEventListener('DOMContentLoaded',function(){ensureEnhancementUI();campusRenderEnhancements();campusAddDraftButton();campusPersistNoticeChanges();campusShowFacultyTool('templates');});
+  if(document.readyState!=='loading'){ensureEnhancementUI();campusRenderEnhancements();campusAddDraftButton();campusPersistNoticeChanges();campusShowFacultyTool('templates');}
   const campusOriginalSwitchRole=window.switchRole;
   if(campusOriginalSwitchRole){window.switchRole=function(role){campusOriginalSwitchRole(role);campusRenderEnhancements();campusAddDraftButton();campusPersistNoticeChanges();campusRefreshDashboards();};}
   const campusOriginalSaveQuestions=window.saveNoticeQuestions;
